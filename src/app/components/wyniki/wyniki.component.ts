@@ -32,6 +32,25 @@ export class WynikiComponent implements OnInit {
 
   constructor(private api: ApiService, public auth: AuthService) {}
 
+  // Try to resolve replay URL to a distance and autofill form.odleglosc
+  checkReplay(url?: string): void {
+    if (!url || !url.trim()) { this.error = 'Podaj URL powtórki.'; return; }
+    this.error = '';
+    this.success = 'Sprawdzam powtórkę...';
+    this.api.replayDistance({ url }).subscribe({
+      next: (res: any) => {
+        if (res?.success && typeof res.length === 'number') {
+          this.form.odleglosc = Math.round(res.length * 10) / 10;
+          this.success = `Odległość uzupełniona: ${this.form.odleglosc} m`;
+        } else {
+          this.error = res?.error || 'Nie udało się odczytać odległości z powtórki.';
+          this.success = '';
+        }
+      },
+      error: () => { this.error = 'Błąd podczas sprawdzania powtórki.'; this.success = ''; }
+    });
+  }
+
   ngOnInit(): void {
     forkJoin({ wyniki: this.api.getWyniki(), gracze: this.api.getGracze(), skocznie: this.api.getSkocznie() }).subscribe({
       next: res => {

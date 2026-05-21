@@ -162,6 +162,24 @@ export class SkocznieComponent implements OnInit {
     });
   }
 
+  checkReplay(url?: string): void {
+    if (!url || !url.trim()) { this.wynikError = 'Podaj URL powtórki.'; return; }
+    this.wynikError = '';
+    this.wynikSuccess = 'Sprawdzam powtórkę...';
+    this.api.replayDistance({ url }).subscribe({
+      next: (res: any) => {
+        if (res?.success && typeof res.length === 'number') {
+          this.wynikForm.odleglosc = Math.round(res.length * 10) / 10;
+          this.wynikSuccess = `Odległość uzupełniona: ${this.wynikForm.odleglosc} m`;
+        } else {
+          this.wynikError = res?.error || 'Nie udało się odczytać odległości z powtórki.';
+          this.wynikSuccess = '';
+        }
+      },
+      error: () => { this.wynikError = 'Błąd podczas sprawdzania powtórki.'; this.wynikSuccess = ''; }
+    });
+  }
+
   otworzKomentuj(w: Wynik): void {
     this.wybranyWynik = w;
     this.komentarzForm = {

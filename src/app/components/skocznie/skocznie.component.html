@@ -199,7 +199,10 @@
     </div>
     <div class="form-group">
       <label>Link do powtórki (opcjonalnie)</label>
-      <input type="url" [(ngModel)]="wynikForm.link_powtorka" placeholder="https://..." />
+      <div style="display:flex;gap:.5rem;align-items:center">
+        <input type="url" [(ngModel)]="wynikForm.link_powtorka" placeholder="https://..." />
+        <button class="btn btn-ghost btn-sm" (click)="checkReplay(wynikForm.link_powtorka)">Sprawdź</button>
+      </div>
     </div>
     <div class="form-group checkbox-group">
       <label class="checkbox-label">

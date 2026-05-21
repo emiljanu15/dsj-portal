@@ -37,4 +37,7 @@ export class ApiService {
   addWynik(w: WynikDto): Observable<Wynik>     { return this.http.post<Wynik>(`${this.base}/Wynik`, w); }
   updateWynik(id: number, w: WynikDto)         { return this.http.put(`${this.base}/Wynik/${id}`, w); }
   deleteWynik(id: number)                      { return this.http.delete(`${this.base}/Wynik/${id}`); }
+
+  // Replay utilities
+  replayDistance(req: { url?: string }) { return this.http.post<any>(`${this.base}/replay/distance`, req); }
 }

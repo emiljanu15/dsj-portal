@@ -52,3 +52,14 @@ export interface Wynik {
   link_powtorka?: string;
   czy_upadek: boolean;
 }
+
+export interface ReplayDistanceRequest {
+  url?: string;
+}
+
+export interface ReplayDistanceResponse {
+  success: boolean;
+  length?: number | null;
+  lengthRaw?: string | null;
+  error?: string | null;
+}
