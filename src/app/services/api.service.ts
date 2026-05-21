@@ -5,7 +5,7 @@ import { Gracz, Skocznia, Uzytkownik, Komentarz, KomentarzDto, Wynik, WynikDto }
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
-  private base = 'https://localhost:7095/api';
+  private base = 'https://dsjbackend-1.onrender.com/api';
 
   constructor(private http: HttpClient) {}
 
