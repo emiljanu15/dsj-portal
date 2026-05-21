@@ -181,5 +181,14 @@ export class SkocznieComponent implements OnInit {
     return user?.login ?? `User #${uzytkownikId}`;
   }
 
+  roznicaDoLidera(w: Wynik): string {
+    if (!this.wynikiSkoczni || this.wynikiSkoczni.length === 0) {
+      return '—';
+    }
+    const lider = this.wynikiSkoczni[0];
+    const diff = Number((w.odleglosc - lider.odleglosc).toFixed(1));
+    return `${diff} m`;
+  }
+
   przekroczylK(w: Wynik): boolean { return !!w.skocznia && w.odleglosc >= w.skocznia.punkt_k; }
 }

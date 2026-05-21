@@ -110,6 +110,7 @@
           <th>Poz.</th>
           <th>Gracz</th>
           <th>Odległość</th>
+          <th>Różnica</th>
           <th>Data skoku</th>
           <th>Lądowanie</th>
           <th>Powtórka</th>
@@ -133,6 +134,7 @@
             </span>
             <span class="badge badge-k" *ngIf="przekroczylK(w)">✓ K</span>
           </td>
+          <td class="difference-cell">{{ i === 0 ? '—' : roznicaDoLidera(w) }}</td>
           <td class="date-cell">{{ w.dataSkoku | date:'dd.MM.yyyy' }}</td>
           <td>
             <span class="upadek-badge" *ngIf="w.czy_upadek">💥 Upadek</span>
