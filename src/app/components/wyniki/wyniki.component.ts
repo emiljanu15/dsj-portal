@@ -34,7 +34,17 @@ export class WynikiComponent implements OnInit {
 
   ngOnInit(): void {
     forkJoin({ wyniki: this.api.getWyniki(), gracze: this.api.getGracze(), skocznie: this.api.getSkocznie() }).subscribe({
-      next: res => { this.wyniki = res.wyniki; this.gracze = res.gracze; this.skocznie = res.skocznie; this.loading = false; },
+      next: res => {
+        this.gracze = res.gracze;
+        this.skocznie = res.skocznie;
+        // normalize wyniki: resolve id-only relations to objects when necessary
+        this.wyniki = res.wyniki.map(w => {
+          const gr = w.gracz ?? this.gracze.find(g => g.id === (w as any).graczId);
+          const sk = w.skocznia ?? this.skocznie.find(s => s.id === (w as any).skoczniaId);
+          return { ...w, gracz: gr, skocznia: sk } as Wynik;
+        });
+        this.loading = false;
+      },
       error: () => { this.error = 'Błąd ładowania.'; this.loading = false; }
     });
   }

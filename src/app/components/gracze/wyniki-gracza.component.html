@@ -1,0 +1,46 @@
+<div class="page-enter">
+  <div class="card">
+    <div class="card-header">
+      <h2>🏆 Wyniki gracza: <strong>{{ gracz?.login_gracza }}</strong></h2>
+    </div>
+
+    <div *ngIf="error" class="alert alert-error">{{ error }}</div>
+    <div *ngIf="loading" class="loading-wrap"><div class="spinner"></div><p>Ładowanie...</p></div>
+
+    <div *ngIf="!loading && lista.length === 0" class="empty-state" style="padding:2rem">
+      <div class="empty-icon">📭</div>
+      <p>Brak wyników dla tego gracza.</p>
+    </div>
+
+    <table class="dsj-table" *ngIf="!loading && lista.length > 0">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Skocznia</th>
+          <th>Punkt K</th>
+          <th>Najlepszy skok</th>
+          <th>Data</th>
+          <th>Powtórka</th>
+          <th>Upadek</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of lista; let i = index">
+          <td class="id-badge">{{ i+1 }}</td>
+          <td><strong>{{ item.skocznia.nazwa }}</strong><div class="text-dim">{{ item.skocznia.lokalizacja }}</div></td>
+          <td><span class="badge badge-k">K{{ item.skocznia.punkt_k }}</span></td>
+          <td>{{ item.rekord }} m</td>
+          <td class="date-cell">{{ item.dataSkoku | date:'dd.MM.yyyy' }}</td>
+          <td>
+            <a *ngIf="item.link_powtorka" [href]="item.link_powtorka" target="_blank">▶ Powtórka</a>
+            <span *ngIf="!item.link_powtorka" class="text-dim">—</span>
+          </td>
+          <td>
+            <span *ngIf="item.czy_upadek">💥</span>
+            <span *ngIf="!item.czy_upadek">✓</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

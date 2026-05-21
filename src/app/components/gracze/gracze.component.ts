@@ -34,11 +34,12 @@ export class GraczeComponent implements OnInit {
     forkJoin({ gracze: this.api.getGracze(), wyniki: this.api.getWyniki() }).subscribe({
       next: ({ gracze, wyniki }) => {
         this.gracze = gracze.map(g => {
-          const wynikGracza = wyniki.filter(w => w.gracz?.id === g.id);
+          const wynikGracza = wyniki.filter(w => w.gracz?.id === g.id || (w as any).graczId === g.id);
           // Grupuj po skoczni, bierz max z każdej
           const maxPerSkocznia = new Map<number, number>();
           wynikGracza.forEach(w => {
-            const sid = w.skocznia?.id ?? 0;
+            const sid = w.skocznia?.id ?? (w as any).skoczniaId ?? 0;
+            if (!sid) return;
             if (!maxPerSkocznia.has(sid) || w.odleglosc > maxPerSkocznia.get(sid)!) {
               maxPerSkocznia.set(sid, w.odleglosc);
             }

@@ -60,9 +60,17 @@ export class SkocznieComponent implements OnInit {
         this.uzytkownicy = uzytkownicy;
         this.wszystkieKomentarze = komentarze;
         this.skocznie = skocznie.map(s => {
-          const ws = wyniki.filter(w => w.skocznia?.id === s.id).sort((a, b) => b.odleglosc - a.odleglosc);
+          const ws = wyniki.filter(w => w.skocznia?.id === s.id || (w as any).skoczniaId === s.id).sort((a, b) => b.odleglosc - a.odleglosc);
           const top = ws[0];
-          return { ...s, rekord: top?.odleglosc, rekordGracz: top?.gracz?.login_gracza };
+          let rekordGracz: string | undefined = undefined;
+          if (top) {
+            rekordGracz = top.gracz?.login_gracza;
+            if (!rekordGracz && (top as any).graczId) {
+              const g = gracze.find(x => x.id === (top as any).graczId);
+              rekordGracz = g?.login_gracza;
+            }
+          }
+          return { ...s, rekord: top?.odleglosc, rekordGracz };
         });
         this.loading = false;
       },
@@ -74,9 +82,17 @@ export class SkocznieComponent implements OnInit {
     this.api.getWyniki().subscribe(wyniki => {
       this.wszystkieWyniki = wyniki;
       this.skocznie = this.skocznie.map(s => {
-        const ws = wyniki.filter(w => w.skocznia?.id === s.id).sort((a, b) => b.odleglosc - a.odleglosc);
+        const ws = wyniki.filter(w => w.skocznia?.id === s.id || (w as any).skoczniaId === s.id).sort((a, b) => b.odleglosc - a.odleglosc);
         const top = ws[0];
-        return { ...s, rekord: top?.odleglosc, rekordGracz: top?.gracz?.login_gracza };
+        let rekordGracz: string | undefined = undefined;
+        if (top) {
+          rekordGracz = top.gracz?.login_gracza;
+          if (!rekordGracz && (top as any).graczId) {
+            const g = this.gracze.find(x => x.id === (top as any).graczId);
+            rekordGracz = g?.login_gracza;
+          }
+        }
+        return { ...s, rekord: top?.odleglosc, rekordGracz };
       });
       if (this.wybranaSkocznia) {
         this.wynikiSkoczni = wyniki
@@ -124,7 +140,15 @@ export class SkocznieComponent implements OnInit {
   }
 
   otworzDodajWynik(): void {
-    this.wynikForm = { odleglosc: 0, dataSkoku: new Date().toISOString().split('T')[0], graczId: this.gracze[0]?.id ?? 0, skoczniaId: this.wybranaSkocznia!.id!, link_powtorka: '', czy_upadek: false };
+    let graczId = 0;
+    if (this.auth.isAdmin) {
+      graczId = this.gracze[0]?.id ?? 0;
+    } else {
+      const myLogin = this.auth.currentUser?.login;
+      const me = this.gracze.find(g => g.login_gracza === myLogin);
+      graczId = me?.id ?? 0;
+    }
+    this.wynikForm = { odleglosc: 0, dataSkoku: new Date().toISOString().split('T')[0], graczId, skoczniaId: this.wybranaSkocznia!.id!, link_powtorka: '', czy_upadek: false };
     this.wynikError = '';
     this.wynikSuccess = '';
     this.showDodajWynik = true;

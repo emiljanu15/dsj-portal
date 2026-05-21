@@ -23,3 +23,13 @@
   color: var(--text-dim);
   text-align: right;
 }
+
+/* Responsive helpers */
+.table-wrap { overflow-x: auto; }
+
+@media (max-width: 700px) {
+  .dsj-table th, .dsj-table td { padding: .35rem .5rem; font-size: .92rem; }
+  .suma { font-size: 1rem; }
+  .badge { font-size: .75rem; padding: .12rem .4rem; }
+  .actions button { padding: .25rem .4rem; font-size: .78rem; }
+}

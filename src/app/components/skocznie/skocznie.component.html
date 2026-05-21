@@ -13,12 +13,12 @@
       <div class="empty-icon">⛰️</div><p>Brak skoczni w bazie.</p>
     </div>
 
-    <table class="dsj-table" *ngIf="!loading && skocznie.length > 0">
+    <div class="table-wrap">
+      <table class="dsj-table" *ngIf="!loading && skocznie.length > 0">
       <thead>
         <tr>
           <th>#</th>
-          <th>Nazwa</th>
-          <th>Lokalizacja</th>
+          <th>Skocznia</th>
           <th>Punkt K</th>
           <th>🏅 Rekord</th>
           <th>Wyniki</th>
@@ -28,13 +28,15 @@
       <tbody>
         <tr *ngFor="let s of skocznie">
           <td><span class="id-badge">{{ s.id }}</span></td>
-          <td><strong>{{ s.nazwa }}</strong></td>
-          <td>📍 {{ s.lokalizacja }}</td>
+          <td class="skocznia-name" (click)="pokazWyniki(s)" style="cursor:pointer">
+            <strong>{{ s.nazwa }}</strong>
+            <div class="text-dim">📍 {{ s.lokalizacja }}</div>
+          </td>
           <td><span class="badge badge-k">K{{ s.punkt_k }}</span></td>
           <td class="rekord-cell">
-            <ng-container *ngIf="s.rekord; else brakRekordu">
+            <ng-container *ngIf="s.rekord != null; else brakRekordu">
               <span class="rekord-val">{{ s.rekord }} m</span>
-              <span class="rekord-gracz">🎿 {{ s.rekordGracz }}</span>
+              <span class="rekord-gracz" *ngIf="s.rekordGracz">🎿 {{ s.rekordGracz }}</span>
             </ng-container>
             <ng-template #brakRekordu>
               <span class="text-dim">—</span>
@@ -49,7 +51,8 @@
           </td>
         </tr>
       </tbody>
-    </table>
+      </table>
+    </div>
   </div>
 </div>
 
@@ -91,17 +94,17 @@
         </div>
       </div>
       <div class="header-actions">
-        <button class="btn btn-primary btn-sm" *ngIf="auth.isAdmin" (click)="otworzDodajWynik()">+ Dodaj wynik</button>
+        <button class="btn btn-primary btn-sm" *ngIf="auth.isLoggedIn" (click)="otworzDodajWynik()">+ Dodaj wynik</button>
         <button class="btn btn-ghost btn-sm" (click)="showWyniki=false">✕</button>
       </div>
     </div>
 
     <div *ngIf="wynikSuccess" class="alert alert-success">{{ wynikSuccess }}</div>
 
-    <div *ngIf="wynikiSkoczni.length === 0" class="empty-state" style="padding:2rem">
+      <div *ngIf="wynikiSkoczni.length === 0" class="empty-state" style="padding:2rem">
       <div class="empty-icon">📭</div>
       <p>Brak wyników dla tej skoczni.</p>
-      <button class="btn btn-primary" *ngIf="auth.isAdmin" (click)="otworzDodajWynik()" style="margin-top:1rem">+ Dodaj pierwszy wynik</button>
+      <button class="btn btn-primary" *ngIf="auth.isLoggedIn" (click)="otworzDodajWynik()" style="margin-top:1rem">+ Dodaj pierwszy wynik</button>
     </div>
 
     <table class="dsj-table" *ngIf="wynikiSkoczni.length > 0">
@@ -177,9 +180,14 @@
 
     <div class="form-group">
       <label>Gracz</label>
-      <select [(ngModel)]="wynikForm.graczId">
-        <option *ngFor="let g of gracze" [value]="g.id">{{ g.login_gracza }}</option>
-      </select>
+      <ng-container *ngIf="auth.isAdmin; else lockedPlayer">
+        <select [(ngModel)]="wynikForm.graczId">
+          <option *ngFor="let g of gracze" [value]="g.id">{{ g.login_gracza }}</option>
+        </select>
+      </ng-container>
+      <ng-template #lockedPlayer>
+        <div class="text-dim">Dodajesz wynik jako: <strong>{{ auth.currentUser?.login }}</strong></div>
+      </ng-template>
     </div>
     <div class="form-row">
       <div class="form-group">

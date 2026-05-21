@@ -71,4 +71,45 @@
       .user-icon { font-size: 1.1rem; }
     }
   }
+
+  @media (max-width: 900px) {
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    padding: .75rem 1rem;
+
+    .nav-links {
+      flex: 1 1 100%;
+      gap: .35rem;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+    }
+
+    .nav-user {
+      width: 100%;
+      justify-content: flex-start;
+      gap: .5rem;
+      flex-wrap: wrap;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .brand-text {
+      font-size: 1rem;
+    }
+
+    .nav-links {
+      flex-direction: column;
+    }
+
+    .nav-links a {
+      width: 100%;
+      padding: .45rem .7rem;
+    }
+
+    .nav-user {
+      justify-content: flex-start;
+      width: 100%;
+    }
+  }
 }

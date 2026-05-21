@@ -24,6 +24,12 @@ export class RejestracjaComponent {
 
     this.api.rejestracja({ login: this.login, password: this.password }).subscribe({
       next: () => {
+        // After user registration, try to create a matching Gracz record (best-effort)
+        this.api.addGracz({ login_gracza: this.login }).subscribe({
+          next: () => {},
+          error: () => { console.warn('Nie udało się utworzyć rekordu Gracz (może już istnieje).'); }
+        });
+
         this.success = 'Konto zostało utworzone! Możesz się teraz zalogować.';
         this.loading = false;
         setTimeout(() => this.router.navigate(['/login']), 1800);

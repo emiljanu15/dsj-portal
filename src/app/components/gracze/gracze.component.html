@@ -14,13 +14,15 @@
       <div class="empty-icon">🎿</div><p>Brak graczy w bazie.</p>
     </div>
 
-    <table class="dsj-table" *ngIf="!loading && gracze.length > 0">
+    <div class="table-wrap">
+      <table class="dsj-table" *ngIf="!loading && gracze.length > 0">
       <thead>
         <tr>
           <th>Poz.</th>
           <th>Login gracza</th>
           <th title="Suma najdłuższych skoków z każdej skoczni">🏅 Suma rekordów</th>
           <th>Skocznie</th>
+          <th>Wyniki</th>
           <th>Data rejestracji</th>
           <th *ngIf="auth.isAdmin">Akcje</th>
         </tr>
@@ -38,7 +40,10 @@
             <span class="suma" *ngIf="g.sumaRekordow > 0">{{ g.sumaRekordow }} m</span>
             <span class="text-dim" *ngIf="g.sumaRekordow === 0">brak skoków</span>
           </td>
-          <td><span class="badge badge-k">{{ g.liczbaSkoczni }} skoczni</span></td>
+          <td><a [routerLink]="['/gracz', g.id, 'wyniki']" class="badge badge-k">{{ g.liczbaSkoczni }} skoczni</a></td>
+          <td>
+            <button class="btn btn-secondary btn-sm" [routerLink]="['/gracz', g.id, 'wyniki']">🏆 Wyniki</button>
+          </td>
           <td class="date-cell">{{ g.dataUtworzenia | date:'dd.MM.yyyy' }}</td>
           <td class="actions" *ngIf="auth.isAdmin">
             <button class="btn btn-ghost btn-sm" (click)="openEdit(g)">✏️ Edytuj</button>
@@ -46,7 +51,8 @@
           </td>
         </tr>
       </tbody>
-    </table>
+      </table>
+    </div>
 
     <p class="info-note">💡 Suma rekordów = najdłuższy skok z każdej skoczni zsumowany razem</p>
   </div>

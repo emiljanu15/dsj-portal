@@ -14,6 +14,7 @@ import { KomentarzeComponent }  from './components/komentarze/komentarze.compone
 import { WynikiComponent }      from './components/wyniki/wyniki.component';
 import { LoginComponent }       from './components/login/login.component';
 import { RejestracjaComponent } from './components/rejestracja/rejestracja.component';
+import { WynikiGraczaComponent } from './components/gracze/wyniki-gracza.component';
 import { AuthService }          from './services/auth.service';
 
 export function initAuth(auth: AuthService): () => void {
@@ -27,6 +28,7 @@ export function initAuth(auth: AuthService): () => void {
     DashboardComponent,
     GraczeComponent,
     SkocznieComponent,
+    WynikiGraczaComponent,
     UzytkownicyComponent,
     KomentarzeComponent,
     WynikiComponent,

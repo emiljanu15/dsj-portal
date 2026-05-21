@@ -6,6 +6,7 @@ import { SkocznieComponent }    from './components/skocznie/skocznie.component';
 import { UzytkownicyComponent } from './components/uzytkownicy/uzytkownicy.component';
 import { KomentarzeComponent }  from './components/komentarze/komentarze.component';
 import { WynikiComponent }      from './components/wyniki/wyniki.component';
+import { WynikiGraczaComponent } from './components/gracze/wyniki-gracza.component';
 import { LoginComponent }       from './components/login/login.component';
 import { RejestracjaComponent } from './components/rejestracja/rejestracja.component';
 
@@ -14,6 +15,7 @@ const routes: Routes = [
   { path: 'gracze',      component: GraczeComponent },
   { path: 'skocznie',    component: SkocznieComponent },
   { path: 'wyniki',      component: WynikiComponent },
+  { path: 'gracz/:id/wyniki', component: WynikiGraczaComponent },
   { path: 'komentarze',  component: KomentarzeComponent },
   { path: 'uzytkownicy', component: UzytkownicyComponent },
   { path: 'login',       component: LoginComponent },

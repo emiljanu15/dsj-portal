@@ -56,3 +56,14 @@
   font-family:'Barlow',sans-serif;font-size:.95rem;text-transform:none;letter-spacing:0;
   input[type="checkbox"] { width:18px;height:18px;accent-color:var(--accent);cursor:pointer; }
 }
+
+/* Responsive helpers */
+.table-wrap { overflow-x: auto; }
+
+@media (max-width: 700px) {
+  .dsj-table th, .dsj-table td { padding: .35rem .5rem; font-size: .92rem; }
+  .rekord-gracz { display: none; }
+  .badge { font-size: .75rem; padding: .12rem .4rem; }
+  .actions button { padding: .25rem .4rem; font-size: .78rem; }
+  .form-row { grid-template-columns: 1fr; }
+}
