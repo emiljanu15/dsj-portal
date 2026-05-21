@@ -113,6 +113,8 @@ a {
 .dsj-table {
   width: 100%;
   border-collapse: collapse;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 
   thead tr {
     background: rgba(255, 219, 79, .04);
@@ -127,6 +129,7 @@ a {
       text-transform: uppercase;
       color: var(--text);
       border-bottom: 2px solid var(--border);
+      white-space: nowrap;
     }
   }
 
@@ -547,7 +550,22 @@ a {
 
     tbody tr td {
       padding: .55rem .65rem;
+      white-space: nowrap;
     }
+  }
+
+  .dsj-table {
+    display: block;
+    min-width: 720px;
+    overflow-x: auto;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr !important;
+  }
+
+  .form-row .form-group {
+    margin-bottom: 0;
   }
 
   .btn {
@@ -713,6 +731,11 @@ a {
     max-height: 95vh;
     overflow-y: auto;
     border-radius: 0;
+  }
+
+  .modal-backdrop {
+    align-items: flex-start;
+    padding: 1rem 0 1.5rem;
   }
 
   .modal-header {
