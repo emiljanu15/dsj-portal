@@ -1,0 +1,70 @@
+<div class="page-enter">
+  <div class="card">
+    <div class="card-header">
+      <h2><span class="icon">🎿</span> Gracze – ranking</h2>
+      <button class="btn btn-primary" *ngIf="auth.isAdmin" (click)="openAdd()">+ Dodaj gracza</button>
+    </div>
+
+    <div *ngIf="error"   class="alert alert-error">{{ error }}</div>
+    <div *ngIf="success" class="alert alert-success">{{ success }}</div>
+
+    <div *ngIf="loading" class="loading-wrap"><div class="spinner"></div><p>Ładowanie...</p></div>
+
+    <div *ngIf="!loading && gracze.length === 0 && !error" class="empty-state">
+      <div class="empty-icon">🎿</div><p>Brak graczy w bazie.</p>
+    </div>
+
+    <table class="dsj-table" *ngIf="!loading && gracze.length > 0">
+      <thead>
+        <tr>
+          <th>Poz.</th>
+          <th>Login gracza</th>
+          <th title="Suma najdłuższych skoków z każdej skoczni">🏅 Suma rekordów</th>
+          <th>Skocznie</th>
+          <th>Data rejestracji</th>
+          <th *ngIf="auth.isAdmin">Akcje</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let g of gracze; let i = index" [class.top1]="i===0" [class.top2]="i===1" [class.top3]="i===2">
+          <td class="pozycja">
+            <span *ngIf="i===0">🥇</span>
+            <span *ngIf="i===1">🥈</span>
+            <span *ngIf="i===2">🥉</span>
+            <span *ngIf="i>2" class="id-badge">{{ i+1 }}</span>
+          </td>
+          <td><strong class="gracz-name">{{ g.login_gracza }}</strong></td>
+          <td>
+            <span class="suma" *ngIf="g.sumaRekordow > 0">{{ g.sumaRekordow }} m</span>
+            <span class="text-dim" *ngIf="g.sumaRekordow === 0">brak skoków</span>
+          </td>
+          <td><span class="badge badge-k">{{ g.liczbaSkoczni }} skoczni</span></td>
+          <td class="date-cell">{{ g.dataUtworzenia | date:'dd.MM.yyyy' }}</td>
+          <td class="actions" *ngIf="auth.isAdmin">
+            <button class="btn btn-ghost btn-sm" (click)="openEdit(g)">✏️ Edytuj</button>
+            <button class="btn btn-danger btn-sm" (click)="delete(g.id!)">🗑️ Usuń</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="info-note">💡 Suma rekordów = najdłuższy skok z każdej skoczni zsumowany razem</p>
+  </div>
+</div>
+
+<div class="modal-backdrop" *ngIf="showModal" (click)="showModal=false">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>{{ editMode ? 'Edytuj gracza' : 'Nowy gracz' }}</h3>
+      <button class="btn btn-ghost btn-sm" (click)="showModal=false">✕</button>
+    </div>
+    <div class="form-group">
+      <label>Login gracza</label>
+      <input type="text" [(ngModel)]="form.login_gracza" placeholder="np. Kowalski99" />
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" (click)="showModal=false">Anuluj</button>
+      <button class="btn btn-primary" (click)="save()">{{ editMode ? 'Zapisz' : 'Dodaj' }}</button>
+    </div>
+  </div>
+</div>

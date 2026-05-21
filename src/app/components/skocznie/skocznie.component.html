@@ -1,0 +1,274 @@
+<div class="page-enter">
+  <div class="card">
+    <div class="card-header">
+      <h2><span class="icon">⛰️</span> Skocznie narciarskie</h2>
+      <button class="btn btn-primary" *ngIf="auth.isAdmin" (click)="openAdd()">+ Dodaj skocznię</button>
+    </div>
+
+    <div *ngIf="error"   class="alert alert-error">{{ error }}</div>
+    <div *ngIf="success" class="alert alert-success">{{ success }}</div>
+    <div *ngIf="loading" class="loading-wrap"><div class="spinner"></div><p>Ładowanie...</p></div>
+
+    <div *ngIf="!loading && skocznie.length === 0 && !error" class="empty-state">
+      <div class="empty-icon">⛰️</div><p>Brak skoczni w bazie.</p>
+    </div>
+
+    <table class="dsj-table" *ngIf="!loading && skocznie.length > 0">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Nazwa</th>
+          <th>Lokalizacja</th>
+          <th>Punkt K</th>
+          <th>🏅 Rekord</th>
+          <th>Wyniki</th>
+          <th *ngIf="auth.isAdmin">Akcje</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let s of skocznie">
+          <td><span class="id-badge">{{ s.id }}</span></td>
+          <td><strong>{{ s.nazwa }}</strong></td>
+          <td>📍 {{ s.lokalizacja }}</td>
+          <td><span class="badge badge-k">K{{ s.punkt_k }}</span></td>
+          <td class="rekord-cell">
+            <ng-container *ngIf="s.rekord; else brakRekordu">
+              <span class="rekord-val">{{ s.rekord }} m</span>
+              <span class="rekord-gracz">🎿 {{ s.rekordGracz }}</span>
+            </ng-container>
+            <ng-template #brakRekordu>
+              <span class="text-dim">—</span>
+            </ng-template>
+          </td>
+          <td>
+            <button class="btn btn-ghost btn-sm" (click)="pokazWyniki(s)">🏆 Rekordy</button>
+          </td>
+          <td class="actions" *ngIf="auth.isAdmin">
+            <button class="btn btn-ghost btn-sm" (click)="openEdit(s)">✏️ Edytuj</button>
+            <button class="btn btn-danger btn-sm" (click)="delete(s.id!)">🗑️ Usuń</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal edycji skoczni -->
+<div class="modal-backdrop" *ngIf="showModal" (click)="showModal=false">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>{{ editMode ? 'Edytuj skocznię' : 'Nowa skocznia' }}</h3>
+      <button class="btn btn-ghost btn-sm" (click)="showModal=false">✕</button>
+    </div>
+    <div class="form-group">
+      <label>Nazwa</label>
+      <input type="text" [(ngModel)]="form.nazwa" placeholder="np. Wielka Krokiew" />
+    </div>
+    <div class="form-group">
+      <label>Lokalizacja</label>
+      <input type="text" [(ngModel)]="form.lokalizacja" placeholder="np. Zakopane" />
+    </div>
+    <div class="form-group">
+      <label>Punkt K (metry)</label>
+      <input type="number" [(ngModel)]="form.punkt_k" />
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" (click)="showModal=false">Anuluj</button>
+      <button class="btn btn-primary" (click)="save()">{{ editMode ? 'Zapisz' : 'Dodaj' }}</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal rekordów skoczni -->
+<div class="modal-backdrop" *ngIf="showWyniki" (click)="showWyniki=false">
+  <div class="modal modal-xl" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div class="header-left">
+        <h3>🏆 {{ wybranaSkocznia?.nazwa }}</h3>
+        <div class="header-meta">
+          <span class="badge badge-k">K{{ wybranaSkocznia?.punkt_k }}</span>
+          <span class="text-dim">📍 {{ wybranaSkocznia?.lokalizacja }}</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-primary btn-sm" *ngIf="auth.isAdmin" (click)="otworzDodajWynik()">+ Dodaj wynik</button>
+        <button class="btn btn-ghost btn-sm" (click)="showWyniki=false">✕</button>
+      </div>
+    </div>
+
+    <div *ngIf="wynikSuccess" class="alert alert-success">{{ wynikSuccess }}</div>
+
+    <div *ngIf="wynikiSkoczni.length === 0" class="empty-state" style="padding:2rem">
+      <div class="empty-icon">📭</div>
+      <p>Brak wyników dla tej skoczni.</p>
+      <button class="btn btn-primary" *ngIf="auth.isAdmin" (click)="otworzDodajWynik()" style="margin-top:1rem">+ Dodaj pierwszy wynik</button>
+    </div>
+
+    <table class="dsj-table" *ngIf="wynikiSkoczni.length > 0">
+      <thead>
+        <tr>
+          <th>Poz.</th>
+          <th>Gracz</th>
+          <th>Odległość</th>
+          <th>Data skoku</th>
+          <th>Lądowanie</th>
+          <th>Powtórka</th>
+          <th>💭 Komentarze</th>
+          <th *ngIf="auth.isAdmin">Akcje</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let w of wynikiSkoczni; let i = index"
+            [class.top1]="i===0" [class.top2]="i===1" [class.top3]="i===2">
+          <td class="pozycja">
+            <span *ngIf="i===0">🥇</span>
+            <span *ngIf="i===1">🥈</span>
+            <span *ngIf="i===2">🥉</span>
+            <span *ngIf="i>2" class="id-badge">{{ i+1 }}</span>
+          </td>
+          <td><strong>{{ w.gracz?.login_gracza ?? '—' }}</strong></td>
+          <td>
+            <span class="odleglosc" [class.over-k]="przekroczylK(w)" [class.under-k]="!przekroczylK(w)">
+              {{ w.odleglosc }} m
+            </span>
+            <span class="badge badge-k" *ngIf="przekroczylK(w)">✓ K</span>
+          </td>
+          <td class="date-cell">{{ w.dataSkoku | date:'dd.MM.yyyy' }}</td>
+          <td>
+            <span class="upadek-badge" *ngIf="w.czy_upadek">💥 Upadek</span>
+            <span class="ok-badge"     *ngIf="!w.czy_upadek">✓ OK</span>
+          </td>
+          <td>
+            <a *ngIf="w.link_powtorka" [href]="w.link_powtorka" target="_blank" class="replay-link">▶ Powtórka</a>
+            <span *ngIf="!w.link_powtorka" class="text-dim">—</span>
+          </td>
+          <td>
+            <button class="btn btn-secondary btn-sm" (click)="otworzKomentarze(w)" title="Pokaż komentarze do tego wyniku">💭 {{ liczenieKomentarzy(w.id!) }}</button>
+          </td>
+          <td>
+            <button class="btn btn-info btn-sm" (click)="otworzKomentuj(w)" *ngIf="auth.isLoggedIn" title="Dodaj komentarz">💬 Komentuj</button>
+            <button class="btn btn-danger btn-sm" (click)="usunWynik(w.id!)" *ngIf="auth.isAdmin">🗑️ Usuń</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal dodaj wynik -->
+<div class="modal-backdrop" *ngIf="showDodajWynik" (click)="showDodajWynik=false">
+  <div class="modal modal-wide" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div>
+        <h3>🏆 Nowy wynik skoku</h3>
+        <p class="modal-sub">Skocznia: <strong>{{ wybranaSkocznia?.nazwa }}</strong> (K{{ wybranaSkocznia?.punkt_k }})</p>
+      </div>
+      <button class="btn btn-ghost btn-sm" (click)="showDodajWynik=false">✕</button>
+    </div>
+
+    <div *ngIf="wynikError" class="alert alert-error">{{ wynikError }}</div>
+
+    <div class="skocznia-locked">
+      <span class="lock-label">Skocznia</span>
+      <span class="lock-value">⛰️ {{ wybranaSkocznia?.nazwa }} &nbsp;<span class="badge badge-k">K{{ wybranaSkocznia?.punkt_k }}</span></span>
+    </div>
+
+    <div class="form-group">
+      <label>Gracz</label>
+      <select [(ngModel)]="wynikForm.graczId">
+        <option *ngFor="let g of gracze" [value]="g.id">{{ g.login_gracza }}</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Odległość (m)</label>
+        <input type="number" step="0.5" [(ngModel)]="wynikForm.odleglosc" placeholder="np. 134.5" />
+      </div>
+      <div class="form-group">
+        <label>Data skoku</label>
+        <input type="date" [(ngModel)]="wynikForm.dataSkoku" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Link do powtórki (opcjonalnie)</label>
+      <input type="url" [(ngModel)]="wynikForm.link_powtorka" placeholder="https://..." />
+    </div>
+    <div class="form-group checkbox-group">
+      <label class="checkbox-label">
+        <input type="checkbox" [(ngModel)]="wynikForm.czy_upadek" />
+        <span>💥 Upadek przy lądowaniu</span>
+      </label>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" (click)="showDodajWynik=false">Anuluj</button>
+      <button class="btn btn-primary" (click)="zapiszWynik()">Dodaj wynik</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal komentarze do wyniku -->
+<div class="modal-backdrop" *ngIf="showKomentuj" (click)="showKomentuj=false">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div>
+        <h3>💬 Dodaj komentarz</h3>
+        <p class="modal-sub" *ngIf="wybranyWynik">
+          Wynik: <strong>{{ wybranyWynik.gracz?.login_gracza }}</strong> - 
+          <strong>{{ wybranyWynik.odleglosc }} m</strong>
+        </p>
+      </div>
+      <button class="btn btn-ghost btn-sm" (click)="showKomentuj=false">✕</button>
+    </div>
+
+    <div *ngIf="komentarzError" class="alert alert-error">{{ komentarzError }}</div>
+    <div *ngIf="komentarzSuccess" class="alert alert-success">{{ komentarzSuccess }}</div>
+
+    <div class="form-group">
+      <label>Twój komentarz</label>
+      <textarea [(ngModel)]="komentarzForm.tresc" 
+                placeholder="Wpisz komentarz..." 
+                rows="6"
+                [disabled]="komentarzSuccess !== ''"></textarea>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-ghost" (click)="showKomentuj=false" [disabled]="komentarzSuccess !== ''">Anuluj</button>
+      <button class="btn btn-primary" (click)="zapiszKomentarz()" [disabled]="komentarzSuccess !== ''">Dodaj komentarz</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal wyswietlanie komentarzy do wyniku -->
+<div class="modal-backdrop" *ngIf="showKomentarze" (click)="showKomentarze=false">
+  <div class="modal modal-wide" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div>
+        <h3>💬 Komentarze do wyniku</h3>
+        <p class="modal-sub" *ngIf="wybranyWynik">
+          Wynik: <strong>{{ wybranyWynik.gracz?.login_gracza }}</strong> - 
+          <strong>{{ wybranyWynik.odleglosc }} m</strong>
+        </p>
+      </div>
+      <button class="btn btn-ghost btn-sm" (click)="showKomentarze=false">✕</button>
+    </div>
+
+    <div *ngIf="komentarzeWybranegaWyniku.length === 0" class="empty-state" style="padding:2rem">
+      <div class="empty-icon">💬</div>
+      <p>Brak komentarzy do tego wyniku.</p>
+    </div>
+
+    <div *ngIf="komentarzeWybranegaWyniku.length > 0" class="comments-list">
+      <div class="comment-item" *ngFor="let k of komentarzeWybranegaWyniku">
+        <div class="comment-header">
+          <span class="comment-user">👤 {{ getLoginUzytkownika(k.uzytkownikId) }}</span>
+          <span class="comment-date">{{ k.dataUtworzenia | date:'dd.MM.yyyy HH:mm' }}</span>
+        </div>
+        <div class="comment-content">{{ k.tresc }}</div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-ghost" (click)="showKomentarze=false">Zamknij</button>
+    </div>
+  </div>
+</div>

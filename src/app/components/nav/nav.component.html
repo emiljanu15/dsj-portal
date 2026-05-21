@@ -1,0 +1,30 @@
+<nav class="navbar">
+  <a routerLink="/" class="brand">
+    <span class="brand-icon">🎿</span>
+    <span class="brand-text">DSJ <strong>POLAND REKORDY</strong></span>
+  </a>
+
+  <ul class="nav-links">
+    <li><a routerLink="/"           routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">📊 Dashboard</a></li>
+    <li><a routerLink="/skocznie"   routerLinkActive="active">⛰️ Skocznie</a></li>
+    <li><a routerLink="/gracze"     routerLinkActive="active">🎿 Gracze</a></li>
+    <li *ngIf="auth.isAdmin"><a routerLink="/wyniki"      routerLinkActive="active">🏆 Wyniki</a></li>
+    <li *ngIf="auth.isAdmin"><a routerLink="/komentarze"  routerLinkActive="active">💬 Komentarze</a></li>
+    <li *ngIf="auth.isAdmin"><a routerLink="/uzytkownicy" routerLinkActive="active">👤 Użytkownicy</a></li>
+  </ul>
+
+  <div class="nav-user">
+    <ng-container *ngIf="auth.isLoggedIn; else notLogged">
+      <span class="user-badge">
+        <span class="user-icon">{{ auth.isAdmin ? '🛡️' : '👤' }}</span>
+        {{ auth.currentUser?.login }}
+        <span class="badge badge-admin" *ngIf="auth.isAdmin">Admin</span>
+      </span>
+      <button class="btn btn-ghost btn-sm" (click)="logout()">Wyloguj</button>
+    </ng-container>
+    <ng-template #notLogged>
+      <a routerLink="/login"       class="btn btn-ghost btn-sm">Logowanie</a>
+      <a routerLink="/rejestracja" class="btn btn-primary btn-sm">Rejestracja</a>
+    </ng-template>
+  </div>
+</nav>

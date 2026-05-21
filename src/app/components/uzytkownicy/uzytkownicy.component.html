@@ -1,0 +1,46 @@
+<div class="page-enter">
+  <div class="card">
+    <div class="card-header">
+      <h2><span class="icon">👥</span> Użytkownicy</h2>
+      <a routerLink="/rejestracja" class="btn btn-primary">+ Nowy użytkownik</a>
+    </div>
+
+    <div *ngIf="error"   class="alert alert-error">{{ error }}</div>
+    <div *ngIf="success" class="alert alert-success">{{ success }}</div>
+
+    <div *ngIf="loading" class="loading-wrap">
+      <div class="spinner"></div><p>Ładowanie...</p>
+    </div>
+
+    <div *ngIf="!loading && uzytkownicy.length === 0 && !error" class="empty-state">
+      <div class="empty-icon">👥</div>
+      <p>Brak użytkowników.</p>
+    </div>
+
+    <table class="dsj-table" *ngIf="!loading && uzytkownicy.length > 0">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Login</th>
+          <th>Rola</th>
+          <th>Data rejestracji</th>
+          <th>Akcje</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let u of uzytkownicy">
+          <td><span class="id-badge">{{ u.id }}</span></td>
+          <td><strong>{{ u.login }}</strong></td>
+          <td>
+            <span class="badge badge-admin" *ngIf="u.czyAdmin">🛡️ Admin</span>
+            <span class="badge badge-user"  *ngIf="!u.czyAdmin">👤 User</span>
+          </td>
+          <td class="date-cell">{{ u.dataUtworzenia | date:'dd.MM.yyyy' }}</td>
+          <td class="actions">
+            <button class="btn btn-danger btn-sm" (click)="delete(u.id!)">🗑️ Usuń</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

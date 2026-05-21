@@ -1,0 +1,25 @@
+.id-badge { display:inline-block;padding:.15rem .45rem;background:var(--bg3);border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:.85rem;color:var(--text-dim); }
+.date-cell { color:var(--text-dim);font-size:.9rem; }
+.actions { display:flex;gap:.5rem;flex-wrap:wrap; }
+.gracz-name { color: var(--snow); }
+.text-dim { color: var(--text-dim); font-size:.9rem; }
+
+.pozycja { font-size: 1.2rem; text-align: center; }
+
+.suma {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--success);
+}
+
+.top1 td { background: rgba(255,215,0,.05); }
+.top2 td { background: rgba(192,192,192,.04); }
+.top3 td { background: rgba(205,127,50,.04); }
+
+.info-note {
+  margin-top: 1rem;
+  font-size: .82rem;
+  color: var(--text-dim);
+  text-align: right;
+}

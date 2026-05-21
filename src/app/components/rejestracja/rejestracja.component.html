@@ -1,0 +1,31 @@
+<div class="auth-wrap page-enter">
+  <div class="auth-card">
+    <div class="auth-icon">✨</div>
+    <h2>Rejestracja</h2>
+    <p class="auth-sub">Dołącz do DSJ Portal i śledź wyniki</p>
+
+    <div *ngIf="error"   class="alert alert-error">{{ error }}</div>
+    <div *ngIf="success" class="alert alert-success">{{ success }}</div>
+
+    <div class="form-group">
+      <label>Login</label>
+      <input type="text" [(ngModel)]="login" placeholder="Wybierz login" />
+    </div>
+    <div class="form-group">
+      <label>Hasło</label>
+      <input type="password" [(ngModel)]="password" placeholder="Hasło" />
+    </div>
+    <div class="form-group">
+      <label>Powtórz hasło</label>
+      <input type="password" [(ngModel)]="password2" placeholder="Powtórz hasło" (keyup.enter)="submit()" />
+    </div>
+
+    <button class="btn btn-primary full-btn" (click)="submit()" [disabled]="loading">
+      {{ loading ? 'Rejestracja...' : 'Zarejestruj się' }}
+    </button>
+
+    <p class="auth-link">
+      Masz już konto? <a routerLink="/login">Zaloguj się</a>
+    </p>
+  </div>
+</div>

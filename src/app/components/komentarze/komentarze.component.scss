@@ -1,0 +1,22 @@
+.filter-bar {
+  display: flex;
+  gap: .75rem;
+  align-items: center;
+  margin-bottom: 1.25rem;
+
+  input {
+    width: 220px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--snow);
+    padding: .45rem .8rem;
+    font-family: 'Barlow', sans-serif;
+    font-size: .9rem;
+    &:focus { outline: none; border-color: var(--accent); }
+  }
+}
+
+.id-badge { display:inline-block;padding:.15rem .45rem;background:var(--bg3);border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:.85rem;color:var(--text-dim); }
+.tresc-cell { max-width: 360px; }
+.actions { display:flex;gap:.5rem;flex-wrap:wrap; }

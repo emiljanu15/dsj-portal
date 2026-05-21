@@ -1,0 +1,60 @@
+.id-badge { display:inline-block;padding:.15rem .45rem;background:var(--bg3);border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:.85rem;color:var(--text-dim); }
+.date-cell { color:var(--text-dim);font-size:.9rem; }
+.actions { display:flex;gap:.4rem; }
+.text-dim { color:var(--text-dim);font-size:.85rem; }
+
+.odleglosc { font-family:'Barlow Condensed',sans-serif;font-size:1.15rem;font-weight:700;margin-right:.4rem; }
+.over-k  { color:var(--success); }
+.under-k { color:var(--warn); }
+
+.upadek-row { opacity:.85; }
+.upadek-badge { background:rgba(255,77,106,.15);color:var(--danger);border:1px solid rgba(255,77,106,.3);padding:.2rem .6rem;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:600; }
+.ok-badge     { background:rgba(46,216,126,.12);color:var(--success);border:1px solid rgba(46,216,126,.25);padding:.2rem .6rem;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:600; }
+.replay-link  { color:var(--accent);font-size:.88rem;font-weight:600;text-decoration:none;&:hover{color:var(--sky);} }
+
+.modal-wide { max-width:640px;width:95vw; }
+
+.form-row { display:grid;grid-template-columns:1fr 1fr;gap:1rem; }
+
+.checkbox-group .checkbox-label {
+  display:flex;align-items:center;gap:.6rem;cursor:pointer;color:var(--text);
+  font-family:'Barlow',sans-serif;font-size:.95rem;text-transform:none;letter-spacing:0;
+  input[type="checkbox"] { width:18px;height:18px;accent-color:var(--accent);cursor:pointer; }
+}
+
+// Komentarze
+.wynik-info { display:flex;align-items:center;gap:.6rem;flex:1;margin-left:.5rem; }
+
+.komentarze-lista {
+  max-height:320px;
+  overflow-y:auto;
+  margin-bottom:1rem;
+  display:flex;
+  flex-direction:column;
+  gap:.75rem;
+}
+
+.komentarz {
+  display:flex;
+  gap:.75rem;
+  align-items:flex-start;
+  padding:.75rem;
+  background:var(--bg3);
+  border-radius:8px;
+  border:1px solid var(--border);
+
+  .kom-avatar { font-size:1.4rem;flex-shrink:0; }
+
+  .kom-body { flex:1; }
+  .kom-meta { margin-bottom:.25rem; }
+  .kom-user { font-family:'Barlow Condensed',sans-serif;font-size:.85rem;color:var(--accent);font-weight:600; }
+  .kom-tresc { color:var(--text);line-height:1.5; }
+}
+
+.dodaj-komentarz {
+  border-top:1px solid var(--border);
+  padding-top:1rem;
+  margin-top:.5rem;
+
+  h4 { font-size:1rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.75rem;color:var(--text-dim); }
+}

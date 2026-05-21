@@ -1,0 +1,77 @@
+<div class="page-enter">
+  <div class="card">
+    <div class="card-header">
+      <h2><span class="icon">💬</span> Komentarze</h2>
+      <button class="btn btn-primary" (click)="openAdd()">+ Dodaj komentarz</button>
+    </div>
+
+    <!-- Filter -->
+    <div class="filter-bar">
+      <input type="number" [(ngModel)]="filterInput" placeholder="Filtruj po ID wyniku..." />
+      <button class="btn btn-ghost btn-sm" (click)="loadByWynik()">Szukaj</button>
+      <button class="btn btn-ghost btn-sm" (click)="filterInput=''; load()">Resetuj</button>
+    </div>
+
+    <div *ngIf="error"   class="alert alert-error">{{ error }}</div>
+    <div *ngIf="success" class="alert alert-success">{{ success }}</div>
+
+    <div *ngIf="loading" class="loading-wrap">
+      <div class="spinner"></div><p>Ładowanie...</p>
+    </div>
+
+    <div *ngIf="!loading && komentarze.length === 0 && !error" class="empty-state">
+      <div class="empty-icon">💬</div>
+      <p>Brak komentarzy.</p>
+    </div>
+
+    <table class="dsj-table" *ngIf="!loading && komentarze.length > 0">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Treść</th>
+          <th>Wynik ID</th>
+          <th>Użytkownik ID</th>
+          <th>Akcje</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let k of komentarze">
+          <td><span class="id-badge">{{ k.id }}</span></td>
+          <td class="tresc-cell">{{ k.tresc }}</td>
+          <td><span class="badge badge-k">Wynik #{{ k.wynikId }}</span></td>
+          <td><span class="badge badge-user">User #{{ k.uzytkownikId }}</span></td>
+          <td class="actions">
+            <button class="btn btn-ghost btn-sm" (click)="openEdit(k)">✏️ Edytuj</button>
+            <button class="btn btn-danger btn-sm" (click)="delete(k.id!)">🗑️ Usuń</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-backdrop" *ngIf="showModal" (click)="showModal=false">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>{{ editMode ? 'Edytuj komentarz' : 'Nowy komentarz' }}</h3>
+      <button class="btn btn-ghost btn-sm" (click)="showModal=false">✕</button>
+    </div>
+    <div class="form-group">
+      <label>Treść</label>
+      <textarea [(ngModel)]="form.tresc" placeholder="Treść komentarza..."></textarea>
+    </div>
+    <div class="form-group">
+      <label>ID wyniku</label>
+      <input type="number" [(ngModel)]="form.wynikId" placeholder="np. 1" />
+    </div>
+    <div class="form-group">
+      <label>ID użytkownika</label>
+      <input type="number" [(ngModel)]="form.uzytkownikId" placeholder="np. 1" />
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" (click)="showModal=false">Anuluj</button>
+      <button class="btn btn-primary" (click)="save()">{{ editMode ? 'Zapisz' : 'Dodaj' }}</button>
+    </div>
+  </div>
+</div>

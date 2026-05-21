@@ -1,0 +1,74 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: .9rem 2rem;
+  background: rgba(17,21,28,.95);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    text-decoration: none;
+    color: var(--snow);
+    white-space: nowrap;
+
+    .brand-icon { font-size: 1.6rem; }
+
+    .brand-text {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 400;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+
+      strong { color: var(--accent); font-weight: 900; }
+    }
+  }
+
+  .nav-links {
+    display: flex;
+    list-style: none;
+    gap: .25rem;
+    flex: 1;
+
+    a {
+      display: block;
+      padding: .4rem .85rem;
+      border-radius: 6px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: .95rem;
+      font-weight: 600;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: all .15s;
+
+      &:hover  { color: var(--text); background: var(--bg3); }
+      &.active { color: var(--accent); background: rgba(59,158,255,.1); }
+    }
+  }
+
+  .nav-user {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    white-space: nowrap;
+
+    .user-badge {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .9rem;
+      color: var(--text);
+
+      .user-icon { font-size: 1.1rem; }
+    }
+  }
+}

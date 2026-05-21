@@ -1,0 +1,49 @@
+<div class="page-enter">
+  <div class="dash-hero">
+    <div class="hero-text">
+      <h1>DSJ Portal</h1>
+      <p>System zarządzania rozgrywkami w skokach narciarskich</p>
+    </div>
+    <div class="hero-art">🎿</div>
+  </div>
+
+  <div *ngIf="loading" class="loading-wrap">
+    <div class="spinner"></div>
+    <p>Ładowanie danych...</p>
+  </div>
+
+  <div *ngIf="error" class="alert alert-error">{{ error }}</div>
+
+  <div *ngIf="!loading && !error" class="stats-grid">
+    <div class="stat-card" routerLink="/gracze" style="cursor:pointer">
+      <div class="stat-icon">🎿</div>
+      <div class="stat-info">
+        <div class="stat-value">{{ gracze }}</div>
+        <div class="stat-label">Gracze</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">👥</div>
+      <div class="stat-info">
+        <div class="stat-value">{{ uzytkownicy }}</div>
+        <div class="stat-label">Zarejestrowani użytkownicy</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="quick-links" *ngIf="!loading">
+    <h2>Szybki dostęp</h2>
+    <div class="links-grid">
+      <a routerLink="/skocznie" class="quick-card">
+        <span>⛰️</span>
+        <strong>Skocznie narciarskie</strong>
+        <small>Przeglądaj skocznie i rekordy</small>
+      </a>
+      <a routerLink="/gracze" class="quick-card">
+        <span>🎿</span>
+        <strong>Gracze – ranking</strong>
+        <small>Ranking graczy z sumą rekordów</small>
+      </a>
+    </div>
+  </div>
+</div>
