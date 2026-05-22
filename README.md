@@ -5,7 +5,7 @@ Portal dla gry DSJ (Deluxe Ski Jump) do zarządzania graczami, skoczniami i kome
 ## Wymagania
 
 - Node.js 18+
-- Angular CLI 17+
+- Angular CLI 17+Working
 
 ## Instalacja
 

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { forkJoin } from 'rxjs';
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
 import { WynikDto, Skocznia } from '../../models/models';
@@ -13,14 +12,15 @@ import { WynikDto, Skocznia } from '../../models/models';
 export class DodajWynikComponent implements OnInit {
   skocznie: Skocznia[] = [];
   loading = true;
+  saving = false;
   error = '';
   success = '';
-  
+
   form: WynikDto = {
     odleglosc: 0,
-    dataSkoku: new Date().toISOString().split('T')[0],
+    dataSkoku: '',
     graczId: 0,
-    skoczniaId: 0,
+    skoczniaId: null as any,
     link_powtorka: '',
     czy_upadek: false
   };
@@ -32,24 +32,20 @@ export class DodajWynikComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Sprawdź czy użytkownik jest zalogowany
     if (!this.auth.isLoggedIn) {
       this.router.navigate(['/login']);
       return;
     }
 
-    // Ustaw graczId na ID zalogowanego użytkownika
     if (this.auth.currentUser?.id) {
-      this.form.graczId = this.auth.currentUser.id;
+      this.form.graczId = Number(this.auth.currentUser.id);
     }
 
-    // Załaduj dostępne skocznie
+    this.form.dataSkoku = this.todayLocal();
+
     this.api.getSkocznie().subscribe({
-      next: skocznie => {
+      next: (skocznie) => {
         this.skocznie = skocznie;
-        if (skocznie.length > 0) {
-          this.form.skoczniaId = skocznie[0].id!;
-        }
         this.loading = false;
       },
       error: () => {
@@ -59,15 +55,26 @@ export class DodajWynikComponent implements OnInit {
     });
   }
 
-  // Sprawdź powtórkę i uzupełnij odległość
+  private todayLocal(): string {
+    const d = new Date();
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
   checkReplay(url?: string): void {
+    this.error = '';
+    this.success = '';
+
     if (!url || !url.trim()) {
       this.error = 'Podaj URL powtórki.';
       return;
     }
-    this.error = '';
+
     this.success = 'Sprawdzam powtórkę...';
-    this.api.replayDistance({ url }).subscribe({
+
+    this.api.replayDistance({ url: url.trim() }).subscribe({
       next: (res: any) => {
         if (res?.success && typeof res.length === 'number') {
           this.form.odleglosc = Math.round(res.length * 10) / 10;
@@ -84,27 +91,66 @@ export class DodajWynikComponent implements OnInit {
     });
   }
 
-  // Wyślij formularz
   save(): void {
-    if (!this.form.odleglosc || !this.form.skoczniaId || !this.form.graczId) {
-      this.error = 'Wypełnij wszystkie wymagane pola.';
+    this.error = '';
+    this.success = '';
+
+    const payload: WynikDto = {
+      ...this.form,
+      odleglosc: Number(this.form.odleglosc),
+      dataSkoku: this.form.dataSkoku,
+      graczId: Number(this.form.graczId),
+      skoczniaId: Number(this.form.skoczniaId),
+      link_powtorka: this.form.link_powtorka?.trim() || '',
+      czy_upadek: !!this.form.czy_upadek
+    };
+
+    if (!payload.graczId || payload.graczId <= 0) {
+      this.error = 'Nieprawidłowy użytkownik. Zaloguj się ponownie.';
       return;
     }
 
-    this.api.addWynik(this.form).subscribe({
+    if (!payload.skoczniaId || payload.skoczniaId <= 0) {
+      this.error = 'Wybierz skocznię.';
+      return;
+    }
+
+    if (!payload.odleglosc || payload.odleglosc <= 0) {
+      this.error = 'Podaj poprawną odległość skoku.';
+      return;
+    }
+
+    if (!payload.dataSkoku) {
+      this.error = 'Wybierz datę skoku.';
+      return;
+    }
+
+    this.saving = true;
+
+    console.log('Dodawanie wyniku - payload:', payload, {
+      graczIdType: typeof payload.graczId,
+      skoczniaIdType: typeof payload.skoczniaId,
+      odlegloscType: typeof payload.odleglosc
+    });
+
+    this.api.addWynik(payload).subscribe({
       next: () => {
+        this.saving = false;
         this.success = 'Wynik dodany pomyślnie! 🎉';
+
         setTimeout(() => {
           this.router.navigate(['/wyniki']);
         }, 1500);
       },
       error: (err) => {
-        this.error = 'Błąd podczas dodawania wyniku: ' + (err?.error?.message || 'Spróbuj ponownie.');
+        this.saving = false;
+        this.error =
+          'Błąd podczas dodawania wyniku: ' +
+          (err?.error?.message || err?.error?.title || 'Spróbuj ponownie.');
       }
     });
   }
 
-  // Anuluj i wróć do dashboard
   cancel(): void {
     this.router.navigate(['/']);
   }
