@@ -28,7 +28,12 @@
 .table-wrap { overflow-x: auto; }
 
 @media (max-width: 700px) {
-  .dsj-table th, .dsj-table td { padding: .35rem .5rem; font-size: .92rem; }
+  .dsj-table th, .dsj-table td {
+    padding: .35rem .5rem;
+    font-size: .92rem;
+    white-space: normal;
+  }
+
   .suma { font-size: 1rem; }
   .badge { font-size: .75rem; padding: .12rem .4rem; }
   .actions button { padding: .25rem .4rem; font-size: .78rem; }
@@ -36,8 +41,10 @@
 
 @media (max-width: 768px) {
   .dsj-table {
-    thead th:nth-child(3),
-    tbody td:nth-child(3) {
+    th:nth-child(4),
+    td:nth-child(4),
+    th:nth-child(6),
+    td:nth-child(6) {
       display: none;
     }
 
@@ -56,30 +63,70 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 650px) {
+  .table-wrap { overflow-x: hidden; }
+
   .dsj-table {
-    thead th:nth-child(3),
-    tbody td:nth-child(3) {
-      display: none;
-    }
-
-    .actions {
-      flex-direction: column;
-      gap: 0.2rem;
-      width: 100%;
-    }
-
-    .actions button {
-      width: 100%;
-      padding: 0.3rem 0.35rem;
-      font-size: 0.6rem;
-      justify-content: center;
-      flex-grow: 1;
-    }
+    border: none;
   }
 
+  .dsj-table thead { display: none; }
+
+  .dsj-table tbody tr {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
+    margin-bottom: 1rem;
+    padding: 0.9rem;
+    border: 1px solid rgba(215, 200, 75, 0.18);
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 14px;
+  }
+
+  .dsj-table tbody td {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.22rem;
+    padding: 0;
+    border: none;
+  }
+
+  .dsj-table tbody td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 0.15rem;
+  }
+
+  .dsj-table tbody td.actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    width: 100%;
+  }
+
+  .dsj-table tbody td.actions::before { content: '';
+    display: none;
+  }
+
+  .dsj-table tbody td .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
   .gracz-name {
     display: block;
     margin-bottom: 0.2rem;
   }
+
+  .actions button {
+    font-size: 0.72rem;
+    padding: 0.3rem 0.35rem;
+  }
 }
+

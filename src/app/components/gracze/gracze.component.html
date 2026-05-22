@@ -29,23 +29,23 @@
       </thead>
       <tbody>
         <tr *ngFor="let g of gracze; let i = index" [class.top1]="i===0" [class.top2]="i===1" [class.top3]="i===2">
-          <td class="pozycja">
+          <td class="pozycja" data-label="Poz.">
             <span *ngIf="i===0">🥇</span>
             <span *ngIf="i===1">🥈</span>
             <span *ngIf="i===2">🥉</span>
             <span *ngIf="i>2" class="id-badge">{{ i+1 }}</span>
           </td>
-          <td><strong class="gracz-name">{{ g.login_gracza }}</strong></td>
-          <td>
+          <td data-label="Login gracza"><strong class="gracz-name">{{ g.login_gracza }}</strong></td>
+          <td data-label="Suma rekordów">
             <span class="suma" *ngIf="g.sumaRekordow > 0">{{ g.sumaRekordow }} m</span>
             <span class="text-dim" *ngIf="g.sumaRekordow === 0">brak skoków</span>
           </td>
-          <td><a [routerLink]="['/gracz', g.id, 'wyniki']" class="badge badge-k">{{ g.liczbaSkoczni }} skoczni</a></td>
-          <td>
+          <td data-label="Skocznie"><a [routerLink]="['/gracz', g.id, 'wyniki']" class="badge badge-k">{{ g.liczbaSkoczni }} skoczni</a></td>
+          <td data-label="Wyniki">
             <button class="btn btn-secondary btn-sm" [routerLink]="['/gracz', g.id, 'wyniki']">🏆 Wyniki</button>
           </td>
-          <td class="date-cell">{{ g.dataUtworzenia | date:'dd.MM.yyyy' }}</td>
-          <td class="actions" *ngIf="auth.isAdmin">
+          <td class="date-cell" data-label="Data rejestracji">{{ g.dataUtworzenia | date:'dd.MM.yyyy' }}</td>
+          <td class="actions" *ngIf="auth.isAdmin" data-label="Akcje">
             <button class="btn btn-ghost btn-sm" (click)="openEdit(g)">✏️ Edytuj</button>
             <button class="btn btn-danger btn-sm" (click)="delete(g.id!)">🗑️ Usuń</button>
           </td>
