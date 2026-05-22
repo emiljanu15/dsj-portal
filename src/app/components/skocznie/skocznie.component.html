@@ -105,56 +105,58 @@
       <button class="btn btn-primary" *ngIf="auth.isLoggedIn" (click)="otworzDodajWynik()" style="margin-top:1rem">+ Dodaj pierwszy wynik</button>
     </div>
 
-    <table class="dsj-table" *ngIf="wynikiSkoczni.length > 0">
-      <thead>
-        <tr>
-          <th>Poz.</th>
-          <th>Gracz</th>
-          <th>Odległość</th>
-          <th>Różnica</th>
-          <th>Data skoku</th>
-          <th>Lądowanie</th>
-          <th>Powtórka</th>
-          <th>💭 Komentarze</th>
-          <th *ngIf="auth.isAdmin">Akcje</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let w of wynikiSkoczni; let i = index"
-            [class.top1]="i===0" [class.top2]="i===1" [class.top3]="i===2">
-          <td class="pozycja">
-            <span *ngIf="i===0">🥇</span>
-            <span *ngIf="i===1">🥈</span>
-            <span *ngIf="i===2">🥉</span>
-            <span *ngIf="i>2" class="id-badge">{{ i+1 }}</span>
-          </td>
-          <td><strong>{{ w.gracz?.login_gracza ?? '—' }}</strong></td>
-          <td>
-            <span class="odleglosc" [class.over-k]="przekroczylK(w)" [class.under-k]="!przekroczylK(w)">
-              {{ w.odleglosc }} m
-            </span>
-            <span class="badge badge-k" *ngIf="przekroczylK(w)">✓ K</span>
-          </td>
-          <td class="difference-cell">{{ i === 0 ? '—' : roznicaDoLidera(w) }}</td>
-          <td class="date-cell">{{ w.dataSkoku | date:'dd.MM.yyyy' }}</td>
-          <td>
-            <span class="upadek-badge" *ngIf="w.czy_upadek">💥 Upadek</span>
-            <span class="ok-badge"     *ngIf="!w.czy_upadek">✓ OK</span>
-          </td>
-          <td>
-            <a *ngIf="w.link_powtorka" [href]="w.link_powtorka" target="_blank" class="replay-link">▶ Powtórka</a>
-            <span *ngIf="!w.link_powtorka" class="text-dim">—</span>
-          </td>
-          <td>
-            <button class="btn btn-secondary btn-sm" (click)="otworzKomentarze(w)" title="Pokaż komentarze do tego wyniku">💭 {{ liczenieKomentarzy(w.id!) }}</button>
-          </td>
-          <td>
-            <button class="btn btn-info btn-sm" (click)="otworzKomentuj(w)" *ngIf="auth.isLoggedIn" title="Dodaj komentarz">💬 Komentuj</button>
-            <button class="btn btn-danger btn-sm" (click)="usunWynik(w.id!)" *ngIf="auth.isAdmin">🗑️ Usuń</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-wrap" *ngIf="wynikiSkoczni.length > 0">
+      <table class="dsj-table">
+        <thead>
+          <tr>
+            <th>Poz.</th>
+            <th>Gracz</th>
+            <th>Odległość</th>
+            <th>Różnica</th>
+            <th>Data skoku</th>
+            <th>Lądowanie</th>
+            <th>Powtórka</th>
+            <th>💭 Komentarze</th>
+            <th *ngIf="auth.isAdmin">Akcje</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let w of wynikiSkoczni; let i = index"
+              [class.top1]="i===0" [class.top2]="i===1" [class.top3]="i===2">
+            <td class="pozycja" data-label="Poz.">
+              <span *ngIf="i===0">🥇</span>
+              <span *ngIf="i===1">🥈</span>
+              <span *ngIf="i===2">🥉</span>
+              <span *ngIf="i>2" class="id-badge">{{ i+1 }}</span>
+            </td>
+            <td data-label="Gracz"><strong>{{ w.gracz?.login_gracza ?? '—' }}</strong></td>
+            <td data-label="Odległość">
+              <span class="odleglosc" [class.over-k]="przekroczylK(w)" [class.under-k]="!przekroczylK(w)">
+                {{ w.odleglosc }} m
+              </span>
+              <span class="badge badge-k" *ngIf="przekroczylK(w)">✓ K</span>
+            </td>
+            <td class="difference-cell" data-label="Różnica">{{ i === 0 ? '—' : roznicaDoLidera(w) }}</td>
+            <td class="date-cell" data-label="Data">{{ w.dataSkoku | date:'dd.MM.yyyy' }}</td>
+            <td data-label="Lądowanie">
+              <span class="upadek-badge" *ngIf="w.czy_upadek">💥 Upadek</span>
+              <span class="ok-badge"     *ngIf="!w.czy_upadek">✓ OK</span>
+            </td>
+            <td data-label="Powtórka">
+              <a *ngIf="w.link_powtorka" [href]="w.link_powtorka" target="_blank" class="replay-link">▶ Powtórka</a>
+              <span *ngIf="!w.link_powtorka" class="text-dim">—</span>
+            </td>
+            <td data-label="Komentarze">
+              <button class="btn btn-secondary btn-sm" (click)="otworzKomentarze(w)" title="Pokaż komentarze do tego wyniku">💭 {{ liczenieKomentarzy(w.id!) }}</button>
+            </td>
+            <td data-label="Akcje">
+              <button class="btn btn-info btn-sm" (click)="otworzKomentuj(w)" *ngIf="auth.isLoggedIn" title="Dodaj komentarz">💬 Komentuj</button>
+              <button class="btn btn-danger btn-sm" (click)="usunWynik(w.id!)" *ngIf="auth.isAdmin">🗑️ Usuń</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 
