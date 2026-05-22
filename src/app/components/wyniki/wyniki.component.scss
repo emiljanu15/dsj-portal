@@ -59,15 +59,15 @@
   h4 { font-size:1rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.75rem;color:var(--text-dim); }
 }
 
+.table-wrap { overflow-x: auto; }
+
 @media (max-width: 768px) {
   .dsj-table {
     /* Ukryj niektóre kolumny na tablet */
-    thead th:nth-child(4),
-    tbody td:nth-child(4),
     thead th:nth-child(5),
     tbody td:nth-child(5),
-    thead th:nth-child(6),
-    tbody td:nth-child(6) {
+    thead th:nth-child(7),
+    tbody td:nth-child(7) {
       display: none;
     }
 
@@ -86,31 +86,65 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 650px) {
+  .table-wrap { overflow-x: hidden; }
+
   .dsj-table {
-    thead th:nth-child(4),
-    tbody td:nth-child(4),
-    thead th:nth-child(5),
-    tbody td:nth-child(5),
-    thead th:nth-child(6),
-    tbody td:nth-child(6),
-    thead th:nth-child(7),
-    tbody td:nth-child(7) {
-      display: none;
-    }
+    border: none;
+  }
 
-    .actions {
-      flex-direction: column;
-      gap: 0.2rem;
-      width: 100%;
-    }
+  .dsj-table thead { display: none; }
 
-    .actions button {
-      width: 100%;
-      padding: 0.3rem 0.35rem;
-      font-size: 0.6rem;
-      justify-content: center;
-      flex-grow: 1;
-    }
+  .dsj-table tbody tr {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+    margin-bottom: 1rem;
+    padding: 0.95rem;
+    border: 1px solid rgba(215, 200, 75, 0.18);
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 14px;
+  }
+
+  .dsj-table tbody td {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.22rem;
+    padding: 0;
+    border: none;
+  }
+
+  .dsj-table tbody td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 0.15rem;
+  }
+
+  .dsj-table tbody td.actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    width: 100%;
+  }
+
+  .dsj-table tbody td.actions::before {
+    content: '';
+    display: none;
+  }
+
+  .dsj-table tbody td .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .dsj-table tbody td .btn {
+    font-size: 0.75rem;
+    padding: 0.28rem 0.35rem;
   }
 }

@@ -13,55 +13,57 @@
       <div class="empty-icon">🏆</div><p>Brak wyników w bazie.</p>
     </div>
 
-    <table class="dsj-table" *ngIf="!loading && wyniki.length > 0">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Gracz</th>
-          <th>Skocznia</th>
-          <th>Odległość</th>
-          <th>Data</th>
-          <th>Lądowanie</th>
-          <th>Powtórka</th>
-          <th>Komentarze</th>
-          <th *ngIf="auth.isAdmin">Akcje</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let w of wyniki" [class.upadek-row]="w.czy_upadek">
-          <td><span class="id-badge">{{ w.id }}</span></td>
-          <td><strong>🎿 {{ w.gracz?.login_gracza ?? '—' }}</strong></td>
-          <td>
-            <span>⛰️ {{ w.skocznia?.nazwa ?? '—' }}</span>
-            <small class="text-dim" *ngIf="w.skocznia"> K{{ w.skocznia.punkt_k }}</small>
-          </td>
-          <td>
-            <span class="odleglosc" [class.over-k]="przekroczylK(w)" [class.under-k]="!przekroczylK(w)">
-              {{ w.odleglosc }} m
-            </span>
-            <span class="badge badge-k" *ngIf="przekroczylK(w)">✓ K</span>
-          </td>
-          <td class="date-cell">{{ w.dataSkoku | date:'dd.MM.yyyy' }}</td>
-          <td>
-            <span class="upadek-badge" *ngIf="w.czy_upadek">💥 Upadek</span>
-            <span class="ok-badge"     *ngIf="!w.czy_upadek">✓ OK</span>
-          </td>
-          <td>
-            <a *ngIf="w.link_powtorka" [href]="w.link_powtorka" target="_blank" class="replay-link">▶ Powtórka</a>
-            <span *ngIf="!w.link_powtorka" class="text-dim">—</span>
-          </td>
-          <td>
-            <button class="btn btn-ghost btn-sm" (click)="pokazKomentarze(w)">
-              💬 Komentarze
-            </button>
-          </td>
-          <td class="actions" *ngIf="auth.isAdmin">
-            <button class="btn btn-ghost btn-sm" (click)="openEdit(w)">✏️</button>
-            <button class="btn btn-danger btn-sm" (click)="delete(w.id!)">🗑️</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-wrap" *ngIf="!loading && wyniki.length > 0">
+      <table class="dsj-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Gracz</th>
+            <th>Skocznia</th>
+            <th>Odległość</th>
+            <th>Data</th>
+            <th>Lądowanie</th>
+            <th>Powtórka</th>
+            <th>Komentarze</th>
+            <th *ngIf="auth.isAdmin">Akcje</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let w of wyniki" [class.upadek-row]="w.czy_upadek">
+            <td data-label="#"><span class="id-badge">{{ w.id }}</span></td>
+            <td data-label="Gracz"><strong>🎿 {{ w.gracz?.login_gracza ?? '—' }}</strong></td>
+            <td data-label="Skocznia">
+              <span>⛰️ {{ w.skocznia?.nazwa ?? '—' }}</span>
+              <small class="text-dim" *ngIf="w.skocznia"> K{{ w.skocznia.punkt_k }}</small>
+            </td>
+            <td data-label="Odległość">
+              <span class="odleglosc" [class.over-k]="przekroczylK(w)" [class.under-k]="!przekroczylK(w)">
+                {{ w.odleglosc }} m
+              </span>
+              <span class="badge badge-k" *ngIf="przekroczylK(w)">✓ K</span>
+            </td>
+            <td class="date-cell" data-label="Data">{{ w.dataSkoku | date:'dd.MM.yyyy' }}</td>
+            <td data-label="Lądowanie">
+              <span class="upadek-badge" *ngIf="w.czy_upadek">💥 Upadek</span>
+              <span class="ok-badge" *ngIf="!w.czy_upadek">✓ OK</span>
+            </td>
+            <td data-label="Powtórka">
+              <a *ngIf="w.link_powtorka" [href]="w.link_powtorka" target="_blank" class="replay-link">▶ Powtórka</a>
+              <span *ngIf="!w.link_powtorka" class="text-dim">—</span>
+            </td>
+            <td data-label="Komentarze">
+              <button class="btn btn-ghost btn-sm" (click)="pokazKomentarze(w)">
+                💬 Komentarze
+              </button>
+            </td>
+            <td class="actions" *ngIf="auth.isAdmin" data-label="Akcje">
+              <button class="btn btn-ghost btn-sm" (click)="openEdit(w)">✏️</button>
+              <button class="btn btn-danger btn-sm" (click)="delete(w.id!)">🗑️</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 
