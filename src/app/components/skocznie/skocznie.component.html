@@ -25,8 +25,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let s of skocznie">
-          <td><span class="id-badge">{{ s.id }}</span></td>
+        <tr *ngFor="let s of skocznie; let i = index">
+          <td><span class="id-badge">{{ i+1 }}</span></td>
           <td class="skocznia-name" (click)="pokazWyniki(s)" style="cursor:pointer">
             <strong>{{ s.nazwa }} (K{{ s.punkt_k }})</strong>
             <div class="text-dim">📍 {{ s.lokalizacja }}</div>
