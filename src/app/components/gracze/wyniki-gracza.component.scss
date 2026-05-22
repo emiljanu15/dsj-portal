@@ -278,3 +278,21 @@ a:hover {
     display: none;
   }
 }
+.page-enter .result-card,
+.page-enter .table-responsive,
+.page-enter .dsj-table,
+.page-enter .dsj-table td,
+.page-enter .dsj-table th {
+  background-color: unset;
+}
+
+.page-enter .result-card {
+  background: #f2f2f2 !important;
+}
+
+.page-enter .dsj-table,
+.page-enter .dsj-table td,
+.page-enter .dsj-table th,
+.page-enter .table-responsive {
+  background: #0a0f1c !important;
+}
