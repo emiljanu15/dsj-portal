@@ -52,9 +52,6 @@ export class DodajWynikComponent implements OnInit {
           this.form.skoczniaId = skocznie[0].id ?? 0;
         }
 
-        console.log('currentUser:', this.auth.currentUser);
-        console.log('graczId z auth:', this.form.graczId);
-
         this.loading = false;
       },
       error: (err) => {
@@ -76,9 +73,10 @@ export class DodajWynikComponent implements OnInit {
   private parseOdleglosc(value: string): number {
     const normalized = String(value ?? '')
       .replace(',', '.')
+      .replace(/[^\d.]/g, '')
       .trim();
 
-    const parsed = Number(normalized);
+    const parsed = parseFloat(normalized);
     return isNaN(parsed) ? 0 : parsed;
   }
 
@@ -115,9 +113,21 @@ export class DodajWynikComponent implements OnInit {
     this.api.replayDistance({ url: url.trim() }).subscribe({
       next: (res: any) => {
         this.checkingReplay = false;
+        console.log('Replay response:', res);
 
-        if (res?.success && typeof res.length === 'number') {
-          const rounded = this.roundTo2(Number(res.length));
+        if (res?.success) {
+          let value = 0;
+
+          if (typeof res.lengthRaw === 'string' && res.lengthRaw.trim()) {
+            value = this.parseOdleglosc(res.lengthRaw);
+          } else if (typeof res.length === 'number') {
+            value = this.roundTo2(res.length);
+          } else if (typeof res.length === 'string') {
+            value = this.parseOdleglosc(res.length);
+          }
+
+          const rounded = this.roundTo2(value);
+
           this.form.odleglosc = rounded;
           this.odlegloscInput = rounded.toFixed(2);
           this.success = `Odległość uzupełniona: ${this.odlegloscInput} m`;
