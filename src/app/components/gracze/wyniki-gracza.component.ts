@@ -58,25 +58,30 @@ export class WynikiGraczaComponent implements OnInit {
           const sid = w.skocznia?.id ?? (w as any).skoczniaId ?? 0;
           if (!sid) return;
 
-          const cur = bestPerSkocznia.get(sid);
-          if (!cur || w.odleglosc > cur.odleglosc) {
+          const current = bestPerSkocznia.get(sid);
+          if (!current || w.odleglosc > current.odleglosc) {
             bestPerSkocznia.set(sid, w);
           }
         });
 
         this.lista = skocznie
-          .map(sk => {
+          .map((sk): SkoczniaWynik => {
             const best = bestPerSkocznia.get(sk.id!);
+
             return {
               skocznia: sk,
-              rekord: best ? best.odleglosc : null,
+              rekord: best?.odleglosc ?? null,
               wynikId: best?.id,
               dataSkoku: best?.dataSkoku,
               link_powtorka: best?.link_powtorka,
-              czy_upadek: best?.czy_upadek
+              czy_upadek: best?.czy_upadek ?? false
             };
           })
-          .sort((a, b) => (b.rekord ?? -1) - (a.rekord ?? -1));
+          .sort((a, b) => {
+            const aVal = a.rekord ?? -1;
+            const bVal = b.rekord ?? -1;
+            return bVal - aVal;
+          });
 
         this.loading = false;
       },
@@ -93,6 +98,26 @@ export class WynikiGraczaComponent implements OnInit {
   }
 
   private updateViewport(): void {
-    this.isMobile = window.innerWidth <= 600;
+    this.isMobile = window.innerWidth < 768;
+  }
+
+  get najlepszySkok(): number | null {
+    const rekordy = this.lista
+      .map(item => item.rekord)
+      .filter((rekord): rekord is number => rekord !== null);
+
+    return rekordy.length ? Math.max(...rekordy) : null;
+  }
+
+  get liczbaUpadkow(): number {
+    return this.lista.filter(item => item.czy_upadek).length;
+  }
+
+  get liczbaSkoczniZRozpoznanymWynikiem(): number {
+    return this.lista.filter(item => item.rekord !== null).length;
+  }
+
+  get maWyniki(): boolean {
+    return this.lista.length > 0;
   }
 }

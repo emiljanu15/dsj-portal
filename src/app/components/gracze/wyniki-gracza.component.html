@@ -1,176 +1,112 @@
-<div class="page-enter" style="color:#f1dc63;">
-  <div class="card"
-       style="background:#0a0f1c;border:2px solid #c6a400;border-radius:0;box-shadow:none;color:#f1dc63;">
-
-    <div class="card-header"
-         style="background:#0a0f1c;border-bottom:2px solid rgba(241,220,99,.35);padding:.9rem 1rem;color:#f1dc63;">
-      <h2 style="margin:0;color:#f1dc63;font-weight:700;letter-spacing:.5px;">
-        🏆 Wyniki gracza: <strong style="color:#f1dc63;">{{ gracz?.login_gracza }}</strong>
-      </h2>
+<div class="player-results">
+  <header class="player-hero">
+    <div>
+      <p class="eyebrow">Wyniki gracza</p>
+      <h1>{{ gracz?.login_gracza }}</h1>
     </div>
 
-    <div *ngIf="error"
-         class="alert alert-error"
-         style="margin:1rem;padding:.75rem .9rem;background:#2a1010;border:1px solid #a94442;color:#ffb3b3;">
-      {{ error }}
-    </div>
-
-    <div *ngIf="loading"
-         class="loading-wrap"
-         style="display:flex;align-items:center;justify-content:center;gap:.9rem;padding:1.2rem 0;color:#f1dc63;">
-      <div class="spinner"></div>
-      <p style="margin:0;color:#f1dc63;">Ładowanie...</p>
-    </div>
-
-    <div *ngIf="!loading && lista.length === 0"
-         class="empty-state"
-         style="padding:2rem;text-align:center;color:rgba(255,255,255,.75);">
-      <div class="empty-icon" style="font-size:2rem;margin-bottom:.5rem;">📭</div>
-      <p style="margin:0;">Brak wyników dla tego gracza.</p>
-    </div>
-
-    <!-- MOBILE -->
-    <ng-container *ngIf="!loading && lista.length > 0 && isMobile">
-      <div class="card-list" style="padding:.85rem;display:block;">
-        <div class="result-card"
-             *ngFor="let item of lista; let i = index"
-             style="background:#11151f;background-image:none;border:1px solid #cfd3d8;border-radius:8px;box-shadow:none;color:#f1dc63;padding:.75rem;margin:0 0 .7rem;">
-
-          <div class="card-row top-row"
-               style="display:flex;align-items:flex-start;gap:.65rem;">
-            <div class="left" style="display:flex;align-items:center;">
-              <span class="id-badge"
-                    style="display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:28px;padding:0 .45rem;border-radius:6px;background:#ececec;color:#f1dc63;font-weight:700;line-height:1;">
-                {{ i + 1 }}
-              </span>
-            </div>
-
-            <div class="main" style="flex:1 1 auto;min-width:0;">
-              <div class="title"
-                   style="color:#f1dc63;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
-                <strong style="color:#f1dc63;">{{ item.skocznia.nazwa }}</strong>
-              </div>
-
-              <div class="subtitle text-dim"
-                   style="margin-top:.12rem;color:#5f6368;font-size:.92rem;line-height:1.1;">
-                {{ item.skocznia.lokalizacja }}
-              </div>
-            </div>
-
-            <div class="right" style="display:flex;align-items:center;">
-              <span class="badge badge-k"
-                    style="display:inline-flex;align-items:center;justify-content:center;padding:.18rem .45rem;border:2px solid #c6a400;background:#12192b;color:#f1dc63;border-radius:0;font-size:.78rem;font-weight:700;white-space:nowrap;">
-                K{{ item.skocznia.punkt_k }}
-              </span>
-            </div>
-          </div>
-
-          <div class="card-row bottom-row"
-               style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.35rem .8rem;margin-top:.45rem;">
-
-            <div class="rekord" style="color:#f1dc63;font-size:1.05rem;font-weight:700;">
-              {{ item.rekord ? (item.rekord + ' m') : '—' }}
-            </div>
-
-            <div class="date" style="color:#f1dc63;font-weight:600;white-space:nowrap;">
-              {{ item.dataSkoku | date:'dd.MM.yyyy' }}
-            </div>
-
-            <div class="links">
-              <a *ngIf="item.link_powtorka"
-                 [href]="item.link_powtorka"
-                 target="_blank"
-                 rel="noopener noreferrer"
-                 style="color:#f1dc63;text-decoration:underline;">
-                ▶ Powtórka
-              </a>
-              <span *ngIf="!item.link_powtorka"
-                    class="text-dim"
-                    style="color:#7f858f;">
-                —
-              </span>
-            </div>
-
-            <div class="fall" style="color:#f1dc63;font-weight:700;">
-              <span *ngIf="item.czy_upadek">💥</span>
-              <span *ngIf="!item.czy_upadek">✓</span>
-            </div>
-          </div>
-        </div>
+    <div class="player-stats" *ngIf="!loading && lista.length > 0">
+      <div class="stat-box">
+        <span class="stat-label">Skocznie</span>
+        <strong>{{ lista.length }}</strong>
       </div>
-    </ng-container>
-
-    <!-- DESKTOP -->
-    <ng-container *ngIf="!loading && lista.length > 0 && !isMobile">
-      <div class="table-responsive"
-           style="width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 1rem 1rem;border:2px solid #c6a400;background:#0a0f1c;">
-
-        <table class="dsj-table"
-               style="width:100%;min-width:720px;border-collapse:collapse;background:#0a0f1c;color:#f1dc63;">
-          <thead>
-            <tr>
-              <th style="padding:.65rem .8rem;text-align:left;background:#101628;color:#f1dc63;border-bottom:1px solid rgba(241,220,99,.16);">#</th>
-              <th style="padding:.65rem .8rem;text-align:left;background:#101628;color:#f1dc63;border-bottom:1px solid rgba(241,220,99,.16);">Skocznia</th>
-              <th style="padding:.65rem .8rem;text-align:left;background:#101628;color:#f1dc63;border-bottom:1px solid rgba(241,220,99,.16);">Punkt K</th>
-              <th style="padding:.65rem .8rem;text-align:left;background:#101628;color:#f1dc63;border-bottom:1px solid rgba(241,220,99,.16);">Najlepszy skok</th>
-              <th style="padding:.65rem .8rem;text-align:left;background:#101628;color:#f1dc63;border-bottom:1px solid rgba(241,220,99,.16);">Data</th>
-              <th style="padding:.65rem .8rem;text-align:left;background:#101628;color:#f1dc63;border-bottom:1px solid rgba(241,220,99,.16);">Powtórka</th>
-              <th style="padding:.65rem .8rem;text-align:left;background:#101628;color:#f1dc63;border-bottom:1px solid rgba(241,220,99,.16);">Upadek</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of lista; let i = index">
-              <td style="padding:.65rem .8rem;border-bottom:1px solid rgba(241,220,99,.16);background:#0a0f1c;color:#f1dc63;">
-                <span class="id-badge"
-                      style="display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:28px;padding:0 .45rem;border-radius:6px;background:#ececec;color:#f1dc63;font-weight:700;">
-                  {{ i + 1 }}
-                </span>
-              </td>
-
-              <td style="padding:.65rem .8rem;border-bottom:1px solid rgba(241,220,99,.16);background:#0a0f1c;color:#f1dc63;">
-                <strong style="color:#f1dc63;">{{ item.skocznia.nazwa }}</strong>
-                <div class="text-dim" style="color:#7f858f;">{{ item.skocznia.lokalizacja }}</div>
-              </td>
-
-              <td style="padding:.65rem .8rem;border-bottom:1px solid rgba(241,220,99,.16);background:#0a0f1c;color:#f1dc63;">
-                <span class="badge badge-k"
-                      style="display:inline-flex;align-items:center;justify-content:center;padding:.18rem .45rem;border:2px solid #c6a400;background:#12192b;color:#f1dc63;border-radius:0;font-size:.78rem;font-weight:700;white-space:nowrap;">
-                  K{{ item.skocznia.punkt_k }}
-                </span>
-              </td>
-
-              <td style="padding:.65rem .8rem;border-bottom:1px solid rgba(241,220,99,.16);background:#0a0f1c;color:#f1dc63;">
-                {{ item.rekord ? (item.rekord + ' m') : '—' }}
-              </td>
-
-              <td class="date-cell"
-                  style="padding:.65rem .8rem;border-bottom:1px solid rgba(241,220,99,.16);background:#0a0f1c;color:#f1dc63;white-space:nowrap;">
-                {{ item.dataSkoku | date:'dd.MM.yyyy' }}
-              </td>
-
-              <td style="padding:.65rem .8rem;border-bottom:1px solid rgba(241,220,99,.16);background:#0a0f1c;color:#f1dc63;">
-                <a *ngIf="item.link_powtorka"
-                   [href]="item.link_powtorka"
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   style="color:#f1dc63;text-decoration:underline;">
-                  ▶ Powtórka
-                </a>
-                <span *ngIf="!item.link_powtorka"
-                      class="text-dim"
-                      style="color:#7f858f;">
-                  —
-                </span>
-              </td>
-
-              <td style="padding:.65rem .8rem;border-bottom:1px solid rgba(241,220,99,.16);background:#0a0f1c;color:#f1dc63;">
-                <span *ngIf="item.czy_upadek">💥</span>
-                <span *ngIf="!item.czy_upadek">✓</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="stat-box">
+        <span class="stat-label">Najlepszy skok</span>
+        <strong>{{ najlepszySkok ?? '—' }}<span *ngIf="najlepszySkok"> m</span></strong>
       </div>
-    </ng-container>
+      <div class="stat-box">
+        <span class="stat-label">Upadki</span>
+        <strong>{{ liczbaUpadkow }}</strong>
+      </div>
+    </div>
+  </header>
+
+  <div *ngIf="error" class="state-box state-error">{{ error }}</div>
+
+  <div *ngIf="loading" class="state-box state-loading">
+    <div class="spinner"></div>
+    <p>Ładowanie wyników...</p>
   </div>
+
+  <div *ngIf="!loading && lista.length === 0" class="state-box state-empty">
+    <div class="empty-icon">🏔️</div>
+    <p>Brak wyników dla tego gracza.</p>
+  </div>
+
+  <section *ngIf="!loading && lista.length > 0" class="results-section">
+    <div class="results-grid mobile-only">
+      <article class="jump-card" *ngFor="let item of lista; let i = index">
+        <div class="jump-card__top">
+          <span class="rank-chip">#{{ i + 1 }}</span>
+          <span class="k-chip">K{{ item.skocznia.punkt_k }}</span>
+        </div>
+
+        <div class="jump-card__main">
+          <h3>{{ item.skocznia.nazwa }}</h3>
+          <p>{{ item.skocznia.lokalizacja }}</p>
+        </div>
+
+        <div class="jump-card__distance">
+          {{ item.rekord ? (item.rekord + ' m') : '—' }}
+        </div>
+
+        <dl class="jump-card__meta">
+          <div>
+            <dt>Data</dt>
+            <dd>{{ item.dataSkoku ? (item.dataSkoku | date:'dd.MM.yyyy') : '—' }}</dd>
+          </div>
+          <div>
+            <dt>Powtórka</dt>
+            <dd>
+              <a *ngIf="item.link_powtorka" [href]="item.link_powtorka" target="_blank" rel="noopener noreferrer">Otwórz</a>
+              <span *ngIf="!item.link_powtorka">—</span>
+            </dd>
+          </div>
+          <div>
+            <dt>Status</dt>
+            <dd [class.is-fall]="item.czy_upadek">
+              {{ item.czy_upadek ? 'Upadek' : 'Ustany' }}
+            </dd>
+          </div>
+        </dl>
+      </article>
+    </div>
+
+    <div class="results-table desktop-only">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Skocznia</th>
+            <th>Punkt K</th>
+            <th>Najlepszy skok</th>
+            <th>Data</th>
+            <th>Powtórka</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of lista; let i = index">
+            <td><span class="rank-chip">#{{ i + 1 }}</span></td>
+            <td>
+              <strong>{{ item.skocznia.nazwa }}</strong>
+              <small>{{ item.skocznia.lokalizacja }}</small>
+            </td>
+            <td><span class="k-chip">K{{ item.skocznia.punkt_k }}</span></td>
+            <td class="distance-cell">{{ item.rekord ? (item.rekord + ' m') : '—' }}</td>
+            <td>{{ item.dataSkoku ? (item.dataSkoku | date:'dd.MM.yyyy') : '—' }}</td>
+            <td>
+              <a *ngIf="item.link_powtorka" [href]="item.link_powtorka" target="_blank" rel="noopener noreferrer">Powtórka</a>
+              <span *ngIf="!item.link_powtorka">—</span>
+            </td>
+            <td>
+              <span class="status-pill" [class.status-pill--danger]="item.czy_upadek">
+                {{ item.czy_upadek ? 'Upadek' : 'OK' }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
 </div>
