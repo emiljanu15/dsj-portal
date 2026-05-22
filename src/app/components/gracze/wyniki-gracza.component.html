@@ -12,6 +12,28 @@
       <p>Brak wyników dla tego gracza.</p>
     </div>
 
+    <div class="card-list" *ngIf="!loading && lista.length > 0">
+      <div class="result-card" *ngFor="let item of lista; let i = index">
+        <div class="card-row top-row">
+          <div class="left"><span class="id-badge">{{ i+1 }}</span></div>
+          <div class="main">
+            <div class="title"><strong>{{ item.skocznia.nazwa }}</strong></div>
+            <div class="subtitle text-dim">{{ item.skocznia.lokalizacja }}</div>
+          </div>
+          <div class="right"><span class="badge badge-k">K{{ item.skocznia.punkt_k }}</span></div>
+        </div>
+        <div class="card-row bottom-row">
+          <div class="rekord">{{ item.rekord ? (item.rekord + ' m') : '—' }}</div>
+          <div class="date">{{ item.dataSkoku | date:'dd.MM.yyyy' }}</div>
+          <div class="links">
+            <a *ngIf="item.link_powtorka" [href]="item.link_powtorka" target="_blank">▶ Powtórka</a>
+            <span *ngIf="!item.link_powtorka" class="text-dim">—</span>
+          </div>
+          <div class="fall"><span *ngIf="item.czy_upadek">💥</span><span *ngIf="!item.czy_upadek">✓</span></div>
+        </div>
+      </div>
+    </div>
+
     <div class="table-responsive" *ngIf="!loading && lista.length > 0">
       <table class="dsj-table">
       <thead>
