@@ -10,6 +10,7 @@ import { WynikiGraczaComponent } from './components/gracze/wyniki-gracza.compone
 import { LoginComponent }       from './components/login/login.component';
 import { RejestracjaComponent } from './components/rejestracja/rejestracja.component';
 import { PomoComponent }        from './components/pomoc/pomoc.component'; // ← NOWE
+import { DodajWynikComponent }  from './components/dodaj-wynik/dodaj-wynik.component'; // ← NOWE
 
 const routes: Routes = [
   { path: '',             component: DashboardComponent },
@@ -22,6 +23,7 @@ const routes: Routes = [
   { path: 'login',       component: LoginComponent },
   { path: 'rejestracja', component: RejestracjaComponent },
   { path: 'pomoc',       component: PomoComponent },        // ← NOWE
+  { path: 'dodaj-wynik', component: DodajWynikComponent }, // ← NOWE
   { path: '**',          redirectTo: '' }
 ];
 

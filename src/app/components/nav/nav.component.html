@@ -11,6 +11,7 @@
     <li *ngIf="auth.isAdmin"><a routerLink="/wyniki"      routerLinkActive="active">🏆 Wyniki</a></li>
     <li *ngIf="auth.isAdmin"><a routerLink="/komentarze"  routerLinkActive="active">💬 Komentarze</a></li>
     <li *ngIf="auth.isAdmin"><a routerLink="/uzytkownicy" routerLinkActive="active">👤 Użytkownicy</a></li>
+    <li *ngIf="auth.isLoggedIn"><a routerLink="/dodaj-wynik" routerLinkActive="active">📝 Dodaj wynik</a></li>
     <li><a routerLink="/pomoc"      routerLinkActive="active">❓ Pomoc</a></li>
   </ul>
 

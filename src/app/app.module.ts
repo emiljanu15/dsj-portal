@@ -21,6 +21,7 @@ import { LoginComponent }       from './components/login/login.component';
 import { RejestracjaComponent } from './components/rejestracja/rejestracja.component';
 import { NavComponent }         from './components/nav/nav.component';
 import { PomoComponent }        from './components/pomoc/pomoc.component';  // ← DODAJ
+import { DodajWynikComponent }  from './components/dodaj-wynik/dodaj-wynik.component'; // ← NOWE
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { PomoComponent }        from './components/pomoc/pomoc.component';  // �
     LoginComponent,
     RejestracjaComponent,
     PomoComponent,  // ← DODAJ
+    DodajWynikComponent,  // ← NOWE
   ],
   imports: [
     BrowserModule,
