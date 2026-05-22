@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { forkJoin } from 'rxjs';
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
 import { WynikDto, Skocznia } from '../../models/models';
@@ -13,12 +12,14 @@ import { WynikDto, Skocznia } from '../../models/models';
 export class DodajWynikComponent implements OnInit {
   skocznie: Skocznia[] = [];
   loading = true;
+  saving = false;
+  checkingReplay = false;
   error = '';
   success = '';
-  
+
   form: WynikDto = {
     odleglosc: 0,
-    dataSkoku: new Date().toISOString().split('T')[0],
+    dataSkoku: '',
     graczId: 0,
     skoczniaId: 0,
     link_powtorka: '',
@@ -32,24 +33,25 @@ export class DodajWynikComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Sprawdź czy użytkownik jest zalogowany
     if (!this.auth.isLoggedIn) {
       this.router.navigate(['/login']);
       return;
     }
 
-    // Ustaw graczId na ID zalogowanego użytkownika
     if (this.auth.currentUser?.id) {
-      this.form.graczId = this.auth.currentUser.id;
+      this.form.graczId = Number(this.auth.currentUser.id);
     }
 
-    // Załaduj dostępne skocznie
+    this.form.dataSkoku = this.todayLocal();
+
     this.api.getSkocznie().subscribe({
-      next: skocznie => {
+      next: (skocznie) => {
         this.skocznie = skocznie;
+
         if (skocznie.length > 0) {
-          this.form.skoczniaId = skocznie[0].id!;
+          this.form.skoczniaId = skocznie[0].id ?? 0;
         }
+
         this.loading = false;
       },
       error: () => {
@@ -59,16 +61,34 @@ export class DodajWynikComponent implements OnInit {
     });
   }
 
-  // Sprawdź powtórkę i uzupełnij odległość
+  private todayLocal(): string {
+    const d = new Date();
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
   checkReplay(url?: string): void {
+    this.error = '';
+    this.success = '';
+
     if (!url || !url.trim()) {
       this.error = 'Podaj URL powtórki.';
       return;
     }
-    this.error = '';
+
+    this.checkingReplay = true;
     this.success = 'Sprawdzam powtórkę...';
-    this.api.replayDistance({ url }).subscribe({
+
+    const payload = { url: url.trim() };
+    console.log('replayDistance payload:', payload);
+
+    this.api.replayDistance(payload).subscribe({
       next: (res: any) => {
+        this.checkingReplay = false;
+        console.log('replayDistance response:', res);
+
         if (res?.success && typeof res.length === 'number') {
           this.form.odleglosc = Math.round(res.length * 10) / 10;
           this.success = `Odległość uzupełniona: ${this.form.odleglosc} m`;
@@ -77,34 +97,92 @@ export class DodajWynikComponent implements OnInit {
           this.success = '';
         }
       },
-      error: () => {
-        this.error = 'Błąd podczas sprawdzania powtórki.';
+      error: (err) => {
+        this.checkingReplay = false;
+        console.error('replayDistance error:', err);
+        console.error('replayDistance error body:', err?.error);
+
+        this.error =
+          err?.error?.message ||
+          err?.error?.title ||
+          (typeof err?.error === 'string' ? err.error : '') ||
+          'Błąd podczas sprawdzania powtórki.';
+
         this.success = '';
       }
     });
   }
 
-  // Wyślij formularz
   save(): void {
-    if (!this.form.odleglosc || !this.form.skoczniaId || !this.form.graczId) {
-      this.error = 'Wypełnij wszystkie wymagane pola.';
+    this.error = '';
+    this.success = '';
+
+    if (!this.form.graczId || this.form.graczId <= 0) {
+      this.error = 'Nieprawidłowy użytkownik. Zaloguj się ponownie.';
       return;
     }
 
-    this.api.addWynik(this.form).subscribe({
+    if (!this.form.skoczniaId || this.form.skoczniaId <= 0) {
+      this.error = 'Wybierz skocznię.';
+      return;
+    }
+
+    if (!this.form.odleglosc || this.form.odleglosc <= 0) {
+      this.error = 'Podaj poprawną odległość skoku.';
+      return;
+    }
+
+    if (!this.form.dataSkoku) {
+      this.error = 'Wybierz datę skoku.';
+      return;
+    }
+
+    const payload: WynikDto = {
+      odleglosc: Number(this.form.odleglosc),
+      dataSkoku: this.form.dataSkoku,
+      graczId: Number(this.form.graczId),
+      skoczniaId: Number(this.form.skoczniaId),
+      link_powtorka: this.form.link_powtorka?.trim() || '',
+      czy_upadek: !!this.form.czy_upadek
+    };
+
+    console.log('Dodawanie wyniku - payload:', payload);
+
+    this.saving = true;
+
+    this.api.addWynik(payload).subscribe({
       next: () => {
+        this.saving = false;
         this.success = 'Wynik dodany pomyślnie! 🎉';
+
         setTimeout(() => {
           this.router.navigate(['/wyniki']);
         }, 1500);
       },
       error: (err) => {
-        this.error = 'Błąd podczas dodawania wyniku: ' + (err?.error?.message || 'Spróbuj ponownie.');
+        this.saving = false;
+        console.error('addWynik error:', err);
+        console.error('addWynik error body:', err?.error);
+
+        if (err?.error?.errors) {
+          const validationErrors = Object.entries(err.error.errors)
+            .map(([key, value]) => `${key}: ${(value as string[]).join(', ')}`)
+            .join(' | ');
+
+          this.error = 'Błąd walidacji: ' + validationErrors;
+          return;
+        }
+
+        this.error =
+          'Błąd podczas dodawania wyniku: ' +
+          (err?.error?.message ||
+           err?.error?.title ||
+           (typeof err?.error === 'string' ? err.error : '') ||
+           'Spróbuj ponownie.');
       }
     });
   }
 
-  // Anuluj i wróć do dashboard
   cancel(): void {
     this.router.navigate(['/']);
   }

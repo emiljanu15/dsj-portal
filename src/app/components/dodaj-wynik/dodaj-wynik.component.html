@@ -13,28 +13,31 @@
     </div>
 
     <div *ngIf="!loading" class="form-container">
-      <form (ngSubmit)="save()">
-        <!-- Gracz - automatycznie ustawiony na zalogowanego użytkownika -->
+      <form #wynikForm="ngForm" (ngSubmit)="save()" novalidate>
         <div class="form-group">
           <label>Gracz (Ty)</label>
           <div class="static-field">
             <strong>{{ auth.currentUser?.login }}</strong>
-            <span class="text-dim">(ID: {{ auth.currentUser?.id }})</span>
+            <span class="text-dim" *ngIf="auth.currentUser?.id">
+              (ID: {{ auth.currentUser?.id }})
+            </span>
           </div>
         </div>
 
-        <!-- Skocznia -->
         <div class="form-group">
           <label for="skocznia">Skocznia *</label>
-          <select id="skocznia" [(ngModel)]="form.skoczniaId" name="skoczniaId" required>
-            <option value="" disabled>Wybierz skocznię...</option>
-            <option *ngFor="let s of skocznie" [value]="s.id">
+          <select
+            id="skocznia"
+            [(ngModel)]="form.skoczniaId"
+            name="skoczniaId"
+            required
+          >
+            <option *ngFor="let s of skocznie" [ngValue]="s.id">
               {{ s.nazwa }} (K{{ s.punkt_k }}) - {{ s.lokalizacja }}
             </option>
           </select>
         </div>
 
-        <!-- Odległość -->
         <div class="form-group">
           <label for="odleglosc">Odległość (metry) *</label>
           <input
@@ -49,7 +52,6 @@
           />
         </div>
 
-        <!-- Data skoku -->
         <div class="form-group">
           <label for="data">Data skoku *</label>
           <input
@@ -61,7 +63,6 @@
           />
         </div>
 
-        <!-- Link do powtórki -->
         <div class="form-group">
           <label for="replay">Link do powtórki (opcjonalnie)</label>
           <div style="display: flex; gap: 0.5rem; align-items: center;">
@@ -75,29 +76,34 @@
             <button
               type="button"
               class="btn btn-ghost btn-sm"
+              [disabled]="checkingReplay"
               (click)="checkReplay(form.link_powtorka)"
             >
-              ✓ Sprawdź
+              {{ checkingReplay ? 'Sprawdzanie...' : '✓ Sprawdź' }}
             </button>
           </div>
-          <small class="text-dim">Jeśli podasz link, będzie można automatycznie odczytać odległość skoku.</small>
+          <small class="text-dim">
+            Jeśli podasz link, będzie można automatycznie odczytać odległość skoku.
+          </small>
         </div>
 
-        <!-- Upadek -->
         <div class="form-group checkbox-group">
           <label class="checkbox-label">
-            <input type="checkbox" [(ngModel)]="form.czy_upadek" name="czy_upadek" />
+            <input
+              type="checkbox"
+              [(ngModel)]="form.czy_upadek"
+              name="czy_upadek"
+            />
             <span>💥 Upadek przy lądowaniu</span>
           </label>
         </div>
 
-        <!-- Przyciski akcji -->
         <div class="form-actions">
           <button type="button" class="btn btn-ghost" (click)="cancel()">
             Anuluj
           </button>
-          <button type="submit" class="btn btn-primary">
-            ✓ Dodaj wynik
+          <button type="submit" class="btn btn-primary" [disabled]="saving">
+            {{ saving ? 'Zapisywanie...' : '✓ Dodaj wynik' }}
           </button>
         </div>
       </form>
