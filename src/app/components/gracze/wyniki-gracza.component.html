@@ -29,129 +29,58 @@
       <p style="margin:0;">Brak wyników dla tego gracza.</p>
     </div>
 
-    <!-- MOBILE CARDS -->
-    <div class="card-list"
-         *ngIf="!loading && lista.length > 0"
-         style="padding:.85rem;display:block;">
+    <!-- MOBILE -->
+    <ng-container *ngIf="!loading && lista.length > 0 && isMobile">
+      <div class="card-list" style="padding:.85rem;display:block;">
+        <div class="result-card"
+             *ngFor="let item of lista; let i = index"
+             style="background:#11151f;background-image:none;border:1px solid #cfd3d8;border-radius:8px;box-shadow:none;color:#f1dc63;padding:.75rem;margin:0 0 .7rem;">
 
-      <div class="result-card"
-           *ngFor="let item of lista; let i = index"
-           style="background:#11151f !important;background-image:none !important;border:1px solid #cfd3d8;border-radius:8px;box-shadow:none;color:#f1dc63;padding:.75rem;margin:0 0 .7rem;">
-
-        <div class="card-row top-row"
-             style="display:flex;align-items:flex-start;gap:.65rem;">
-          <div class="left" style="display:flex;align-items:center;">
-            <span class="id-badge"
-                  style="display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:28px;padding:0 .45rem;border-radius:6px;background:#ececec;color:#f1dc63;font-weight:700;line-height:1;">
-              {{ i+1 }}
-            </span>
-          </div>
-
-          <div class="main" style="flex:1 1 auto;min-width:0;">
-            <div class="title"
-                 style="color:#f1dc63;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
-              <strong style="color:#f1dc63;">{{ item.skocznia.nazwa }}</strong>
-            </div>
-
-            <div class="subtitle text-dim"
-                 style="margin-top:.12rem;color:#5f6368;font-size:.92rem;line-height:1.1;">
-              {{ item.skocznia.lokalizacja }}
-            </div>
-          </div>
-
-          <div class="right" style="display:flex;align-items:center;">
-            <span class="badge badge-k"
-                  style="display:inline-flex;align-items:center;justify-content:center;padding:.18rem .45rem;border:2px solid #c6a400;background:#12192b;color:#f1dc63;border-radius:0;font-size:.78rem;font-weight:700;white-space:nowrap;">
-              K{{ item.skocznia.punkt_k }}
-            </span>
-          </div>
-        </div>
-
-        <div class="card-row bottom-row"
-             style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.35rem .8rem;margin-top:.45rem;">
-
-          <div class="rekord" style="color:#f1dc63;font-size:1.05rem;font-weight:700;">
-            {{ item.rekord ? (item.rekord + ' m') : '—' }}
-          </div>
-
-          <div class="date" style="color:#f1dc63;font-weight:600;white-space:nowrap;">
-            {{ item.dataSkoku | date:'dd.MM.yyyy' }}
-          </div>
-
-          <div class="links">
-            <a *ngIf="item.link_powtorka"
-               [href]="item.link_powtorka"
-               target="_blank"
-               style="color:#f1dc63;text-decoration:underline;">
-              ▶ Powtórka
-            </a>
-            <span *ngIf="!item.link_powtorka"
-                  class="text-dim"
-                  style="color:#7f858f;">
-              —
-            </span>
-          </div>
-
-          <div class="fall" style="color:#f1dc63;font-weight:700;">
-            <span *ngIf="item.czy_upadek">💥</span>
-            <span *ngIf="!item.czy_upadek">✓</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- DESKTOP TABLE -->
-    <div class="table-responsive"
-         *ngIf="!loading && lista.length > 0"
-         style="width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 1rem 1rem;border:2px solid #c6a400;background:#0a0f1c;">
-
-      <table class="dsj-table"
-             style="width:100%;min-width:720px;border-collapse:collapse;background:#0a0f1c;color:#f1dc63;">
-        <thead>
-          <tr>
-            <th style="padding:.65rem .8rem;text-align:left;background:#101628;color:#f1dc63;border-bottom:1px solid rgba(241,220,99,.16);">#</th>
-            <th style="padding:.65rem .8rem;text-align:left;background:#101628;color:#f1dc63;border-bottom:1px solid rgba(241,220,99,.16);">Skocznia</th>
-            <th style="padding:.65rem .8rem;text-align:left;background:#101628;color:#f1dc63;border-bottom:1px solid rgba(241,220,99,.16);">Punkt K</th>
-            <th style="padding:.65rem .8rem;text-align:left;background:#101628;color:#f1dc63;border-bottom:1px solid rgba(241,220,99,.16);">Najlepszy skok</th>
-            <th style="padding:.65rem .8rem;text-align:left;background:#101628;color:#f1dc63;border-bottom:1px solid rgba(241,220,99,.16);">Data</th>
-            <th style="padding:.65rem .8rem;text-align:left;background:#101628;color:#f1dc63;border-bottom:1px solid rgba(241,220,99,.16);">Powtórka</th>
-            <th style="padding:.65rem .8rem;text-align:left;background:#101628;color:#f1dc63;border-bottom:1px solid rgba(241,220,99,.16);">Upadek</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let item of lista; let i = index">
-            <td style="padding:.65rem .8rem;border-bottom:1px solid rgba(241,220,99,.16);background:#0a0f1c;color:#f1dc63;">
+          <div class="card-row top-row"
+               style="display:flex;align-items:flex-start;gap:.65rem;">
+            <div class="left" style="display:flex;align-items:center;">
               <span class="id-badge"
-                    style="display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:28px;padding:0 .45rem;border-radius:6px;background:#ececec;color:#f1dc63;font-weight:700;">
-                {{ i+1 }}
+                    style="display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:28px;padding:0 .45rem;border-radius:6px;background:#ececec;color:#f1dc63;font-weight:700;line-height:1;">
+                {{ i + 1 }}
               </span>
-            </td>
+            </div>
 
-            <td style="padding:.65rem .8rem;border-bottom:1px solid rgba(241,220,99,.16);background:#0a0f1c;color:#f1dc63;">
-              <strong style="color:#f1dc63;">{{ item.skocznia.nazwa }}</strong>
-              <div class="text-dim" style="color:#7f858f;">{{ item.skocznia.lokalizacja }}</div>
-            </td>
+            <div class="main" style="flex:1 1 auto;min-width:0;">
+              <div class="title"
+                   style="color:#f1dc63;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                <strong style="color:#f1dc63;">{{ item.skocznia.nazwa }}</strong>
+              </div>
 
-            <td style="padding:.65rem .8rem;border-bottom:1px solid rgba(241,220,99,.16);background:#0a0f1c;color:#f1dc63;">
+              <div class="subtitle text-dim"
+                   style="margin-top:.12rem;color:#5f6368;font-size:.92rem;line-height:1.1;">
+                {{ item.skocznia.lokalizacja }}
+              </div>
+            </div>
+
+            <div class="right" style="display:flex;align-items:center;">
               <span class="badge badge-k"
                     style="display:inline-flex;align-items:center;justify-content:center;padding:.18rem .45rem;border:2px solid #c6a400;background:#12192b;color:#f1dc63;border-radius:0;font-size:.78rem;font-weight:700;white-space:nowrap;">
                 K{{ item.skocznia.punkt_k }}
               </span>
-            </td>
+            </div>
+          </div>
 
-            <td style="padding:.65rem .8rem;border-bottom:1px solid rgba(241,220,99,.16);background:#0a0f1c;color:#f1dc63;">
+          <div class="card-row bottom-row"
+               style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.35rem .8rem;margin-top:.45rem;">
+
+            <div class="rekord" style="color:#f1dc63;font-size:1.05rem;font-weight:700;">
               {{ item.rekord ? (item.rekord + ' m') : '—' }}
-            </td>
+            </div>
 
-            <td class="date-cell"
-                style="padding:.65rem .8rem;border-bottom:1px solid rgba(241,220,99,.16);background:#0a0f1c;color:#f1dc63;white-space:nowrap;">
+            <div class="date" style="color:#f1dc63;font-weight:600;white-space:nowrap;">
               {{ item.dataSkoku | date:'dd.MM.yyyy' }}
-            </td>
+            </div>
 
-            <td style="padding:.65rem .8rem;border-bottom:1px solid rgba(241,220,99,.16);background:#0a0f1c;color:#f1dc63;">
+            <div class="links">
               <a *ngIf="item.link_powtorka"
                  [href]="item.link_powtorka"
                  target="_blank"
+                 rel="noopener noreferrer"
                  style="color:#f1dc63;text-decoration:underline;">
                 ▶ Powtórka
               </a>
@@ -160,15 +89,88 @@
                     style="color:#7f858f;">
                 —
               </span>
-            </td>
+            </div>
 
-            <td style="padding:.65rem .8rem;border-bottom:1px solid rgba(241,220,99,.16);background:#0a0f1c;color:#f1dc63;">
+            <div class="fall" style="color:#f1dc63;font-weight:700;">
               <span *ngIf="item.czy_upadek">💥</span>
               <span *ngIf="!item.czy_upadek">✓</span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- DESKTOP -->
+    <ng-container *ngIf="!loading && lista.length > 0 && !isMobile">
+      <div class="table-responsive"
+           style="width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 1rem 1rem;border:2px solid #c6a400;background:#0a0f1c;">
+
+        <table class="dsj-table"
+               style="width:100%;min-width:720px;border-collapse:collapse;background:#0a0f1c;color:#f1dc63;">
+          <thead>
+            <tr>
+              <th style="padding:.65rem .8rem;text-align:left;background:#101628;color:#f1dc63;border-bottom:1px solid rgba(241,220,99,.16);">#</th>
+              <th style="padding:.65rem .8rem;text-align:left;background:#101628;color:#f1dc63;border-bottom:1px solid rgba(241,220,99,.16);">Skocznia</th>
+              <th style="padding:.65rem .8rem;text-align:left;background:#101628;color:#f1dc63;border-bottom:1px solid rgba(241,220,99,.16);">Punkt K</th>
+              <th style="padding:.65rem .8rem;text-align:left;background:#101628;color:#f1dc63;border-bottom:1px solid rgba(241,220,99,.16);">Najlepszy skok</th>
+              <th style="padding:.65rem .8rem;text-align:left;background:#101628;color:#f1dc63;border-bottom:1px solid rgba(241,220,99,.16);">Data</th>
+              <th style="padding:.65rem .8rem;text-align:left;background:#101628;color:#f1dc63;border-bottom:1px solid rgba(241,220,99,.16);">Powtórka</th>
+              <th style="padding:.65rem .8rem;text-align:left;background:#101628;color:#f1dc63;border-bottom:1px solid rgba(241,220,99,.16);">Upadek</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of lista; let i = index">
+              <td style="padding:.65rem .8rem;border-bottom:1px solid rgba(241,220,99,.16);background:#0a0f1c;color:#f1dc63;">
+                <span class="id-badge"
+                      style="display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:28px;padding:0 .45rem;border-radius:6px;background:#ececec;color:#f1dc63;font-weight:700;">
+                  {{ i + 1 }}
+                </span>
+              </td>
+
+              <td style="padding:.65rem .8rem;border-bottom:1px solid rgba(241,220,99,.16);background:#0a0f1c;color:#f1dc63;">
+                <strong style="color:#f1dc63;">{{ item.skocznia.nazwa }}</strong>
+                <div class="text-dim" style="color:#7f858f;">{{ item.skocznia.lokalizacja }}</div>
+              </td>
+
+              <td style="padding:.65rem .8rem;border-bottom:1px solid rgba(241,220,99,.16);background:#0a0f1c;color:#f1dc63;">
+                <span class="badge badge-k"
+                      style="display:inline-flex;align-items:center;justify-content:center;padding:.18rem .45rem;border:2px solid #c6a400;background:#12192b;color:#f1dc63;border-radius:0;font-size:.78rem;font-weight:700;white-space:nowrap;">
+                  K{{ item.skocznia.punkt_k }}
+                </span>
+              </td>
+
+              <td style="padding:.65rem .8rem;border-bottom:1px solid rgba(241,220,99,.16);background:#0a0f1c;color:#f1dc63;">
+                {{ item.rekord ? (item.rekord + ' m') : '—' }}
+              </td>
+
+              <td class="date-cell"
+                  style="padding:.65rem .8rem;border-bottom:1px solid rgba(241,220,99,.16);background:#0a0f1c;color:#f1dc63;white-space:nowrap;">
+                {{ item.dataSkoku | date:'dd.MM.yyyy' }}
+              </td>
+
+              <td style="padding:.65rem .8rem;border-bottom:1px solid rgba(241,220,99,.16);background:#0a0f1c;color:#f1dc63;">
+                <a *ngIf="item.link_powtorka"
+                   [href]="item.link_powtorka"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   style="color:#f1dc63;text-decoration:underline;">
+                  ▶ Powtórka
+                </a>
+                <span *ngIf="!item.link_powtorka"
+                      class="text-dim"
+                      style="color:#7f858f;">
+                  —
+                </span>
+              </td>
+
+              <td style="padding:.65rem .8rem;border-bottom:1px solid rgba(241,220,99,.16);background:#0a0f1c;color:#f1dc63;">
+                <span *ngIf="item.czy_upadek">💥</span>
+                <span *ngIf="!item.czy_upadek">✓</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </ng-container>
   </div>
 </div>
