@@ -18,17 +18,12 @@
   }
 
   .hero-text {
-    h1 {
-      font-size: 3.5rem;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      background: linear-gradient(90deg, var(--snow), var(--sky));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      line-height: 1;
-      margin-bottom: .5rem;
+    .logo-hero {
+      max-width: 100%;
+      height: auto;
+      max-height: 100px;
+      margin-bottom: 0.5rem;
+      display: block;
     }
     p { color: var(--text-dim); font-size: 1.05rem; }
   }
@@ -37,6 +32,40 @@
     font-size: 5rem;
     opacity: .4;
     transform: rotate(-15deg);
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 2rem 1.5rem;
+    text-align: center;
+
+    .hero-text {
+      .logo-hero {
+        max-height: 70px;
+        margin-bottom: 0.75rem;
+      }
+      p { font-size: 0.95rem; }
+    }
+
+    .hero-art {
+      font-size: 3rem;
+      margin-top: 1rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    padding: 1.5rem 1rem;
+
+    .hero-text {
+      .logo-hero {
+        max-height: 50px;
+      }
+      p { font-size: 0.85rem; }
+    }
+
+    .hero-art {
+      font-size: 2rem;
+    }
   }
 }
 
