@@ -91,7 +91,13 @@ export class DodajWynikComponent implements OnInit {
 
         if (res?.success && typeof res.length === 'number') {
           this.form.odleglosc = this.roundTo2(res.length);
+          
           this.success = `Odległość uzupełniona: ${this.form.odleglosc.toFixed(2)} m`;
+          console.log('res.length =', res.length, 'type:', typeof res.length);
+const rounded = Math.round(res.length * 100) / 100;
+console.log('rounded =', rounded, 'type:', typeof rounded);
+this.form.odleglosc = rounded;
+console.log('form.odleglosc after set =', this.form.odleglosc, 'type:', typeof this.form.odleglosc);
         } else {
           this.error = res?.error || 'Nie udało się odczytać odległości z powtórki.';
           this.success = '';
