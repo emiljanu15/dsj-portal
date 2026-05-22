@@ -17,8 +17,6 @@ export class DodajWynikComponent implements OnInit {
   error = '';
   success = '';
 
-  odlegloscInput = '0.00';
-
   form: WynikDto = {
     odleglosc: 0,
     dataSkoku: '',
@@ -42,7 +40,6 @@ export class DodajWynikComponent implements OnInit {
 
     this.form.dataSkoku = this.todayLocal();
     this.form.graczId = Number(this.auth.currentUser?.graczId ?? 0);
-    this.odlegloscInput = '0.00';
 
     this.api.getSkocznie().subscribe({
       next: (skocznie) => {
@@ -51,6 +48,9 @@ export class DodajWynikComponent implements OnInit {
         if (skocznie.length > 0) {
           this.form.skoczniaId = skocznie[0].id ?? 0;
         }
+
+        console.log('currentUser:', this.auth.currentUser);
+        console.log('graczId z auth:', this.form.graczId);
 
         this.loading = false;
       },
@@ -70,67 +70,28 @@ export class DodajWynikComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
-  private parseOdleglosc(value: string): number {
-    const normalized = String(value ?? '')
-      .replace(',', '.')
-      .replace(/[^\d.]/g, '')
-      .trim();
-
-    const parsed = parseFloat(normalized);
-    return isNaN(parsed) ? 0 : parsed;
-  }
-
   private roundTo2(value: number): number {
-    return Math.round((value + Number.EPSILON) * 100) / 100;
-  }
-
-  formatOdleglosc(): void {
-    const parsed = this.parseOdleglosc(this.odlegloscInput);
-
-    if (parsed < 0) {
-      this.form.odleglosc = 0;
-      this.odlegloscInput = '0.00';
-      return;
-    }
-
-    const rounded = this.roundTo2(parsed);
-    this.form.odleglosc = rounded;
-    this.odlegloscInput = rounded.toFixed(2);
+    return Math.round(value * 100) / 100;
   }
 
   checkReplay(url?: string): void {
-    this.error = '';
-    this.success = '';
-
     if (!url || !url.trim()) {
       this.error = 'Podaj URL powtórki.';
       return;
     }
 
-    this.checkingReplay = true;
+    this.error = '';
     this.success = 'Sprawdzam powtórkę...';
+    this.checkingReplay = true;
 
-    this.api.replayDistance({ url: url.trim() }).subscribe({
+    this.api.replayDistance({ url }).subscribe({
       next: (res: any) => {
         this.checkingReplay = false;
         console.log('Replay response:', res);
 
-        if (res?.success) {
-          let value = 0;
-
-          if (typeof res.lengthRaw === 'string' && res.lengthRaw.trim()) {
-            value = this.parseOdleglosc(res.lengthRaw);
-          } else if (typeof res.length === 'number') {
-            value = this.roundTo2(res.length);
-          } else if (typeof res.length === 'string') {
-            value = this.parseOdleglosc(res.length);
-          }
-
-          const rounded = this.roundTo2(value);
-
-          this.form.odleglosc = rounded;
-          this.odlegloscInput = rounded.toFixed(2);
-          this.success = `Odległość uzupełniona: ${this.odlegloscInput} m`;
+        if (res?.success && typeof res.length === 'number') {
+          this.form.odleglosc = this.roundTo2(res.length);
+          this.success = `Odległość uzupełniona: ${this.form.odleglosc.toFixed(2)} m`;
         } else {
           this.error = res?.error || 'Nie udało się odczytać odległości z powtórki.';
           this.success = '';
@@ -152,8 +113,6 @@ export class DodajWynikComponent implements OnInit {
   save(): void {
     this.error = '';
     this.success = '';
-
-    this.formatOdleglosc();
 
     const currentGraczId = Number(this.auth.currentUser?.graczId ?? 0);
     this.form.graczId = currentGraczId;
@@ -179,7 +138,7 @@ export class DodajWynikComponent implements OnInit {
     }
 
     const payload: WynikDto = {
-      odleglosc: this.roundTo2(this.parseOdleglosc(this.odlegloscInput)),
+      odleglosc: this.roundTo2(Number(this.form.odleglosc)),
       dataSkoku: this.form.dataSkoku,
       graczId: currentGraczId,
       skoczniaId: Number(this.form.skoczniaId),

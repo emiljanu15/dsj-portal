@@ -42,16 +42,16 @@
           <label for="odleglosc">Odległość (metry) *</label>
           <input
             id="odleglosc"
-            type="text"
-            inputmode="decimal"
-            [(ngModel)]="odlegloscInput"
+            type="number"
+            step="0.01"
+            min="0"
+            [(ngModel)]="form.odleglosc"
             name="odleglosc"
             placeholder="np. 134.50"
             required
-            (blur)="formatOdleglosc()"
           />
           <small class="text-dim">
-            Użyj kropki lub przecinka. Zapis będzie z dokładnością do 2 miejsc po przecinku.
+            Wartość zostanie zapisana z dokładnością do 2 miejsc po przecinku.
           </small>
         </div>
 
