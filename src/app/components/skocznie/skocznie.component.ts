@@ -169,7 +169,7 @@ export class SkocznieComponent implements OnInit {
     this.api.replayDistance({ url }).subscribe({
       next: (res: any) => {
         if (res?.success && typeof res.length === 'number') {
-          this.wynikForm.odleglosc = Math.round(res.length * 10) / 10;
+          this.wynikForm.odleglosc = Math.round(res.length * 100) / 100;
           this.wynikSuccess = `Odległość uzupełniona: ${this.wynikForm.odleglosc} m`;
         } else {
           this.wynikError = res?.error || 'Nie udało się odczytać odległości z powtórki.';
