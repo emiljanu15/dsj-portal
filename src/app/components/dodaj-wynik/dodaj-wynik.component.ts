@@ -50,23 +50,27 @@ export class DodajWynikComponent implements OnInit {
         this.gracze = gracze;
         this.skocznie = skocznie;
 
-        const login = (this.auth.currentUser?.login ?? '').trim().toLowerCase();
+        const loginUzytkownika = (this.auth.currentUser?.login ?? '').trim().toLowerCase();
 
-        const gracz = this.gracze.find(
-          g => (g.login_gracza ?? '').trim().toLowerCase() === login
+        const znalezionyGracz = this.gracze.find(g =>
+          (g.login_gracza ?? '').trim().toLowerCase() === loginUzytkownika
         );
 
-        if (!gracz?.id) {
-          this.error = `Nie znaleziono gracza dla loginu: ${this.auth.currentUser?.login}`;
+        if (!znalezionyGracz?.id) {
+          this.error = `Nie znaleziono gracza o loginie: ${this.auth.currentUser?.login}`;
           this.loading = false;
           return;
         }
 
-        this.form.graczId = gracz.id;
+        this.form.graczId = znalezionyGracz.id;
 
         if (this.skocznie.length > 0) {
           this.form.skoczniaId = this.skocznie[0].id ?? 0;
         }
+
+        console.log('currentUser:', this.auth.currentUser);
+        console.log('znalezionyGracz:', znalezionyGracz);
+        console.log('form init:', this.form);
 
         this.loading = false;
       },
