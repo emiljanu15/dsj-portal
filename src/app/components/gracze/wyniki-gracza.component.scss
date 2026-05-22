@@ -1,2 +1,65 @@
-/* minimal styling - reuse global styles */
+/* responsive table styles for player results */
 .page-enter { }
+
+.table-responsive {
+	width: 100%;
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
+}
+
+.dsj-table {
+	width: 100%;
+	border-collapse: collapse;
+	min-width: 720px; /* ensures columns keep readable width on small viewports and trigger horizontal scroll */
+}
+
+.dsj-table th,
+.dsj-table td {
+	padding: 0.6rem 0.75rem;
+	text-align: left;
+	border-bottom: 1px solid rgba(0,0,0,0.06);
+	vertical-align: middle;
+}
+
+.dsj-table thead th {
+	font-weight: 600;
+	font-size: 0.95rem;
+}
+
+.id-badge {
+	display: inline-block;
+	background: rgba(0,0,0,0.06);
+	border-radius: 6px;
+	padding: 0.2rem 0.45rem;
+	min-width: 28px;
+	text-align: center;
+}
+
+.text-dim { color: rgba(0,0,0,0.5); font-size: 0.85rem; }
+
+/* Small screens: allow horizontal scrolling and hide less important columns */
+@media (max-width: 720px) {
+	.dsj-table { min-width: 620px; font-size: 0.95rem; }
+}
+
+@media (max-width: 600px) {
+	.dsj-table { min-width: 520px; font-size: 0.95rem; }
+
+	/* hide less important columns to reduce clutter */
+	.dsj-table thead th:nth-child(3), /* Punkt K */
+	.dsj-table thead th:nth-child(6), /* Powtórka */
+	.dsj-table thead th:nth-child(7), /* Upadek */
+	.dsj-table tbody td:nth-child(3),
+	.dsj-table tbody td:nth-child(6),
+	.dsj-table tbody td:nth-child(7) {
+		display: none;
+	}
+
+	/* stack name and location to save horizontal space */
+	.dsj-table td > strong { display: block; }
+	.dsj-table td .text-dim { display: block; margin-top: 0.15rem; }
+}
+
+/* improve empty / loading visuals */
+.empty-state { text-align: center; color: rgba(0,0,0,0.65); }
+.loading-wrap { display:flex; align-items:center; gap:1rem; justify-content:center; padding:1rem 0; }

@@ -12,7 +12,8 @@
       <p>Brak wyników dla tego gracza.</p>
     </div>
 
-    <table class="dsj-table" *ngIf="!loading && lista.length > 0">
+    <div class="table-responsive" *ngIf="!loading && lista.length > 0">
+      <table class="dsj-table">
       <thead>
         <tr>
           <th>#</th>
@@ -41,6 +42,7 @@
           </td>
         </tr>
       </tbody>
-    </table>
+      </table>
+    </div>
   </div>
 </div>
