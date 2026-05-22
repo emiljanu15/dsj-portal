@@ -70,9 +70,7 @@
 
 @media (max-width: 768px) {
   .dsj-table {
-    /* Ukryj kolumny Rekord i Wyniki na tablet */
-    thead th:nth-child(3),
-    tbody td:nth-child(3),
+    /* Ukryj kolumnę Wyniki na tablet, pokaż rekord */
     thead th:nth-child(4),
     tbody td:nth-child(4) {
       display: none;
@@ -96,16 +94,9 @@
 
 @media (max-width: 480px) {
   .dsj-table {
-    /* Mobilny layout - tylko lp, nazwa, akcje */
-    thead th:nth-child(3),
-    tbody td:nth-child(3),
+    /* Mobilny layout - lp, nazwa, rekord, akcje */
     thead th:nth-child(4),
     tbody td:nth-child(4) {
-      display: none;
-    }
-
-    thead th:nth-child(5),
-    tbody td:nth-child(5) {
       display: none;
     }
 

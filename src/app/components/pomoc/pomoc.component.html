@@ -1,0 +1,283 @@
+<div class="page-enter pomoc-page">
+
+  <!-- Hero -->
+  <div class="pomoc-hero">
+    <div class="pomoc-hero-inner">
+      <div class="pomoc-logo">❓</div>
+      <div>
+        <h1>Pomoc – DSJ Portal</h1>
+        <p class="pomoc-subtitle">Instrukcja obsługi systemu zarządzania skokami narciarskimi</p>
+      </div>
+    </div>
+
+    <!-- Szybka nawigacja -->
+    <nav class="toc">
+      <span class="toc-label">Przejdź do sekcji:</span>
+      <a class="toc-link" (click)="scrollTo('logowanie')">🔐 Logowanie</a>
+      <a class="toc-link" (click)="scrollTo('dashboard')">📊 Dashboard</a>
+      <a class="toc-link" (click)="scrollTo('skocznie')">⛰️ Skocznie</a>
+      <a class="toc-link" (click)="scrollTo('gracze')">🎿 Gracze</a>
+      <a class="toc-link" (click)="scrollTo('wyniki')">🏆 Wyniki</a>
+      <a class="toc-link" (click)="scrollTo('komentarze')">💬 Komentarze</a>
+      <a class="toc-link" (click)="scrollTo('uzytkownicy')">👤 Użytkownicy</a>
+      <a class="toc-link" (click)="scrollTo('role')">🛡️ Role</a>
+    </nav>
+  </div>
+
+  <!-- Sekcja: Logowanie i rejestracja -->
+  <section class="pomoc-section" id="logowanie">
+    <div class="section-header">
+      <span class="section-icon">🔐</span>
+      <h2>Logowanie i rejestracja</h2>
+    </div>
+
+    <div class="cards-grid">
+      <div class="pomoc-card">
+        <h3>Jak się zarejestrować?</h3>
+        <ol>
+          <li>Kliknij przycisk <strong>Rejestracja</strong> w prawym górnym rogu.</li>
+          <li>Wpisz wybrany login i hasło.</li>
+          <li>Kliknij <strong>Zarejestruj się</strong>.</li>
+          <li>Po udanej rejestracji możesz się zalogować.</li>
+        </ol>
+        <div class="tip">💡 Login musi być unikalny w systemie.</div>
+      </div>
+
+      <div class="pomoc-card">
+        <h3>Jak się zalogować?</h3>
+        <ol>
+          <li>Kliknij przycisk <strong>Logowanie</strong> w górnym pasku.</li>
+          <li>Wpisz swój login i hasło.</li>
+          <li>Naciśnij <kbd>Enter</kbd> lub kliknij <strong>Zaloguj się</strong>.</li>
+          <li>Po zalogowaniu w pasku pojawi się Twoja nazwa i przycisk <strong>Wyloguj</strong>.</li>
+        </ol>
+      </div>
+
+      <div class="pomoc-card">
+        <h3>Role użytkowników</h3>
+        <div class="role-row">
+          <span class="badge badge-user">👤 User</span>
+          <span>Przeglądanie i dodawanie wyników na skoczniach.</span>
+        </div>
+        <div class="role-row">
+          <span class="badge badge-admin">🛡️ Admin</span>
+          <span>Pełne zarządzanie: gracze, skocznie, wyniki, komentarze, użytkownicy.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sekcja: Dashboard -->
+  <section class="pomoc-section" id="dashboard">
+    <div class="section-header">
+      <span class="section-icon">📊</span>
+      <h2>Dashboard – strona główna</h2>
+    </div>
+    <div class="pomoc-card wide">
+      <p>Dashboard to punkt startowy portalu. Wyświetla trzy statystyki na żywo:</p>
+      <div class="stat-preview-row">
+        <div class="stat-preview"><span>🎿</span><strong>Gracze</strong><small>Liczba graczy w bazie</small></div>
+        <div class="stat-preview"><span>⛰️</span><strong>Skocznie</strong><small>Liczba skoczni w bazie</small></div>
+        <div class="stat-preview"><span>👥</span><strong>Użytkownicy</strong><small>Zarejestrowani użytkownicy</small></div>
+      </div>
+      <p>Pod statystykami znajdziesz <strong>Szybki dostęp</strong> do najważniejszych sekcji – kliknij kartę, aby przejść od razu do Skoczni lub Graczy.</p>
+    </div>
+  </section>
+
+  <!-- Sekcja: Skocznie -->
+  <section class="pomoc-section" id="skocznie">
+    <div class="section-header">
+      <span class="section-icon">⛰️</span>
+      <h2>Skocznie narciarskie</h2>
+    </div>
+
+    <div class="cards-grid">
+      <div class="pomoc-card">
+        <h3>Przeglądanie skoczni</h3>
+        <ul>
+          <li>Lista wszystkich skoczni z nazwą, lokalizacją i punktem K.</li>
+          <li>Kolumna <strong>🏅 Rekord</strong> pokazuje najlepszy wynik i nick gracza.</li>
+          <li>Kliknij nazwę skoczni lub przycisk <strong>🏆 Rekordy</strong>, aby zobaczyć wyniki wszystkich graczy na tej skoczni.</li>
+        </ul>
+      </div>
+
+      <div class="pomoc-card">
+        <h3>Dodawanie wyniku na skoczni</h3>
+        <ol>
+          <li>Otwórz modal rekordów skoczni (przycisk <strong>🏆 Rekordy</strong>).</li>
+          <li>Kliknij <strong>+ Dodaj wynik</strong> (widoczny po zalogowaniu).</li>
+          <li>Wybierz gracza, wpisz odległość w metrach, datę skoku.</li>
+          <li>Opcjonalnie: zaznacz <em>Upadek</em> i wklej link do powtórki.</li>
+          <li>Kliknij <strong>Dodaj</strong>.</li>
+        </ol>
+        <div class="tip">💡 Wynik ponad punkt K oznaczony jest odznaką <span class="badge badge-k">✓ K</span>.</div>
+      </div>
+
+      <div class="pomoc-card admin-only">
+        <div class="admin-tag">🛡️ Tylko Admin</div>
+        <h3>Zarządzanie skoczniami</h3>
+        <ul>
+          <li><strong>+ Dodaj skocznię</strong> – uzupełnij nazwę, lokalizację i punkt K.</li>
+          <li><strong>✏️ Edytuj</strong> – zmień dane istniejącej skoczni.</li>
+          <li><strong>🗑️ Usuń</strong> – trwale usuwa skocznię z bazy.</li>
+        </ul>
+        <div class="tip warn">⚠️ Usunięcie skoczni może wpłynąć na powiązane wyniki!</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sekcja: Gracze -->
+  <section class="pomoc-section" id="gracze">
+    <div class="section-header">
+      <span class="section-icon">🎿</span>
+      <h2>Gracze – ranking</h2>
+    </div>
+
+    <div class="cards-grid">
+      <div class="pomoc-card">
+        <h3>Jak działa ranking?</h3>
+        <p>Gracze są sortowani według <strong>sumy rekordów</strong> – czyli sumy <em>najdłuższych skoków</em> z każdej skoczni z osobna.</p>
+        <div class="ranking-example">
+          <div class="rank-item">🥇 Miejsce 1</div>
+          <div class="rank-item">🥈 Miejsce 2</div>
+          <div class="rank-item">🥉 Miejsce 3</div>
+          <div class="rank-item muted">4, 5, 6... reszta</div>
+        </div>
+        <div class="tip">💡 Suma rekordów = najdłuższy skok z każdej skoczni zsumowany razem.</div>
+      </div>
+
+      <div class="pomoc-card">
+        <h3>Wyniki gracza</h3>
+        <p>Kliknij odznakę z liczbą skoczni lub przycisk <strong>🏆 Wyniki</strong> przy graczu, aby zobaczyć jego pełną historię skoków pogrupowaną po skoczniach.</p>
+      </div>
+
+      <div class="pomoc-card admin-only">
+        <div class="admin-tag">🛡️ Tylko Admin</div>
+        <h3>Zarządzanie graczami</h3>
+        <ul>
+          <li><strong>+ Dodaj gracza</strong> – podaj login gracza.</li>
+          <li><strong>✏️ Edytuj</strong> – zmień login gracza.</li>
+          <li><strong>🗑️ Usuń</strong> – usuwa gracza z rankingu.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sekcja: Wyniki -->
+  <section class="pomoc-section" id="wyniki">
+    <div class="section-header">
+      <span class="section-icon">🏆</span>
+      <h2>Wyniki skoków</h2>
+    </div>
+
+    <div class="pomoc-card wide">
+      <p>Sekcja <strong>Wyniki</strong> to centralna tabela wszystkich skoków w systemie (dostępna tylko dla admina w nawigacji).</p>
+      <div class="table-legend">
+        <div class="legend-row"><span class="badge-demo over-k">✓ K</span> Skok przekroczył punkt K skoczni</div>
+        <div class="legend-row"><span class="upadek-badge">💥 Upadek</span> Lądowanie zakończone upadkiem</div>
+        <div class="legend-row"><span class="ok-badge">✓ OK</span> Poprawne lądowanie</div>
+        <div class="legend-row"><a class="replay-link-demo">▶ Powtórka</a> Link do nagrania skoku (klikalne)</div>
+        <div class="legend-row"><span>💬 Komentarze</span> Otwiera komentarze powiązane z wynikiem</div>
+      </div>
+    </div>
+
+    <div class="cards-grid mt-sm">
+      <div class="pomoc-card admin-only">
+        <div class="admin-tag">🛡️ Tylko Admin</div>
+        <h3>Dodawanie wyniku</h3>
+        <ol>
+          <li>Kliknij <strong>+ Dodaj wynik</strong>.</li>
+          <li>Wybierz gracza i skocznię z list rozwijanych.</li>
+          <li>Podaj odległość (metry), datę i opcjonalnie link do powtórki.</li>
+          <li>Zaznacz <em>czy upadek</em> jeśli gracz upadł.</li>
+          <li>Kliknij <strong>Dodaj</strong>.</li>
+        </ol>
+      </div>
+      <div class="pomoc-card admin-only">
+        <div class="admin-tag">🛡️ Tylko Admin</div>
+        <h3>Edycja i usuwanie</h3>
+        <ul>
+          <li><strong>✏️</strong> przy wierszu otwiera formularz edycji wyniku.</li>
+          <li><strong>🗑️</strong> trwale usuwa wynik – pojawi się prośba o potwierdzenie.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sekcja: Komentarze -->
+  <section class="pomoc-section" id="komentarze">
+    <div class="section-header">
+      <span class="section-icon">💬</span>
+      <h2>Komentarze</h2>
+    </div>
+
+    <div class="cards-grid">
+      <div class="pomoc-card">
+        <h3>Przeglądanie komentarzy</h3>
+        <ul>
+          <li>Tabela wyświetla treść, ID wyniku i ID użytkownika.</li>
+          <li>Filtr <strong>„Filtruj po ID wyniku"</strong> – wpisz numer i kliknij <strong>Szukaj</strong>, aby zobaczyć komentarze do konkretnego wyniku.</li>
+          <li><strong>Resetuj</strong> – przywraca pełną listę.</li>
+        </ul>
+      </div>
+
+      <div class="pomoc-card admin-only">
+        <div class="admin-tag">🛡️ Tylko Admin</div>
+        <h3>Zarządzanie komentarzami</h3>
+        <ul>
+          <li><strong>+ Dodaj komentarz</strong> – podaj treść, ID wyniku i ID użytkownika.</li>
+          <li><strong>✏️ Edytuj</strong> – zmień treść lub powiązanie.</li>
+          <li><strong>🗑️ Usuń</strong> – usuwa komentarz.</li>
+        </ul>
+        <div class="tip">💡 Komentarze są też dostępne z poziomu tabeli wyników (przycisk 💬).</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sekcja: Użytkownicy -->
+  <section class="pomoc-section" id="uzytkownicy">
+    <div class="section-header">
+      <span class="section-icon">👤</span>
+      <h2>Użytkownicy</h2>
+    </div>
+
+    <div class="pomoc-card wide admin-only">
+      <div class="admin-tag">🛡️ Tylko Admin</div>
+      <p>Sekcja widoczna wyłącznie dla administratora. Wyświetla wszystkich zarejestrowanych użytkowników wraz z ich rolą i datą rejestracji.</p>
+      <ul>
+        <li><strong>+ Nowy użytkownik</strong> – przenosi do formularza rejestracji.</li>
+        <li><strong>🗑️ Usuń</strong> – trwale usuwa konto użytkownika.</li>
+      </ul>
+      <div class="tip warn">⚠️ Nie możesz usunąć własnego konta z tego widoku.</div>
+    </div>
+  </section>
+
+  <!-- Sekcja: Role i uprawnienia -->
+  <section class="pomoc-section" id="role">
+    <div class="section-header">
+      <span class="section-icon">🛡️</span>
+      <h2>Podsumowanie ról i uprawnień</h2>
+    </div>
+
+    <div class="pomoc-card wide">
+      <div class="permissions-table">
+        <div class="perm-header">
+          <span>Funkcja</span>
+          <span class="badge badge-user">👤 User</span>
+          <span class="badge badge-admin">🛡️ Admin</span>
+        </div>
+        <div class="perm-row" *ngFor="let p of permissions">
+          <span>{{ p.feature }}</span>
+          <span [class]="p.user ? 'perm-yes' : 'perm-no'">{{ p.user ? '✓' : '—' }}</span>
+          <span [class]="p.admin ? 'perm-yes' : 'perm-no'">{{ p.admin ? '✓' : '—' }}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Powrót na górę -->
+  <div class="back-top">
+    <button class="btn btn-ghost" (click)="scrollTo('logowanie')">↑ Powrót na górę</button>
+  </div>
+
+</div>
