@@ -70,6 +70,17 @@ export class DodajWynikComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
+  private roundTo2(value: number): number {
+    return Math.round((value + Number.EPSILON) * 100) / 100;
+  }
+
+  formatOdleglosc(): void {
+    const val = Number(this.form.odleglosc);
+    if (!isNaN(val) && val >= 0) {
+      this.form.odleglosc = this.roundTo2(val);
+    }
+  }
+
   checkReplay(url?: string): void {
     this.error = '';
     this.success = '';
@@ -87,8 +98,8 @@ export class DodajWynikComponent implements OnInit {
         this.checkingReplay = false;
 
         if (res?.success && typeof res.length === 'number') {
-          this.form.odleglosc = Math.round(res.length * 100) / 100;
-          this.success = `Odległość uzupełniona: ${this.form.odleglosc} m`;
+          this.form.odleglosc = this.roundTo2(Number(res.length));
+          this.success = `Odległość uzupełniona: ${this.form.odleglosc.toFixed(2)} m`;
         } else {
           this.error = res?.error || 'Nie udało się odczytać odległości z powtórki.';
           this.success = '';
@@ -111,6 +122,11 @@ export class DodajWynikComponent implements OnInit {
     this.error = '';
     this.success = '';
 
+    this.formatOdleglosc();
+
+    const currentGraczId = Number(this.auth.currentUser?.graczId ?? 0);
+    this.form.graczId = currentGraczId;
+
     if (!this.form.graczId || this.form.graczId <= 0) {
       this.error = 'Brak poprawnie powiązanego gracza dla zalogowanego użytkownika.';
       return;
@@ -132,9 +148,9 @@ export class DodajWynikComponent implements OnInit {
     }
 
     const payload: WynikDto = {
-      odleglosc: Number(this.form.odleglosc),
+      odleglosc: this.roundTo2(Number(this.form.odleglosc)),
       dataSkoku: this.form.dataSkoku,
-      graczId: Number(this.form.graczId),
+      graczId: currentGraczId,
       skoczniaId: Number(this.form.skoczniaId),
       link_powtorka: this.form.link_powtorka?.trim() || '',
       czy_upadek: !!this.form.czy_upadek

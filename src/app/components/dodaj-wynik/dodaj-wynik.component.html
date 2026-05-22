@@ -49,7 +49,11 @@
             name="odleglosc"
             placeholder="np. 134.50"
             required
+            (blur)="formatOdleglosc()"
           />
+          <small class="text-dim">
+            Wartość zostanie zapisana z dokładnością do 2 miejsc po przecinku.
+          </small>
         </div>
 
         <div class="form-group">
