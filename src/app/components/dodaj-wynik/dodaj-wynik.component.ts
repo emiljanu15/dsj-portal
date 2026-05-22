@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { forkJoin } from 'rxjs';
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
-import { WynikDto, Skocznia } from '../../models/models';
+import { WynikDto, Skocznia, Gracz } from '../../models/models';
 
 @Component({
   selector: 'app-dodaj-wynik',
@@ -11,6 +12,7 @@ import { WynikDto, Skocznia } from '../../models/models';
 })
 export class DodajWynikComponent implements OnInit {
   skocznie: Skocznia[] = [];
+  gracze: Gracz[] = [];
   loading = true;
   saving = false;
   checkingReplay = false;
@@ -38,24 +40,39 @@ export class DodajWynikComponent implements OnInit {
       return;
     }
 
-    if (this.auth.currentUser?.id) {
-      this.form.graczId = Number(this.auth.currentUser.id);
-    }
-
     this.form.dataSkoku = this.todayLocal();
 
-    this.api.getSkocznie().subscribe({
-      next: (skocznie) => {
+    forkJoin({
+      gracze: this.api.getGracze(),
+      skocznie: this.api.getSkocznie()
+    }).subscribe({
+      next: ({ gracze, skocznie }) => {
+        this.gracze = gracze;
         this.skocznie = skocznie;
 
-        if (skocznie.length > 0) {
-          this.form.skoczniaId = skocznie[0].id ?? 0;
+        const login = (this.auth.currentUser?.login ?? '').trim().toLowerCase();
+
+        const gracz = this.gracze.find(
+          g => (g.login_gracza ?? '').trim().toLowerCase() === login
+        );
+
+        if (!gracz?.id) {
+          this.error = `Nie znaleziono gracza dla loginu: ${this.auth.currentUser?.login}`;
+          this.loading = false;
+          return;
+        }
+
+        this.form.graczId = gracz.id;
+
+        if (this.skocznie.length > 0) {
+          this.form.skoczniaId = this.skocznie[0].id ?? 0;
         }
 
         this.loading = false;
       },
-      error: () => {
-        this.error = 'Błąd ładowania skoczni.';
+      error: (err) => {
+        console.error('Błąd ładowania danych formularza:', err);
+        this.error = 'Błąd ładowania graczy lub skoczni.';
         this.loading = false;
       }
     });
@@ -90,7 +107,7 @@ export class DodajWynikComponent implements OnInit {
         console.log('replayDistance response:', res);
 
         if (res?.success && typeof res.length === 'number') {
-          this.form.odleglosc = Math.round(res.length * 10) / 10;
+          this.form.odleglosc = Math.round(res.length * 100) / 100;
           this.success = `Odległość uzupełniona: ${this.form.odleglosc} m`;
         } else {
           this.error = res?.error || 'Nie udało się odczytać odległości z powtórki.';
@@ -118,7 +135,7 @@ export class DodajWynikComponent implements OnInit {
     this.success = '';
 
     if (!this.form.graczId || this.form.graczId <= 0) {
-      this.error = 'Nieprawidłowy użytkownik. Zaloguj się ponownie.';
+      this.error = 'Nie znaleziono poprawnego gracza dla zalogowanego użytkownika.';
       return;
     }
 
@@ -127,7 +144,7 @@ export class DodajWynikComponent implements OnInit {
       return;
     }
 
-    if (!this.form.odleglosc || this.form.odleglosc <= 0) {
+    if (!this.form.odleglosc || Number(this.form.odleglosc) <= 0) {
       this.error = 'Podaj poprawną odległość skoku.';
       return;
     }
