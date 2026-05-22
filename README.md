@@ -26,7 +26,7 @@ private base = 'https://localhost:7000/api';  // ← TWÓJ URL
 ```
 
 ## Uruchomienie
-
+--working
 ```bash
 ng serve
 ```
