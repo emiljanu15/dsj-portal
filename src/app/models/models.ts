@@ -18,6 +18,7 @@ export interface Uzytkownik {
   password?: string;
   dataUtworzenia?: string;
   czyAdmin?: boolean;
+  graczId?: number;
 }
 
 export interface KomentarzDto {

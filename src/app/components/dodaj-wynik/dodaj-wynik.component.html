@@ -18,8 +18,8 @@
           <label>Gracz (Ty)</label>
           <div class="static-field">
             <strong>{{ auth.currentUser?.login }}</strong>
-            <span class="text-dim" *ngIf="form.graczId > 0">
-              (ID gracza: {{ form.graczId }})
+            <span class="text-dim" *ngIf="auth.currentUser?.graczId">
+              (ID gracza: {{ auth.currentUser?.graczId }})
             </span>
           </div>
         </div>

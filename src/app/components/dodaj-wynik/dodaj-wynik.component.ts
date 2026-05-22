@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { forkJoin } from 'rxjs';
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
-import { WynikDto, Skocznia, Gracz } from '../../models/models';
+import { WynikDto, Skocznia } from '../../models/models';
 
 @Component({
   selector: 'app-dodaj-wynik',
@@ -12,7 +11,6 @@ import { WynikDto, Skocznia, Gracz } from '../../models/models';
 })
 export class DodajWynikComponent implements OnInit {
   skocznie: Skocznia[] = [];
-  gracze: Gracz[] = [];
   loading = true;
   saving = false;
   checkingReplay = false;
@@ -41,42 +39,24 @@ export class DodajWynikComponent implements OnInit {
     }
 
     this.form.dataSkoku = this.todayLocal();
+    this.form.graczId = Number(this.auth.currentUser?.graczId ?? 0);
 
-    forkJoin({
-      gracze: this.api.getGracze(),
-      skocznie: this.api.getSkocznie()
-    }).subscribe({
-      next: ({ gracze, skocznie }) => {
-        this.gracze = gracze;
+    this.api.getSkocznie().subscribe({
+      next: (skocznie) => {
         this.skocznie = skocznie;
 
-        const loginUzytkownika = (this.auth.currentUser?.login ?? '').trim().toLowerCase();
-
-        const znalezionyGracz = this.gracze.find(g =>
-          (g.login_gracza ?? '').trim().toLowerCase() === loginUzytkownika
-        );
-
-        if (!znalezionyGracz?.id) {
-          this.error = `Nie znaleziono gracza o loginie: ${this.auth.currentUser?.login}`;
-          this.loading = false;
-          return;
-        }
-
-        this.form.graczId = znalezionyGracz.id;
-
-        if (this.skocznie.length > 0) {
-          this.form.skoczniaId = this.skocznie[0].id ?? 0;
+        if (skocznie.length > 0) {
+          this.form.skoczniaId = skocznie[0].id ?? 0;
         }
 
         console.log('currentUser:', this.auth.currentUser);
-        console.log('znalezionyGracz:', znalezionyGracz);
-        console.log('form init:', this.form);
+        console.log('graczId z auth:', this.form.graczId);
 
         this.loading = false;
       },
       error: (err) => {
-        console.error('Błąd ładowania danych formularza:', err);
-        this.error = 'Błąd ładowania graczy lub skoczni.';
+        console.error('Błąd ładowania skoczni:', err);
+        this.error = 'Błąd ładowania skoczni.';
         this.loading = false;
       }
     });
@@ -102,13 +82,9 @@ export class DodajWynikComponent implements OnInit {
     this.checkingReplay = true;
     this.success = 'Sprawdzam powtórkę...';
 
-    const payload = { url: url.trim() };
-    console.log('replayDistance payload:', payload);
-
-    this.api.replayDistance(payload).subscribe({
+    this.api.replayDistance({ url: url.trim() }).subscribe({
       next: (res: any) => {
         this.checkingReplay = false;
-        console.log('replayDistance response:', res);
 
         if (res?.success && typeof res.length === 'number') {
           this.form.odleglosc = Math.round(res.length * 100) / 100;
@@ -121,14 +97,11 @@ export class DodajWynikComponent implements OnInit {
       error: (err) => {
         this.checkingReplay = false;
         console.error('replayDistance error:', err);
-        console.error('replayDistance error body:', err?.error);
-
         this.error =
           err?.error?.message ||
           err?.error?.title ||
           (typeof err?.error === 'string' ? err.error : '') ||
           'Błąd podczas sprawdzania powtórki.';
-
         this.success = '';
       }
     });
@@ -139,7 +112,7 @@ export class DodajWynikComponent implements OnInit {
     this.success = '';
 
     if (!this.form.graczId || this.form.graczId <= 0) {
-      this.error = 'Nie znaleziono poprawnego gracza dla zalogowanego użytkownika.';
+      this.error = 'Brak poprawnie powiązanego gracza dla zalogowanego użytkownika.';
       return;
     }
 

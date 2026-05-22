@@ -22,20 +22,38 @@ export class LoginComponent {
   ) {}
 
   submit(): void {
-    if (!this.login || !this.password) { this.error = 'Podaj login i hasło.'; return; }
+    if (!this.login || !this.password) {
+      this.error = 'Podaj login i hasło.';
+      return;
+    }
+
     this.loading = true;
     this.error = '';
 
-    const payload: Uzytkownik = { login: this.login, password: this.password };
+    const payload: Uzytkownik = {
+      login: this.login,
+      password: this.password
+    };
 
     this.api.logowanie(payload).subscribe({
-      next: (res: any) => {
-        // Backend może zwrócić obiekt użytkownika lub obiekt zawierający pole user.
-        const user: Uzytkownik = res?.user ?? res ?? { login: this.login, czyAdmin: false };
-        this.auth.setUser(user);
-        this.router.navigate(['/']);
+      next: async (res: any) => {
+        try {
+          const user: Uzytkownik = res?.user ?? res ?? {
+            login: this.login,
+            czyAdmin: false
+          };
+
+          await this.auth.setUser(user);
+          this.loading = false;
+          this.router.navigate(['/']);
+        } catch (err) {
+          console.error('Błąd setUser po logowaniu:', err);
+          this.error = 'Zalogowano, ale nie udało się przygotować profilu gracza.';
+          this.loading = false;
+        }
       },
-      error: () => {
+      error: (err) => {
+        console.error('Błąd logowania:', err);
         this.error = 'Nieprawidłowy login lub hasło.';
         this.loading = false;
       }
