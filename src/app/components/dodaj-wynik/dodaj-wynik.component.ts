@@ -13,7 +13,10 @@ export class DodajWynikComponent implements OnInit {
   skocznie: Skocznia[] = [];
   loading = true;
   saving = false;
+<<<<<<< HEAD
   checkingReplay = false;
+=======
+>>>>>>> 7684d124e48770821f7da1e2d3bb7c71c5a001b6
   error = '';
   success = '';
 
@@ -21,7 +24,7 @@ export class DodajWynikComponent implements OnInit {
     odleglosc: 0,
     dataSkoku: '',
     graczId: 0,
-    skoczniaId: 0,
+    skoczniaId: null as any,
     link_powtorka: '',
     czy_upadek: false
   };
@@ -38,6 +41,7 @@ export class DodajWynikComponent implements OnInit {
       return;
     }
 
+<<<<<<< HEAD
     this.form.dataSkoku = this.todayLocal();
     this.form.graczId = Number(this.auth.currentUser?.graczId ?? 0);
 
@@ -52,6 +56,17 @@ export class DodajWynikComponent implements OnInit {
         console.log('currentUser:', this.auth.currentUser);
         console.log('graczId z auth:', this.form.graczId);
 
+=======
+    if (this.auth.currentUser?.id) {
+      this.form.graczId = Number(this.auth.currentUser.id);
+    }
+
+    this.form.dataSkoku = this.todayLocal();
+
+    this.api.getSkocznie().subscribe({
+      next: (skocznie) => {
+        this.skocznie = skocznie;
+>>>>>>> 7684d124e48770821f7da1e2d3bb7c71c5a001b6
         this.loading = false;
       },
       error: (err) => {
@@ -70,21 +85,33 @@ export class DodajWynikComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
+<<<<<<< HEAD
   private roundTo2(value: number): number {
     return Math.round(value * 100) / 100;
   }
 
+=======
+>>>>>>> 7684d124e48770821f7da1e2d3bb7c71c5a001b6
   checkReplay(url?: string): void {
+    this.error = '';
+    this.success = '';
+
     if (!url || !url.trim()) {
       this.error = 'Podaj URL powtórki.';
       return;
     }
 
+<<<<<<< HEAD
     this.error = '';
     this.success = 'Sprawdzam powtórkę...';
     this.checkingReplay = true;
 
     this.api.replayDistance({ url }).subscribe({
+=======
+    this.success = 'Sprawdzam powtórkę...';
+
+    this.api.replayDistance({ url: url.trim() }).subscribe({
+>>>>>>> 7684d124e48770821f7da1e2d3bb7c71c5a001b6
       next: (res: any) => {
         this.checkingReplay = false;
         console.log('Replay response:', res);
@@ -120,6 +147,7 @@ console.log('form.odleglosc after set =', this.form.odleglosc, 'type:', typeof t
     this.error = '';
     this.success = '';
 
+<<<<<<< HEAD
     const currentGraczId = Number(this.auth.currentUser?.graczId ?? 0);
     this.form.graczId = currentGraczId;
 
@@ -129,20 +157,47 @@ console.log('form.odleglosc after set =', this.form.odleglosc, 'type:', typeof t
     }
 
     if (!this.form.skoczniaId || this.form.skoczniaId <= 0) {
+=======
+    const payload: WynikDto = {
+      ...this.form,
+      odleglosc: Number(this.form.odleglosc),
+      dataSkoku: this.form.dataSkoku,
+      graczId: Number(this.form.graczId),
+      skoczniaId: Number(this.form.skoczniaId),
+      link_powtorka: this.form.link_powtorka?.trim() || '',
+      czy_upadek: !!this.form.czy_upadek
+    };
+
+    if (!payload.graczId || payload.graczId <= 0) {
+      this.error = 'Nieprawidłowy użytkownik. Zaloguj się ponownie.';
+      return;
+    }
+
+    if (!payload.skoczniaId || payload.skoczniaId <= 0) {
+>>>>>>> 7684d124e48770821f7da1e2d3bb7c71c5a001b6
       this.error = 'Wybierz skocznię.';
       return;
     }
 
+<<<<<<< HEAD
     if (!this.form.odleglosc || Number(this.form.odleglosc) <= 0) {
+=======
+    if (!payload.odleglosc || payload.odleglosc <= 0) {
+>>>>>>> 7684d124e48770821f7da1e2d3bb7c71c5a001b6
       this.error = 'Podaj poprawną odległość skoku.';
       return;
     }
 
+<<<<<<< HEAD
     if (!this.form.dataSkoku) {
+=======
+    if (!payload.dataSkoku) {
+>>>>>>> 7684d124e48770821f7da1e2d3bb7c71c5a001b6
       this.error = 'Wybierz datę skoku.';
       return;
     }
 
+<<<<<<< HEAD
     const payload: WynikDto = {
       odleglosc: this.roundTo2(Number(this.form.odleglosc)),
       dataSkoku: this.form.dataSkoku,
@@ -156,6 +211,16 @@ console.log('form.odleglosc after set =', this.form.odleglosc, 'type:', typeof t
 
     this.saving = true;
 
+=======
+    this.saving = true;
+
+    console.log('Dodawanie wyniku - payload:', payload, {
+      graczIdType: typeof payload.graczId,
+      skoczniaIdType: typeof payload.skoczniaId,
+      odlegloscType: typeof payload.odleglosc
+    });
+
+>>>>>>> 7684d124e48770821f7da1e2d3bb7c71c5a001b6
     this.api.addWynik(payload).subscribe({
       next: () => {
         this.saving = false;
@@ -167,6 +232,7 @@ console.log('form.odleglosc after set =', this.form.odleglosc, 'type:', typeof t
       },
       error: (err) => {
         this.saving = false;
+<<<<<<< HEAD
         console.error('addWynik error:', err);
         console.error('addWynik error body:', err?.error);
 
@@ -185,6 +251,11 @@ console.log('form.odleglosc after set =', this.form.odleglosc, 'type:', typeof t
            err?.error?.title ||
            (typeof err?.error === 'string' ? err.error : '') ||
            'Spróbuj ponownie.');
+=======
+        this.error =
+          'Błąd podczas dodawania wyniku: ' +
+          (err?.error?.message || err?.error?.title || 'Spróbuj ponownie.');
+>>>>>>> 7684d124e48770821f7da1e2d3bb7c71c5a001b6
       }
     });
   }

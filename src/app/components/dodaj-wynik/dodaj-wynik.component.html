@@ -13,14 +13,23 @@
     </div>
 
     <div *ngIf="!loading" class="form-container">
+<<<<<<< HEAD
       <form #wynikForm="ngForm" (ngSubmit)="save()" novalidate>
+=======
+      <form #wynikForm="ngForm" (ngSubmit)="save()">
+        <!-- Gracz - automatycznie ustawiony na zalogowanego użytkownika -->
+>>>>>>> 7684d124e48770821f7da1e2d3bb7c71c5a001b6
         <div class="form-group">
           <label>Gracz (Ty)</label>
           <div class="static-field">
             <strong>{{ auth.currentUser?.login }}</strong>
+<<<<<<< HEAD
             <span class="text-dim" *ngIf="auth.currentUser?.graczId">
               (ID gracza: {{ auth.currentUser?.graczId }})
             </span>
+=======
+            <span class="text-dim"></span>
+>>>>>>> 7684d124e48770821f7da1e2d3bb7c71c5a001b6
           </div>
         </div>
 
@@ -32,6 +41,10 @@
             name="skoczniaId"
             required
           >
+<<<<<<< HEAD
+=======
+            <option [ngValue]="null" disabled>Wybierz skocznię...</option>
+>>>>>>> 7684d124e48770821f7da1e2d3bb7c71c5a001b6
             <option *ngFor="let s of skocznie" [ngValue]="s.id">
               {{ s.nazwa }} (K{{ s.punkt_k }}) - {{ s.lokalizacja }}
             </option>
@@ -43,8 +56,13 @@
           <input
             id="odleglosc"
             type="number"
+<<<<<<< HEAD
             step="0.01"
             min="0"
+=======
+            step="0.5"
+            min="0.5"
+>>>>>>> 7684d124e48770821f7da1e2d3bb7c71c5a001b6
             [(ngModel)]="form.odleglosc"
             name="odleglosc"
             placeholder="np. 134.50"
@@ -105,7 +123,11 @@
           <button type="button" class="btn btn-ghost" (click)="cancel()">
             Anuluj
           </button>
+<<<<<<< HEAD
           <button type="submit" class="btn btn-primary" [disabled]="saving || loading">
+=======
+          <button type="submit" class="btn btn-primary" [disabled]="saving">
+>>>>>>> 7684d124e48770821f7da1e2d3bb7c71c5a001b6
             {{ saving ? 'Zapisywanie...' : '✓ Dodaj wynik' }}
           </button>
         </div>
