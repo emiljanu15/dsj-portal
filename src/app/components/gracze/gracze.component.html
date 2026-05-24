@@ -37,7 +37,7 @@
           </td>
           <td data-label="Login gracza"><strong class="gracz-name">{{ g.login_gracza }}</strong></td>
           <td data-label="Suma rekordów">
-            <span class="suma" *ngIf="g.sumaRekordow > 0">{{ g.sumaRekordow }} m</span>
+            <span class="suma" *ngIf="g.sumaRekordow > 0">{{ g.sumaRekordow | number:'1.2-2' }} m</span>
             <span class="text-dim" *ngIf="g.sumaRekordow === 0">brak skoków</span>
           </td>
           <td data-label="Skocznie"><a [routerLink]="['/gracz', g.id, 'wyniki']" class="badge badge-k">{{ g.liczbaSkoczni }} skoczni</a></td>
@@ -54,7 +54,9 @@
       </table>
     </div>
 
-    <p class="info-note">💡 Suma rekordów = najdłuższy skok z każdej skoczni zsumowany razem</p>
+    <p class="info-note" style="font-size: 0.85rem; color: var(--text-dim); margin-top: 1rem; font-style: italic;">
+      💡 Suma rekordów = najdłuższy skok z każdej skoczni zsumowany razem
+    </p>
   </div>
 </div>
 

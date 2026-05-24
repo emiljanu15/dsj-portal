@@ -70,32 +70,40 @@ a {
   }
 }
 
-// ── Layout (Struktura z nagłówkiem i siatką) ───────────────────────────────
+// ── Layout (Zresetowany do pełnej szerokości pod Dashboard) ──────────────────
 .page-wrap {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
-// Jeśli używasz takiego kontenera na całą stronę
 .main-content {
   flex: 1;
   padding: 1.5rem;
   max-width: 1150px;
   width: 100%;
   margin: 0 auto;
-  
-  // Domyślnie włączamy układ dwukolumnowy (Aktualności | O nas / Puchar Świata)
+  // Domyślnie brak grida – strony rozciągają się na 100% szerokości kontenera
+}
+
+// Nowa klasa do stosowania TYLKO tam, gdzie chcesz mieć układ dwukolumnowy (np. newsy + top 10)
+// W HTML używasz wtedy: <div class="main-content portal-grid">
+.portal-grid {
   display: grid;
   grid-template-columns: 1.6fr 1fr; 
   gap: 2.5rem;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
 }
 
 // ── Cards / Wpisy (Newsy) ───────────────────────────────────────────────────
 .card {
   background: var(--bg2);
   border: none;
-  border-bottom: 1px solid var(--border); // Separacja wpisów linią (jak na screenie)
+  border-bottom: 1px solid var(--border);
   padding: 0 0 1.5rem 0;
   margin-bottom: 1.5rem;
   box-shadow: none;
@@ -112,7 +120,7 @@ a {
   h2 {
     font-size: 1.25rem;
     font-weight: 700;
-    text-transform: none; // Wyłączone ALL CAPS dla tytułów artykułów
+    text-transform: none;
     color: var(--portal-blue);
     font-family: 'PT Sans', sans-serif;
     display: flex;
@@ -153,11 +161,11 @@ a {
     transition: none;
 
     &:nth-child(even) {
-      background: var(--bg3); // Co drugi wiersz ma lekki błękit
+      background: var(--bg3);
     }
 
     &:hover {
-      background: #e2f0f9;  // Subtelny hover wiersza
+      background: #e2f0f9;
     }
 
     td {
@@ -292,7 +300,7 @@ a {
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4); // Naturalne, półprzezroczyste przyciemnienie
+  background: rgba(0, 0, 0, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -401,8 +409,8 @@ a {
 // ── Dashboard / Statystyki ──────────────────────────────────────────────────
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
   margin-bottom: 2rem;
 }
 
@@ -434,7 +442,7 @@ a {
 
   .stat-info {
     .stat-value {
-      font-size: 1.3rem;
+      font-size: 1.4rem;
       font-weight: 700;
       color: var(--portal-blue);
       line-height: 1.2;
@@ -489,7 +497,6 @@ a {
   }
 }
 
-// Klasyczna dolna belka pod artykułem (Autor, data, komentarze)
 .card-footer-meta {
   display: flex;
   gap: 15px;
@@ -543,14 +550,6 @@ a {
 }
 
 // ── RWD (Responsywność) ─────────────────────────────────────────────────────
-@media (max-width: 900px) {
-  .main-content {
-    grid-template-columns: 1fr; // Jedna kolumna na tabletach i telefonach
-    gap: 1.5rem;
-    padding: 1rem;
-  }
-}
-
 @media (max-width: 480px) {
   html, body {
     font-size: 12px;
