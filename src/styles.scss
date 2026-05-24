@@ -1,30 +1,33 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
 :root {
-  // Nowa paleta barw wyciągnięta wprost ze zdjęcia SJ3.pl
+  // Nowa jasna paleta barw wprost z portalu SJ3.pl
   --bg: #f4fafd;            // Jasne, lekko błękitne tło strony
-  --bg2: #ffffff;           // Białe tło sekcji i newsów
-  --bg3: #eef7fc;           // Jasnoniebieskie tło dla wierszy parzystych / tabeli
+  --bg2: #ffffff;           // Białe tło sekcji, newsów i paneli
+  --bg3: #eef7fc;           // Jasnoniebieskie tło dla wierszy parzystych / elementów list
   --panel: #ffffff;
 
-  // Kolory portalu (Głęboki błękit i pomarańczowy akcent dolny)
-  --portal-blue: #235a81;    // Główny niebieski z menu/nagłówków
-  --portal-orange: #f27224;  // Pomarańczowy pasek akcentujący pod menu
+  // Barwy przewodnie (Głęboki błękit i pomarańczowy akcent dolny)
+  --portal-blue: #235a81;    // Główny niebieski z menu i nagłówków
+  --portal-orange: #f27224;  // Pomarańczowy pasek akcentujący
 
-  --border: #b1c9da;        // Delikatne, niebiesko-szare obramowanie wpisów
+  --border: #b1c9da;        // Delikatne, niebiesko-szare obramowanie
   --accent: #1c5279;
   --accent2: #143d5c;
-  
+  --sky: #d0e4f2;
+  --snow: #ffffff;
+
   // Tekst
   --text: #333333;          // Ciemnoszary, czytelny tekst główny
-  --text-dim: #666666;      // Zgaszony tekst (daty, autorzy)
-  --text-light: #ffffff;    // Biały tekst do użycia na ciemnym tle (np. menu)
+  --text-dim: #666666;      // Zgaszony tekst (daty, autorzy, podpisy)
+  --text-light: #ffffff;    // Biały tekst na ciemne tła
 
+  // Statusy dostosowane do jasnego motywu
   --success: #2da15f;
   --danger: #d94141;
   --warn: #f2a124;
 
-  --radius: 0px;            // Klasyczny styl retro-web, ostre krawędzie
+  --radius: 0px;            // Klasyczny styl retro-web, ostre krawędzie bez zaokrągleń
   --shadow: none;
 }
 
@@ -39,18 +42,15 @@ html, body {
   height: 100%;
   background: var(--bg);
   color: var(--text);
-  // Zmiana z fontu pikselowego na czysty, nowoczesny font bezszeryfowy dla tekstu
   font-family: 'Open Sans', 'PT Sans', sans-serif;
   font-size: 13px;
   line-height: 1.6;
 }
 
 body {
-  // Usunięto ciemny gradient na rzecz czystego wyglądu ze zdjęcia
   background: var(--bg);
 }
 
-// Stylizacja głównych nagłówków sekcji (np. AKTUALNOŚCI, O NAS)
 h1, h2, h3, h4 {
   font-family: 'PT Sans', sans-serif;
   font-weight: 700;
@@ -62,7 +62,7 @@ h1, h2, h3, h4 {
 
 a {
   color: #174a6e;
-  text-decoration: underline; // Klasyczne linkowanie z podkreśleniem
+  text-decoration: underline;
 
   &:hover {
     color: var(--portal-orange);
@@ -70,35 +70,28 @@ a {
   }
 }
 
-// ── Layout (Struktura dwukolumnowa jak na screenie) ──────────────────────────
+// ── Layout (Struktura z nagłówkiem i siatką) ───────────────────────────────
 .page-wrap {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
-// Górna belka / Menu nawigacyjne w stylu SJ3.pl
-.portal-header-mock {
-  background: var(--portal-blue);
-  color: var(--text-light);
-  padding: 15px 20px;
-  border-bottom: 4px solid var(--portal-orange); // Charakterystyczny pomarańczowy pasek
-}
-
+// Jeśli używasz takiego kontenera na całą stronę
 .main-content {
   flex: 1;
   padding: 1.5rem;
-  max-width: 1100px;
+  max-width: 1150px;
   width: 100%;
   margin: 0 auto;
   
-  // Jeśli chcesz uzyskać układ dwukolumnowy (Aktualności | O nas), dodaj tę klasę do kontenera w HTML
+  // Domyślnie włączamy układ dwukolumnowy (Aktualności | O nas / Puchar Świata)
   display: grid;
   grid-template-columns: 1.6fr 1fr; 
   gap: 2.5rem;
 }
 
-// ── Karty / Wpisy (Newsy) ───────────────────────────────────────────────────
+// ── Cards / Wpisy (Newsy) ───────────────────────────────────────────────────
 .card {
   background: var(--bg2);
   border: none;
@@ -108,7 +101,6 @@ a {
   box-shadow: none;
 }
 
-// Nagłówki newsów (np. "Historyczny konkurs duetów!")
 .card-header {
   display: flex;
   align-items: center;
@@ -120,23 +112,25 @@ a {
   h2 {
     font-size: 1.25rem;
     font-weight: 700;
-    text-transform: none; // Wyłączone wymuszone wielkie litery dla tytułów artykułów
+    text-transform: none; // Wyłączone ALL CAPS dla tytułów artykułów
     color: var(--portal-blue);
     font-family: 'PT Sans', sans-serif;
-    text-decoration: underline;
-    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: .65rem;
 
-    &:hover {
-      color: var(--portal-orange);
+    span.icon {
+      font-size: 1.1rem;
     }
   }
 }
 
-// ── Tabela (Klasyfikacja Top 10 Pucharu Świata) ──────────────────────────────
+// ── Table (Klasyfikacja / Listy wyników) ────────────────────────────────────
 .dsj-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.95rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 
   thead tr {
     background: transparent;
@@ -150,27 +144,27 @@ a {
       color: var(--text-dim);
       border-bottom: 1px solid var(--portal-blue);
       text-transform: none;
+      white-space: nowrap;
     }
   }
 
   tbody tr {
     border-bottom: none;
-    
-    // Efekt co drugiego wiersza na przemian
+    transition: none;
+
     &:nth-child(even) {
-      background: var(--bg3);
+      background: var(--bg3); // Co drugi wiersz ma lekki błękit
     }
 
     &:hover {
-      background: #e2f0f9;
+      background: #e2f0f9;  // Subtelny hover wiersza
     }
 
     td {
-      padding: .4rem .5rem;
+      padding: .5rem .5rem;
       vertical-align: middle;
       color: var(--text);
       
-      // Stylizacja numeracji pozycji (1., 2., 3.)
       &:first-child {
         font-weight: 700;
         color: var(--text-dim);
@@ -180,7 +174,7 @@ a {
   }
 }
 
-// ── Przyciski ───────────────────────────────────────────────────────────────
+// ── Buttons ─────────────────────────────────────────────────────────────────
 .btn {
   display: inline-flex;
   align-items: center;
@@ -191,15 +185,28 @@ a {
   font-family: 'Open Sans', sans-serif;
   font-size: .8rem;
   font-weight: 600;
-  text-transform: none;
   cursor: pointer;
+  transition: background-color 0.1s ease;
   background: var(--portal-blue);
-  color: #fff;
+  color: #ffffff;
 
   &:hover {
     background: var(--portal-orange);
     border-color: var(--portal-orange);
-    color: #fff;
+    color: #ffffff;
+  }
+
+  &-primary,
+  &-ghost,
+  &-info {
+    background: var(--portal-blue);
+    color: #ffffff;
+    border: 1px solid var(--portal-blue);
+    
+    &:hover {
+      background: var(--portal-orange);
+      border-color: var(--portal-orange);
+    }
   }
 
   &-secondary {
@@ -210,44 +217,39 @@ a {
     &:hover {
       background: var(--bg3);
       color: var(--portal-blue);
+      border-color: var(--portal-blue);
     }
+  }
+
+  &-danger {
+    background: transparent;
+    color: var(--danger);
+    border-color: var(--danger);
+
+    &:hover {
+      background: var(--danger);
+      color: #ffffff;
+    }
+  }
+
+  &-success {
+    background: transparent;
+    color: var(--success);
+    border-color: var(--success);
+
+    &:hover {
+      background: var(--success);
+      color: #ffffff;
+    }
+  }
+
+  &-sm {
+    padding: .25rem .5rem;
+    font-size: .75rem;
   }
 }
 
-// ── Dane Autora / Meta wpisu (np. kolarz, 25.03.2026) ────────────────────────
-.comment-meta-mock, 
-.card-footer-meta {
-  display: flex;
-  gap: 15px;
-  align-items: center;
-  font-size: 0.85rem;
-  color: var(--text-dim);
-  margin-top: 0.5rem;
-
-  .author {
-    color: var(--portal-blue);
-    font-weight: 700;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    
-    &::before {
-      content: "👤"; // Prosty zamiennik ikony użytkownika ze zdjęcia
-      font-size: 0.9rem;
-    }
-  }
-  
-  .links {
-    margin-left: auto;
-    a {
-      color: var(--portal-blue);
-      text-decoration: none;
-      &:hover { text-decoration: underline; }
-    }
-  }
-}
-
-// ── Formularze ──────────────────────────────────────────────────────────────
+// ── Forms ───────────────────────────────────────────────────────────────────
 .form-group {
   margin-bottom: 1rem;
 
@@ -272,15 +274,301 @@ a {
     &:focus {
       outline: none;
       border-color: var(--portal-blue);
+      box-shadow: 0 0 0 2px rgba(35, 90, 129, 0.15);
+    }
+
+    &::placeholder {
+      color: #999999;
+    }
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 90px;
+  }
+}
+
+// ── Modal ───────────────────────────────────────────────────────────────────
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4); // Naturalne, półprzezroczyste przyciemnienie
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn .15s ease-out;
+}
+
+.modal {
+  background: var(--bg2);
+  border: 1px solid var(--portal-blue);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 520px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+  animation: slideUp .15s ease-out;
+
+  &-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+    padding-bottom: .6rem;
+    border-bottom: 1px solid var(--border);
+
+    h3 {
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      color: var(--portal-blue);
+    }
+  }
+
+  &-footer {
+    display: flex;
+    gap: .75rem;
+    justify-content: flex-end;
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+}
+
+// ── Badges ──────────────────────────────────────────────────────────────────
+.badge {
+  display: inline-block;
+  padding: .2rem .5rem;
+  border-radius: var(--radius);
+  font-size: .75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--portal-blue);
+
+  &-admin {
+    background: #fff0f0;
+    color: var(--danger);
+    border-color: #fcc;
+  }
+  
+  &-user {
+    background: var(--bg3);
+    color: var(--portal-blue);
+  }
+}
+
+// ── Alerts ──────────────────────────────────────────────────────────────────
+.alert {
+  padding: .8rem 1rem;
+  border-radius: var(--radius);
+  font-size: .85rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+
+  &-error {
+    background: #fff5f5;
+    border-color: var(--danger);
+    color: var(--danger);
+  }
+
+  &-success {
+    background: #f5fbf7;
+    border-color: var(--success);
+    color: var(--success);
+  }
+}
+
+// ── Spinner / Ładowanie ─────────────────────────────────────────────────────
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--bg3);
+  border-top-color: var(--portal-blue);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+  margin: 2rem auto;
+}
+
+.loading-wrap {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-dim);
+}
+
+// ── Dashboard / Statystyki ──────────────────────────────────────────────────
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  &:hover {
+    background: var(--bg3);
+    border-color: var(--portal-blue);
+  }
+
+  .stat-icon {
+    font-size: 1.3rem;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--portal-blue);
+  }
+
+  .stat-info {
+    .stat-value {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--portal-blue);
+      line-height: 1.2;
+    }
+
+    .stat-label {
+      font-size: .75rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
     }
   }
 }
 
-// ── Reszta adaptacji (RWD) ──────────────────────────────────────────────────
-@media (max-width: 768px) {
+// ── Sekcja Komentarzy i Meta wpisów ─────────────────────────────────────────
+.comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.comment-item {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+
+  .comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: .5rem;
+    font-size: .8rem;
+  }
+
+  .comment-user {
+    font-weight: 700;
+    color: var(--portal-blue);
+  }
+
+  .comment-date {
+    color: var(--text-dim);
+    font-size: .75rem;
+  }
+
+  .comment-content {
+    color: var(--text);
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-size: .85rem;
+  }
+}
+
+// Klasyczna dolna belka pod artykułem (Autor, data, komentarze)
+.card-footer-meta {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  margin-top: 0.75rem;
+
+  .author {
+    color: var(--portal-blue);
+    font-weight: 700;
+  }
+  
+  .comment-link {
+    margin-left: auto;
+    color: var(--portal-blue);
+    font-size: 0.85rem;
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-dim);
+  border: 1px dashed var(--border);
+  background: var(--bg2);
+
+  .empty-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+}
+
+// ── Animacje ──────────────────────────────────────────────────────────────
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.page-enter {
+  animation: slideUp .15s ease-out;
+}
+
+// ── RWD (Responsywność) ─────────────────────────────────────────────────────
+@media (max-width: 900px) {
   .main-content {
-    grid-template-columns: 1fr; // Na telefonie jedna kolumna pod drugą
+    grid-template-columns: 1fr; // Jedna kolumna na tabletach i telefonach
     gap: 1.5rem;
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  html, body {
+    font-size: 12px;
+  }
+  
+  .card-header h2 {
+    font-size: 1.1rem;
+  }
+
+  .dsj-table {
+    font-size: 0.85rem;
+    thead tr th, tbody tr td {
+      padding: 0.4rem;
+    }
+  }
+
+  .modal {
+    width: 95vw !important;
     padding: 1rem;
   }
 }
