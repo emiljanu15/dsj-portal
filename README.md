@@ -12,7 +12,7 @@ Portal dla gry DSJ (Deluxe Ski Jump) do zarządzania graczami, skoczniami i kome
 ```bash
 npm install
 ```
-
+--ostateczne poprawki
 ## Konfiguracja backendu
 
 Otwórz plik:
