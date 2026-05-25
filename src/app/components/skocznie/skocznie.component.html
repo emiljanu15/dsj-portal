@@ -33,7 +33,7 @@
           </td>
           <td class="rekord-cell">
             <ng-container *ngIf="s.rekord != null; else brakRekordu">
-              <span class="rekord-val">{{ s.rekord }} m</span>
+              <span class="rekord-val">{{ s.rekord | number:'1.2-2' }} m</span>
               <span class="rekord-gracz" *ngIf="s.rekordGracz">🎿 {{ s.rekordGracz }}</span>
             </ng-container>
             <ng-template #brakRekordu>
@@ -54,7 +54,6 @@
   </div>
 </div>
 
-<!-- Modal edycji skoczni -->
 <div class="modal-backdrop" *ngIf="showModal" (click)="showModal=false">
   <div class="modal" (click)="$event.stopPropagation()">
     <div class="modal-header">
@@ -80,7 +79,6 @@
   </div>
 </div>
 
-<!-- Modal rekordów skoczni -->
 <div class="modal-backdrop" *ngIf="showWyniki" (click)="showWyniki=false">
   <div class="modal modal-xl" (click)="$event.stopPropagation()">
     <div class="modal-header">
@@ -132,7 +130,7 @@
             <td data-label="Gracz"><strong>{{ w.gracz?.login_gracza ?? '—' }}</strong></td>
             <td data-label="Odległość">
               <span class="odleglosc" [class.over-k]="przekroczylK(w)" [class.under-k]="!przekroczylK(w)">
-                {{ w.odleglosc }} m
+                {{ w.odleglosc | number:'1.2-2' }} m
               </span>
               <span class="badge badge-k" *ngIf="przekroczylK(w)">✓ K</span>
             </td>
@@ -160,7 +158,6 @@
   </div>
 </div>
 
-<!-- Modal dodaj wynik -->
 <div class="modal-backdrop" *ngIf="showDodajWynik" (click)="showDodajWynik=false">
   <div class="modal modal-wide" (click)="$event.stopPropagation()">
     <div class="modal-header">
@@ -219,7 +216,6 @@
   </div>
 </div>
 
-<!-- Modal komentarze do wyniku -->
 <div class="modal-backdrop" *ngIf="showKomentuj" (click)="showKomentuj=false">
   <div class="modal" (click)="$event.stopPropagation()">
     <div class="modal-header">
@@ -227,7 +223,7 @@
         <h3>💬 Dodaj komentarz</h3>
         <p class="modal-sub" *ngIf="wybranyWynik">
           Wynik: <strong>{{ wybranyWynik.gracz?.login_gracza }}</strong> - 
-          <strong>{{ wybranyWynik.odleglosc }} m</strong>
+          <strong>{{ wybranyWynik.odleglosc | number:'1.2-2' }} m</strong>
         </p>
       </div>
       <button class="btn btn-ghost btn-sm" (click)="showKomentuj=false">✕</button>
@@ -251,7 +247,6 @@
   </div>
 </div>
 
-<!-- Modal wyswietlanie komentarzy do wyniku -->
 <div class="modal-backdrop" *ngIf="showKomentarze" (click)="showKomentarze=false">
   <div class="modal modal-wide" (click)="$event.stopPropagation()">
     <div class="modal-header">
@@ -259,7 +254,7 @@
         <h3>💬 Komentarze do wyniku</h3>
         <p class="modal-sub" *ngIf="wybranyWynik">
           Wynik: <strong>{{ wybranyWynik.gracz?.login_gracza }}</strong> - 
-          <strong>{{ wybranyWynik.odleglosc }} m</strong>
+          <strong>{{ wybranyWynik.odleglosc | number:'1.2-2' }} m</strong>
         </p>
       </div>
       <button class="btn btn-ghost btn-sm" (click)="showKomentarze=false">✕</button>

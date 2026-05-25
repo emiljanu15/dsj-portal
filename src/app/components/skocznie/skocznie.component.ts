@@ -228,8 +228,10 @@ export class SkocznieComponent implements OnInit {
       return '—';
     }
     const lider = this.wynikiSkoczni[0];
-    const diff = Number((w.odleglosc - lider.odleglosc).toFixed(1));
-    return `${diff} m`;
+    const diff = w.odleglosc - lider.odleglosc;
+    
+    // Zmienione z toFixed(1) na toFixed(2) by pasowało do reszty wyników
+    return `${diff > 0 ? '+' : ''}${diff.toFixed(2)} m`;
   }
 
   przekroczylK(w: Wynik): boolean { return !!w.skocznia && w.odleglosc >= w.skocznia.punkt_k; }
