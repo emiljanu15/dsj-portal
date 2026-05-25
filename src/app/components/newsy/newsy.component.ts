@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
-import { AuthService } from '../../services/auth.service'; // <-- Zaimportuj swój AuthService (popraw ścieżkę jeśli trzeba)
+import { AuthService } from '../../services/auth.service';
 import { NewsResponse, NewsDto } from '../../models/models';
 
 @Component({
@@ -15,7 +15,7 @@ import { NewsResponse, NewsDto } from '../../models/models';
 export class NewsyComponent implements OnInit {
   private fb = inject(FormBuilder);
   private apiService = inject(ApiService);
-  public auth = inject(AuthService); // <-- Wstrzyknij jako PUBLIC, żeby HTML widział auth.isAdmin
+  public auth = inject(AuthService); // public, aby HTML widział auth.isAdmin oraz auth.currentUser
 
   newsList: NewsResponse[] = [];
   loading = true;
@@ -47,10 +47,9 @@ export class NewsyComponent implements OnInit {
   onAddNews() {
     if (this.newsForm.invalid) return;
 
-    // Pobieramy ID dynamicznie z Twojego serwisu auth, jeśli user jest zalogowany
     const dto: NewsDto = {
-      tresc: this.newsForm.value.tresc ?? '',
-      uzytkownikId: this.auth.currentUser?.id || 1 
+      tresc = this.newsForm.value.tresc ?? '',
+      uzytkownikId = this.auth.currentUser?.id || 1 
     };
 
     this.apiService.addNews(dto).subscribe({
@@ -66,5 +65,27 @@ export class NewsyComponent implements OnInit {
         this.statusMessage = `Problem przy publikacji: ${err.error || err.message}`;
       }
     });
+  }
+
+  // 🔴 METODA USUWANIA DLA ADMINA
+  onDeleteNews(id: number) {
+    if (!id) return;
+
+    if (confirm('Czy na pewno chcesz bezpowrotnie usunąć ten wpis?')) {
+      this.apiService.deleteNews(id).subscribe({
+        next: () => {
+          this.alertClass = 'alert-success';
+          this.statusMessage = 'Wpis został usunięty.';
+          this.loadAllNews(); // Odświeżamy listę, żeby usunięty news zniknął z ekranu
+          setTimeout(() => this.statusMessage = '', 3000);
+        },
+        error: (err) => {
+          console.error('Błąd podczas usuwania newsa:', err);
+          this.alertClass = 'alert-danger';
+          this.statusMessage = `Nie udało się usunąć wpisu: ${err.error || err.message}`;
+          setTimeout(() => this.statusMessage = '', 4000);
+        }
+      });
+    }
   }
 }

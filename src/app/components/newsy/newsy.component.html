@@ -41,15 +41,24 @@
 
     @for (news of newsList; track news.id) {
       <div class="news-item">
-        <div class="news-meta">
-          <span class="news-user">
-            👤 <strong>{{ news.uzytkownik?.login || 'System' }}</strong>
-            @if (news.uzytkownik?.czyAdmin) {
-              <span class="badge-admin">Admin</span>
-            }
-          </span>
-          <span class="news-date">📅 {{ news.dataDodania | date:'dd.MM.yyyy, HH:mm' }}</span>
+        <div class="news-header">
+          <div class="news-meta">
+            <span class="news-user">
+              👤 <strong>{{ news.uzytkownik?.login || 'System' }}</strong>
+              @if (news.uzytkownik?.czyAdmin) {
+                <span class="badge-admin">Admin</span>
+              }
+            </span>
+            <span class="news-date">📅 {{ news.dataDodania | date:'dd.MM.yyyy, HH:mm' }}</span>
+          </div>
+
+          @if (auth.isAdmin) {
+            <button class="btn-delete" (click)="onDeleteNews(news.id)" title="Usuń wpis">
+              🗑️
+            </button>
+          }
         </div>
+
         <div class="news-content">
           {{ news.tresc }}
         </div>
