@@ -1,71 +1,138 @@
+// Zmienne kolorów wyciągnięte bezpośrednio z grafiki DSJ
+$dsj-bg-blue: #3b556e;
+$dsj-text-gray: #a4aab0;
+$dsj-text-gold: #cfb041;
+$dsj-dot-red: #e02c2c;
+
+/* ==========================================================================
+   SEKCJA: HERO BANNER (RETRO STYLE DSJ)
+   ========================================================================== */
 .dash-hero {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  background: linear-gradient(135deg, var(--bg2) 0%, #0d1829 100%);
+  justify-content: center;
+  background: $dsj-bg-blue; 
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 2.5rem 2rem;
   margin-bottom: 2rem;
   position: relative;
   overflow: hidden;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2);
 
   &::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse at 80% 50%, rgba(59,158,255,.07) 0%, transparent 70%);
+    background: radial-gradient(circle at 30% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 60%);
+    pointer-events: none;
   }
 
-  .hero-text {
-    .logo-hero {
-      max-width: 100%;
-      height: auto;
-      max-height: 100px;
-      margin-bottom: 0.5rem;
-      display: block;
-    }
-    p { color: var(--text-dim); font-size: 1.05rem; }
+  // Kontener dopasowujący grafikę obok tekstów
+  .hero-brand-wrap {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+    max-width: 800px;
+    width: 100%;
+    z-index: 1;
   }
 
-  .hero-art {
-    font-size: 5rem;
-    opacity: .4;
-    transform: rotate(-15deg);
+  // Stylizacja wyciętego koła z assetsów
+  .hero-logo-art {
+    width: 140px;
+    height: 140px;
+    object-fit: contain;
+    image-rendering: pixelated; // Zapobiega rozmywaniu krawędzi pikseli na dużych ekranach
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.3));
+    border-radius: 50%;
   }
 
-  @media (max-width: 768px) {
+  .hero-text-side {
+    display: flex;
     flex-direction: column;
-    padding: 2rem 1.5rem;
-    text-align: center;
+    justify-content: center;
+  }
 
-    .hero-text {
-      .logo-hero {
-        max-height: 70px;
-        margin-bottom: 0.75rem;
-        margin-inline: auto;
-      }
-      p { font-size: 0.95rem; }
+  // Zaprogramowany tekst z obrazka stylizowany na retro font monospace
+  .retro-title {
+    margin: 0;
+    padding: 0;
+    font-family: 'Courier New', Courier, monospace; 
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+
+    .title-top {
+      color: $dsj-text-gray;
+      font-size: 1.75rem;
     }
 
-    .hero-art {
-      font-size: 3rem;
-      margin-top: 1rem;
+    .title-main {
+      color: $dsj-text-gold;
+      font-size: 3.2rem;
+      letter-spacing: 2px;
+      position: relative;
+    }
+
+    .dot-red {
+      color: $dsj-dot-red;
+      font-weight: bold;
     }
   }
 
+  .hero-subtitle {
+    margin-top: 0.75rem;
+    margin-bottom: 0;
+    color: lighten($dsj-bg-blue, 35%);
+    font-size: 1.05rem;
+    letter-spacing: 0.5px;
+  }
+
+  /* RWD: Tablety */
+  @media (max-width: 768px) {
+    padding: 2rem 1.5rem;
+
+    .hero-brand-wrap {
+      flex-direction: column;
+      text-align: center;
+      gap: 1.5rem;
+    }
+
+    .hero-logo-art {
+      width: 110px;
+      height: 110px;
+    }
+
+    .retro-title {
+      .title-top { font-size: 1.4rem; }
+      .title-main { font-size: 2.5rem; }
+    }
+
+    .hero-subtitle {
+      font-size: 0.95rem;
+    }
+  }
+
+  /* RWD: Smartfony */
   @media (max-width: 480px) {
     padding: 1.5rem 1rem;
 
-    .hero-text {
-      .logo-hero {
-        max-height: 50px;
-      }
-      p { font-size: 0.85rem; }
+    .hero-logo-art {
+      width: 90px;
+      height: 90px;
     }
 
-    .hero-art {
-      font-size: 2rem;
+    .retro-title {
+      .title-top { font-size: 1.1rem; }
+      .title-main { font-size: 1.9rem; }
+    }
+
+    .hero-subtitle {
+      font-size: 0.85rem;
     }
   }
 }
@@ -79,7 +146,7 @@
 
   .news-badge {
     display: inline-block;
-    background: #2563eb; // Wyraźny, głęboki niebieski dla kontrastu z jasną czcionką
+    background: #2563eb; 
     color: #ffffff; 
     font-size: 0.75rem;
     font-weight: 800;
@@ -91,13 +158,13 @@
   }
 
   .news-box {
-    background: #0e1726 !important; // WYMUSZAMY ciemne tło (identyczne jak górna belka nawigacji)
+    background: #0e1726 !important; 
     border: 1px solid var(--border);
     border-top: 3px solid #2563eb; 
     border-radius: 0 var(--radius) var(--radius) var(--radius);
     padding: 1.5rem;
     transition: all .2s ease-in-out;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); // Dodajemy głębię
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); 
 
     &:hover {
       border-color: #3b82f6;
@@ -110,13 +177,13 @@
       justify-content: space-between;
       align-items: center;
       font-size: 0.85rem;
-      color: #94a3b8; // Jasnoszara data
+      color: #94a3b8; 
       margin-bottom: 1rem;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       padding-bottom: 0.65rem;
 
       .news-author strong {
-        color: #3b82f6; // Jasnoniebieski, świecący autor
+        color: #3b82f6; 
         font-weight: 700;
       }
 
@@ -132,14 +199,14 @@
     }
 
     .news-text {
-      color: #ffffff !important; // CZYSTA, JASNA BIEL – tekst będzie idealnie ostry
+      color: #ffffff !important; 
       font-size: 1.05rem;
       font-weight: 500;
       line-height: 1.6;
       margin: 0;
       white-space: pre-wrap;
       word-break: break-word;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.5); // Delikatny cień pod tekstem dla czytelności
+      text-shadow: 0 1px 2px rgba(0,0,0,0.5); 
     }
   }
 }
