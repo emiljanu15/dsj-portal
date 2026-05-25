@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { forkJoin } from 'rxjs';
+import { forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { ApiService } from '../../services/api.service';
-import { NewsResponse } from '../../models/models'; // Zaimportuj model jeśli chcesz mieć silne typowanie
+import { NewsResponse } from '../../models/models';
 
 @Component({
   selector: 'app-dashboard',
@@ -23,21 +24,29 @@ export class DashboardComponent implements OnInit {
       g: this.api.getGracze(),
       u: this.api.getUzytkownicy(),
       s: this.api.getSkocznie(),
-      n: this.api.getNews() // ← Pobieramy też newsy
+      // Odporność na błędy CORS/serwera dla nowego endpointu z newsami
+      n: this.api.getNews().pipe(
+        catchError(err => {
+          console.warn('Nie udało się załadować sekcji newsów:', err);
+          return of([]); // W razie błędu zwracamy pustą tablicę, aby forkJoin szedł dalej
+        })
+      )
     }).subscribe({
       next: res => {
         this.gracze      = res.g.length;
         this.skocznie    = res.s.length;
         this.uzytkownicy = res.u.length;
         
-        // Pobieramy pierwszy news z góry (najnowszy)
+        // Jeśli w bazie są już newsy, przypisujemy pierwszy (najnowszy)
         if (res.n && res.n.length > 0) {
           this.ostatniNews = res.n[0];
         }
 
         this.loading = false;
       },
-      error: () => {
+      error: (err) => {
+        // Ten error odpali się tylko wtedy, gdy padną kluczowe tabele (gracze/skocznie/uzytkownicy)
+        console.error('Błąd krytyczny dashboardu:', err);
         this.error   = 'Nie można połączyć się z backendem. Sprawdź URL w api.service.ts.';
         this.loading = false;
       }
