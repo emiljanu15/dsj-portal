@@ -47,9 +47,10 @@ export class NewsyComponent implements OnInit {
   onAddNews() {
     if (this.newsForm.invalid) return;
 
+    // 🛠️ TUTAJ POPRAWIONE: Dwukropki zamiast znaków równości
     const dto: NewsDto = {
-      tresc = this.newsForm.value.tresc ?? '',
-      uzytkownikId = this.auth.currentUser?.id || 1 
+      tresc: this.newsForm.value.tresc ?? '',
+      uzytkownikId: this.auth.currentUser?.id || 1 
     };
 
     this.apiService.addNews(dto).subscribe({
