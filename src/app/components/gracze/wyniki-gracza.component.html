@@ -12,7 +12,7 @@
       </div>
       <div class="stat-box">
         <span class="stat-label">Najlepszy skok</span>
-        <strong>{{ najlepszySkok ?? '—' }}<span *ngIf="najlepszySkok"> m</span></strong>
+        <strong>{{ najlepszySkok ? (najlepszySkok | number:'1.2-2') : '—' }}<span *ngIf="najlepszySkok"> m</span></strong>
       </div>
       <div class="stat-box">
         <span class="stat-label">Upadki</span>
@@ -47,7 +47,7 @@
         </div>
 
         <div class="jump-card__distance">
-          {{ item.rekord ? (item.rekord + ' m') : '—' }}
+          {{ item.rekord ? ((item.rekord | number:'1.2-2') + ' m') : '—' }}
         </div>
 
         <dl class="jump-card__meta">
@@ -93,7 +93,9 @@
               <small>{{ item.skocznia.lokalizacja }}</small>
             </td>
             <td><span class="k-chip">K{{ item.skocznia.punkt_k }}</span></td>
-            <td class="distance-cell">{{ item.rekord ? (item.rekord + ' m') : '—' }}</td>
+            <td class="distance-cell">
+              {{ item.rekord ? ((item.rekord | number:'1.2-2') + ' m') : '—' }}
+            </td>
             <td>{{ item.dataSkoku ? (item.dataSkoku | date:'dd.MM.yyyy') : '—' }}</td>
             <td>
               <a *ngIf="item.link_powtorka" [href]="item.link_powtorka" target="_blank" rel="noopener noreferrer">Powtórka</a>

@@ -25,6 +25,9 @@ export class WynikiGraczaComponent implements OnInit {
   error = '';
   isMobile = false;
 
+  // Przechowujemy surową listę wszystkich skoków gracza do poprawnych statystyk globalnych
+  private wszystkieWynikiGracza: Wynik[] = [];
+
   constructor(
     private route: ActivatedRoute,
     private api: ApiService
@@ -48,13 +51,14 @@ export class WynikiGraczaComponent implements OnInit {
       next: ({ gracz, wyniki, skocznie }) => {
         this.gracz = gracz;
 
-        const wynikiGracza = wyniki.filter(
+        // Filtrujemy absolutnie wszystkie rekordy powiązane z tym graczem
+        this.wszystkieWynikiGracza = wyniki.filter(
           w => w.gracz?.id === id || (w as any).graczId === id
         );
 
         const bestPerSkocznia = new Map<number, Wynik>();
 
-        wynikiGracza.forEach(w => {
+        this.wszystkieWynikiGracza.forEach(w => {
           const sid = w.skocznia?.id ?? (w as any).skoczniaId ?? 0;
           if (!sid) return;
 
@@ -70,7 +74,7 @@ export class WynikiGraczaComponent implements OnInit {
 
             return {
               skocznia: sk,
-              rekord: best?.odleglosc ?? null,
+              rekord: best ? Number(best.odleglosc) : null,
               wynikId: best?.id,
               dataSkoku: best?.dataSkoku,
               link_powtorka: best?.link_powtorka,
@@ -109,8 +113,9 @@ export class WynikiGraczaComponent implements OnInit {
     return rekordy.length ? Math.max(...rekordy) : null;
   }
 
+  // Zwraca łączną sumę wszystkich upadków z bazy danych dla tego profilu
   get liczbaUpadkow(): number {
-    return this.lista.filter(item => item.czy_upadek).length;
+    return this.wszystkieWynikiGracza.filter(w => w.czy_upadek).length;
   }
 
   get liczbaSkoczniZRozpoznanymWynikiem(): number {
