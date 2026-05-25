@@ -1,35 +1,71 @@
-.id-badge { display:inline-block;padding:.15rem .45rem;background:var(--bg3);border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:.85rem;color:var(--text-dim); }
-.date-cell { color:var(--text-dim);font-size:.9rem; }
-.actions { display:flex;gap:.5rem;flex-wrap:wrap; }
-.gracz-name { color: var(--snow); }
-.text-dim { color: var(--text-dim); font-size:.9rem; }
-
-.pozycja { font-size: 1.2rem; text-align: center; }
-
-.suma {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: var(--success);
+// ── Główne elementy komórkowe tabeli ─────────────────────────────────────────
+.id-badge {
+  display: inline-block;
+  padding: .15rem .45rem;
+  background: var(--bg3);
+  border-radius: 0px; // Reset do ostrych krawędzi
+  font-family: 'Open Sans', sans-serif;
+  font-size: .85rem;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
 }
 
-.top1 td { background: rgba(255,215,0,.05); }
-.top2 td { background: rgba(192,192,192,.04); }
-.top3 td { background: rgba(205,127,50,.04); }
+.date-cell { 
+  color: var(--text-dim); 
+  font-size: .9rem; 
+}
+
+.actions { 
+  display: flex; 
+  gap: .5rem; 
+  flex-wrap: wrap; 
+}
+
+// FIX: Loginy nie są już białe – teraz używają ciemnego, czytelnego koloru
+.gracz-name { 
+  color: var(--text); 
+  font-weight: 700;
+}
+
+.text-dim { 
+  color: var(--text-dim); 
+  font-size: .9rem; 
+}
+
+.pozycja { 
+  font-size: 1.1rem; 
+  text-align: center; 
+}
+
+// Suma rekordów dopasowana do klasycznego stylu
+.suma {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent-strong); // Zmiana z neonowej zieleni na głęboki błękit
+}
+
+// Delikatne tła dla podium w stylu retro-portalu
+.top1 td { background: rgba(242, 114, 36, 0.04); } // Pomarańczowy akcent dla zwycięzcy
+.top2 td { background: rgba(35, 90, 129, 0.03); }  // Lekki błękit dla drugiego miejsca
+.top3 td { background: rgba(35, 90, 129, 0.01); }
 
 .info-note {
   margin-top: 1rem;
   font-size: .82rem;
   color: var(--text-dim);
-  text-align: right;
+  text-align: left;
 }
 
 /* Responsive helpers */
-.table-wrap { overflow-x: auto; }
+.table-wrap { 
+  overflow-x: auto; 
+}
 
+// ── RWD / Responsywność ─────────────────────────────────────────────────────
 @media (max-width: 700px) {
   .dsj-table th, .dsj-table td {
-    padding: .35rem .5rem;
+    padding: .4rem .5rem;
     font-size: .92rem;
     white-space: normal;
   }
@@ -45,7 +81,7 @@
     td:nth-child(4),
     th:nth-child(6),
     td:nth-child(6) {
-      display: none;
+      display: none; // Ukrywanie zbędnych kolumn na tabletach
     }
 
     .actions {
@@ -63,6 +99,7 @@
   }
 }
 
+// Przebudowa kart mobilnych na jasny styl SJ3.pl
 @media (max-width: 650px) {
   .table-wrap { overflow-x: hidden; }
 
@@ -75,12 +112,12 @@
   .dsj-table tbody tr {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 0.55rem;
+    gap: 0.6rem;
     margin-bottom: 1rem;
-    padding: 0.9rem;
-    border: 1px solid rgba(215, 200, 75, 0.18);
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: 14px;
+    padding: 1rem;
+    border: 1px solid var(--border); // Dopasowanie koloru obramowania ramki
+    background: var(--bg2);          // Czyste białe tło karty mobilnej
+    border-radius: 0px;              // Pozbywamy się zaokrąglenia 14px
   }
 
   .dsj-table tbody td {
@@ -89,13 +126,15 @@
     gap: 0.22rem;
     padding: 0;
     border: none;
+    background: transparent !important; // Czyszczenie teł podium na kafelkach mobilnych
   }
 
   .dsj-table tbody td[data-label]::before {
     content: attr(data-label);
     display: block;
-    font-size: 0.72rem;
-    letter-spacing: 0.04em;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
     text-transform: uppercase;
     color: var(--text-dim);
     margin-bottom: 0.15rem;
@@ -106,9 +145,11 @@
     flex-direction: column;
     gap: 0.35rem;
     width: 100%;
+    margin-top: 0.5rem;
   }
 
-  .dsj-table tbody td.actions::before { content: '';
+  .dsj-table tbody td.actions::before { 
+    content: '';
     display: none;
   }
 
@@ -129,4 +170,3 @@
     padding: 0.3rem 0.35rem;
   }
 }
-
