@@ -1,7 +1,14 @@
+// Zmienne kolorów retro DSJ wyciągnięte z grafiki
+$dsj-text-gray: #a4aab0;
+$dsj-text-gold: #cfb041;
+$dsj-dot-red: #e02c2c;
+
 .auth-wrap {
   display: flex;
   justify-content: center;
+  align-items: center;
   padding: 3rem 1rem;
+  min-height: calc(100vh - 120px); // Wyśrodkowanie karty w pionie
 }
 
 .auth-card {
@@ -13,25 +20,58 @@
   padding: 2.5rem 2rem;
   box-shadow: var(--shadow);
 
-  .auth-icon {
-    font-size: 3rem;
-    text-align: center;
-    margin-bottom: .75rem;
+  // ── RETRO BRANDING (Skocznia + Stylizowany napis) ────────────────────────
+  .auth-brand-wrap {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1.25rem;
+    margin-bottom: 1.25rem;
+
+    .auth-logo-img {
+      width: 55px;
+      height: 55px;
+      object-fit: contain;
+      border-radius: 50%;
+      image-rendering: pixelated; // Piksele zachowują swoją ostrość retro
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3));
+    }
+
+    .auth-brand-text {
+      display: flex;
+      flex-direction: column;
+      font-family: 'Courier New', Courier, monospace;
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: 1.1;
+      text-align: left;
+
+      .brand-text-top {
+        color: $dsj-text-gray;
+        font-size: 0.9rem;
+        letter-spacing: 0.5px;
+      }
+
+      .brand-text-main {
+        color: $dsj-text-gold;
+        font-size: 1.5rem;
+        letter-spacing: 1px;
+      }
+
+      .dot-red {
+        color: $dsj-dot-red;
+      }
+    }
   }
 
-  .auth-logo {
-    max-width: 100%;
-    height: auto;
-    max-height: 80px;
-    display: block;
-    margin: 0 auto 1rem;
-  }
-
+  // ── TYTUŁY FORMULARZA LOGOWANIA ──────────────────────────────────────────
   h2 {
     text-align: center;
-    font-size: 2rem;
+    font-size: 1.8rem;
     text-transform: uppercase;
     letter-spacing: .08em;
+    margin-top: 0.5rem;
     margin-bottom: .3rem;
   }
 
@@ -42,6 +82,7 @@
     margin-bottom: 1.75rem;
   }
 
+  // ── PRZYCISK ZALOGUJ ─────────────────────────────────────────────────────
   .full-btn {
     width: 100%;
     justify-content: center;
@@ -50,11 +91,43 @@
     margin-top: .5rem;
   }
 
+  // ── LINK: ZAREJESTRUJ SIĘ ────────────────────────────────────────────────
   .auth-link {
     text-align: center;
     margin-top: 1.25rem;
     font-size: .9rem;
     color: var(--text-dim);
-    a { color: var(--accent); }
+    
+    a { 
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// ── RESPONSYWNOŚĆ (RWD) ─────────────────────────────────────────────────────
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 1.75rem 1.25rem;
+
+    .auth-brand-wrap {
+      .auth-logo-img {
+        width: 45px;
+        height: 45px;
+      }
+      .auth-brand-text {
+        .brand-text-top { font-size: 0.75rem; }
+        .brand-text-main { font-size: 1.25rem; }
+      }
+    }
+    
+    h2 {
+      font-size: 1.5rem;
+    }
   }
 }
