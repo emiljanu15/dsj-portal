@@ -1,3 +1,7 @@
+// ==========================================
+// GRACZ & SKOCZNIA
+// ==========================================
+
 export interface Gracz {
   id?: number;
   login_gracza: string;
@@ -12,6 +16,10 @@ export interface Skocznia {
   dataUtworzenia?: string;
 }
 
+// ==========================================
+// UZYTKOWNIK
+// ==========================================
+
 export interface Uzytkownik {
   id?: number;
   login: string;
@@ -21,23 +29,13 @@ export interface Uzytkownik {
   graczId?: number;
 }
 
-export interface KomentarzDto {
-  tresc: string;
-  wynikId: number;
-  uzytkownikId: number;
-}
-
-export interface Komentarz {
-  id?: number;
-  tresc: string;
-  wynikId: number;
-  uzytkownikId: number;
-  dataUtworzenia?: string;
-}
+// ==========================================
+// WYNIKI & REPLAY SCRAPER
+// ==========================================
 
 export interface WynikDto {
   odleglosc: number;
-  dataSkoku: string;
+  dataSkoku: string; // Format 'YYYY-MM-DD' z racji typu date w Swaggerze
   graczId: number;
   skoczniaId: number;
   link_powtorka?: string;
@@ -63,4 +61,62 @@ export interface ReplayDistanceResponse {
   length?: number | null;
   lengthRaw?: string | null;
   error?: string | null;
+}
+
+// ==========================================
+// KOMENTARZE
+// ==========================================
+
+export interface KomentarzDto {
+  tresc: string;
+  wynikId: number;
+  uzytkownikId: number;
+}
+
+// Zaktualizowany model struktury zwracanej przez Twój KomentarzController (obiekt anonimowy)
+export interface KomentarzResponse {
+  id: number;
+  tresc: string;
+  dataDodania: string;
+  wynikId: number;
+  wynik: {
+    id: number;
+  } | null;
+  uzytkownikId: number;
+  uzytkownik: {
+    id: number;
+    login: string;
+    czyAdmin: boolean;
+  } | null;
+}
+
+// Stary model pomocniczy (w razie gdybyś go gdzieś używał bezpośrednio)
+export interface Komentarz {
+  id?: number;
+  tresc: string;
+  wynikId: number;
+  uzytkownikId: number;
+  dataUtworzenia?: string;
+}
+
+// ==========================================
+// NEWSY (Nowy Moduł)
+// ==========================================
+
+export interface NewsDto {
+  tresc: string;
+  uzytkownikId: number;
+}
+
+// Dokładna struktura zwracana przez NewsController.GetNews()
+export interface NewsResponse {
+  id: number;
+  tresc: string;
+  dataDodania: string;
+  uzytkownikId: number;
+  uzytkownik: {
+    id: number;
+    login: string;
+    czyAdmin: boolean;
+  } | null;
 }
