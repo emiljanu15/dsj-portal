@@ -1,0 +1,60 @@
+<div class="newsy-page">
+  
+  <div class="form-section" *ngIf="auth.isAdmin">
+    <h3>✍️ Dodaj nową aktualność</h3>
+    <form [formGroup]="newsForm" (ngSubmit)="onAddNews()">
+      <div class="form-group">
+        <textarea 
+          formControlName="tresc" 
+          placeholder="Co nowego w Deluxe Ski Jump? Wpisz treść..." 
+          rows="3">
+        </textarea>
+        @if (newsForm.get('tresc')?.touched && newsForm.get('tresc')?.invalid) {
+          <small class="error-text">Treść musi mieć minimum 5 znaków.</small>
+        }
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" [disabled]="newsForm.invalid" class="btn-pub">
+          🚀 Opublikuj wpis
+        </button>
+      </div>
+    </form>
+
+    @if (statusMessage) {
+      <div [class]="'alert ' + alertClass">
+        {{ statusMessage }}
+      </div>
+    }
+  </div>
+
+  <div class="list-section">
+    <h2 class="title">📰 Ostatnie Wydarzenia</h2>
+
+    @if (loading) {
+      <div class="loader">Pobieranie wiadomości...</div>
+    }
+
+    @if (!loading && newsList.length === 0) {
+      <p class="no-news">Brak wiadomości. Dodaj pierwszą powyżej!</p>
+    }
+
+    @for (news of newsList; track news.id) {
+      <div class="news-item">
+        <div class="news-meta">
+          <span class="news-user">
+            👤 <strong>{{ news.uzytkownik?.login || 'System' }}</strong>
+            @if (news.uzytkownik?.czyAdmin) {
+              <span class="badge-admin">Admin</span>
+            }
+          </span>
+          <span class="news-date">📅 {{ news.dataDodania | date:'dd.MM.yyyy, HH:mm' }}</span>
+        </div>
+        <div class="news-content">
+          {{ news.tresc }}
+        </div>
+      </div>
+    }
+  </div>
+
+</div>

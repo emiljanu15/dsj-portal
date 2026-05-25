@@ -30,12 +30,24 @@
         <div class="stat-label">Skocznie</div>
       </div>
     </div>
+
     <div class="stat-card">
       <div class="stat-icon">👥</div>
       <div class="stat-info">
         <div class="stat-value">{{ uzytkownicy }}</div>
         <div class="stat-label">Zarejestrowani użytkownicy</div>
       </div>
+    </div>
+  </div>
+
+  <div class="latest-news-section" *ngIf="!loading && !error && ostatniNews" routerLink="/newsy" style="cursor: pointer;">
+    <div class="news-badge">📢 OSTATNIA AKTUALNOŚĆ</div>
+    <div class="news-box">
+      <div class="news-top">
+        <span class="news-author">👤 <strong>{{ ostatniNews.uzytkownik?.login || 'System' }}</strong></span>
+        <span class="news-date">📅 {{ ostatniNews.dataDodania | date:'dd.MM.yyyy, HH:mm' }}</span>
+      </div>
+      <p class="news-text">{{ ostatniNews.tresc }}</p>
     </div>
   </div>
 

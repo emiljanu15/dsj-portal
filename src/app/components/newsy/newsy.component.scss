@@ -1,0 +1,152 @@
+.newsy-page {
+  max-width: 750px;
+  margin: 20px auto;
+  padding: 0 15px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+  /* Formularz dodawania */
+  .form-section {
+    background: #fdfdfd;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+
+    h3 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      color: #2d3748;
+      font-size: 1.2em;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 12px;
+
+      textarea {
+        padding: 12px;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        font-size: 14px;
+        resize: vertical;
+        outline: none;
+        transition: border 0.2s;
+
+        &:focus {
+          border-color: #3b82f6;
+        }
+      }
+
+      .error-text {
+        color: #ef4444;
+        font-size: 12px;
+        margin-top: 4px;
+      }
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+
+      .btn-pub {
+        background: #10b981;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.2s;
+
+        &:hover:not(:disabled) {
+          background: #059669;
+        }
+
+        &:disabled {
+          background: #cbd5e1;
+          cursor: not-allowed;
+        }
+      }
+    }
+
+    /* Alerty i komunikaty */
+    .alert {
+      margin-top: 12px;
+      padding: 10px;
+      border-radius: 6px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 500;
+
+      &.alert-success { background: #d1fae5; color: #065f46; }
+      &.alert-danger { background: #fee2e2; color: #991b1b; }
+    }
+  }
+
+  /* Sekcja z listą wpisów */
+  .list-section {
+    .title {
+      color: #1e293b;
+      font-size: 1.5em;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 8px;
+      margin-bottom: 20px;
+    }
+
+    .loader, .no-news {
+      text-align: center;
+      color: #64748b;
+      padding: 20px;
+    }
+
+    .news-item {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+      overflow: hidden;
+
+      .news-meta {
+        background: #f8fafc;
+        padding: 8px 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #f1f5f9;
+        font-size: 13px;
+
+        .news-user {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          color: #334155;
+
+          .badge-admin {
+            background: #ef4444;
+            color: white;
+            font-size: 10px;
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-weight: bold;
+            text-transform: uppercase;
+          }
+        }
+
+        .news-date {
+          color: #64748b;
+        }
+      }
+
+      .news-content {
+        padding: 15px;
+        color: #334155;
+        line-height: 1.5;
+        white-space: pre-wrap;
+        font-size: 15px;
+      }
+    }
+  }
+}

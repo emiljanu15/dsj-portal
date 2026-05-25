@@ -69,6 +69,66 @@
   }
 }
 
+/* ==========================================================================
+   SEKCJA: OSTATNI NEWS (DOPASOWANA DO TWOM MOTYWU)
+   ========================================================================== */
+.latest-news-section {
+  margin: 2rem 0;
+  font-family: inherit;
+
+  .news-badge {
+    display: inline-block;
+    background: #e74c3c; // Klasyczna czerwień powiadomienia
+    color: #ffffff;
+    font-size: 0.7rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 4px 4px 0 0;
+    letter-spacing: 0.08em;
+  }
+
+  .news-box {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-top: 3px solid #e74c3c; // Czerwony akcent u góry boksu
+    border-radius: 0 var(--radius) var(--radius) var(--radius);
+    padding: 1.25rem;
+    transition: all .2s ease-in-out;
+
+    &:hover {
+      border-color: var(--accent);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(59,158,255,.12);
+    }
+
+    .news-top {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      margin-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.5rem;
+
+      .news-author strong {
+        color: var(--snow);
+      }
+    }
+
+    .news-text {
+      color: var(--snow);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin: 0;
+      white-space: pre-wrap;
+    }
+  }
+}
+
+/* ==========================================================================
+   SZYBKI DOSTĘP & LINKI
+   ========================================================================== */
 .quick-links {
   h2 {
     font-size: 1.4rem;
