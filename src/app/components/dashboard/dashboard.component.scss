@@ -43,6 +43,7 @@
       .logo-hero {
         max-height: 70px;
         margin-bottom: 0.75rem;
+        margin-inline: auto; // Wyśrodkowanie loga mobilnie
       }
       p { font-size: 0.95rem; }
     }
@@ -70,7 +71,7 @@
 }
 
 /* ==========================================================================
-   SEKCJA: OSTATNI NEWS (DOPASOWANA DO TWOM MOTYWU)
+   SEKCJA: OSTATNI NEWS (POPRAWIONY KONTRAST I KOLORYSTYKA)
    ========================================================================== */
 .latest-news-section {
   margin: 2rem 0;
@@ -78,50 +79,62 @@
 
   .news-badge {
     display: inline-block;
-    background: #e74c3c; // Klasyczna czerwień powiadomienia
-    color: #ffffff;
-    font-size: 0.7rem;
-    font-weight: bold;
+    background: var(--accent); // Zmiana na spójny akcent portalu zamiast jaskrawej czerwieni
+    color: #040d1a; // Ciemny, głęboki tekst na jasnym tle dla idealnego kontrastu
+    font-size: 0.75rem;
+    font-weight: 800;
     text-transform: uppercase;
-    padding: 4px 10px;
-    border-radius: 4px 4px 0 0;
+    padding: 6px 12px;
+    border-radius: 6px 6px 0 0;
     letter-spacing: 0.08em;
   }
 
   .news-box {
     background: var(--bg2);
     border: 1px solid var(--border);
-    border-top: 3px solid #e74c3c; // Czerwony akcent u góry boksu
+    border-top: 3px solid var(--accent); // Spójny pasek akcentujący
     border-radius: 0 var(--radius) var(--radius) var(--radius);
-    padding: 1.25rem;
+    padding: 1.5rem;
     transition: all .2s ease-in-out;
 
     &:hover {
       border-color: var(--accent);
       transform: translateY(-3px);
-      box-shadow: 0 8px 24px rgba(59,158,255,.12);
+      box-shadow: 0 8px 24px rgba(59, 158, 255, 0.15);
     }
 
     .news-top {
       display: flex;
       justify-content: space-between;
-      font-size: 0.82rem;
+      align-items: center;
+      font-size: 0.85rem;
       color: var(--text-dim);
-      margin-bottom: 0.75rem;
+      margin-bottom: 1rem;
       border-bottom: 1px solid var(--border);
-      padding-bottom: 0.5rem;
+      padding-bottom: 0.65rem;
 
       .news-author strong {
-        color: var(--snow);
+        color: var(--accent); // Wyraźny kolor dla autora wpisu
+      }
+
+      .news-date {
+        color: var(--text-dim);
+      }
+
+      @media (max-width: 480px) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.3rem;
       }
     }
 
     .news-text {
-      color: var(--snow);
-      font-size: 0.95rem;
+      color: #e2e8f0; // Bardzo czytelna, lekko złamana biel (nie razi, nie zlewa się)
+      font-size: 1rem;
       line-height: 1.6;
       margin: 0;
       white-space: pre-wrap;
+      word-break: break-word; // Zabezpieczenie przed rozjeżdżaniem długich wyrazów
     }
   }
 }
