@@ -40,7 +40,8 @@ export class WynikiComponent implements OnInit {
     this.api.replayDistance({ url }).subscribe({
       next: (res: any) => {
         if (res?.success && typeof res.length === 'number') {
-          this.form.odleglosc = Math.round(res.length * 10) / 10;
+          // POPRAWKA: Zaokrąglanie do 2 miejsc po przecinku zamiast do 1
+          this.form.odleglosc = Math.round(res.length * 100) / 100;
           this.success = `Odległość uzupełniona: ${this.form.odleglosc} m`;
         } else {
           this.error = res?.error || 'Nie udało się odczytać odległości z powtórki.';

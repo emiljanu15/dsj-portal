@@ -38,7 +38,7 @@
             </td>
             <td data-label="Odległość">
               <span class="odleglosc" [class.over-k]="przekroczylK(w)" [class.under-k]="!przekroczylK(w)">
-                {{ w.odleglosc }} m
+                {{ (+w.odleglosc) | number:'1.2-2':'en-US' }} m
               </span>
               <span class="badge badge-k" *ngIf="przekroczylK(w)">✓ K</span>
             </td>
@@ -67,7 +67,6 @@
   </div>
 </div>
 
-<!-- Modal dodaj/edytuj wynik (tylko admin) -->
 <div class="modal-backdrop" *ngIf="showModal && auth.isAdmin" (click)="showModal=false">
   <div class="modal modal-wide" (click)="$event.stopPropagation()">
     <div class="modal-header">
@@ -91,7 +90,7 @@
     <div class="form-row">
       <div class="form-group">
         <label>Odległość (m)</label>
-        <input type="number" step="0.5" [(ngModel)]="form.odleglosc" placeholder="np. 134.5" />
+        <input type="number" step="0.01" [(ngModel)]="form.odleglosc" placeholder="np. 134.50" />
       </div>
       <div class="form-group">
         <label>Data skoku</label>
@@ -118,13 +117,12 @@
   </div>
 </div>
 
-<!-- Panel komentarzy -->
 <div class="modal-backdrop" *ngIf="showKomentarze" (click)="showKomentarze=false">
   <div class="modal modal-wide" (click)="$event.stopPropagation()">
     <div class="modal-header">
       <h3>💬 Komentarze do wyniku</h3>
       <div class="wynik-info" *ngIf="wybranyWynik">
-        <span class="badge badge-k">{{ wybranyWynik.odleglosc }} m</span>
+        <span class="badge badge-k">{{ (+wybranyWynik.odleglosc) | number:'1.2-2':'en-US' }} m</span>
         <span class="text-dim">{{ wybranyWynik.gracz?.login_gracza }} – {{ wybranyWynik.skocznia?.nazwa }}</span>
       </div>
       <button class="btn btn-ghost btn-sm" (click)="showKomentarze=false">✕</button>
@@ -151,7 +149,6 @@
       </div>
     </div>
 
-    <!-- Dodaj komentarz (tylko zalogowany) -->
     <div class="dodaj-komentarz" *ngIf="auth.isLoggedIn">
       <h4>Dodaj komentarz</h4>
       <div class="form-group">
