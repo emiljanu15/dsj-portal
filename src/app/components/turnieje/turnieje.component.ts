@@ -274,7 +274,7 @@ export class TurniejeComponent implements OnInit {
     });
   }
 
-  saveUczestnik(): void {
+saveUczestnik(): void {
     if (!this.uczestnikForm.nazwa_uczestnika?.trim()) {
       this.error = 'Podaj nazwę uczestnika.';
       return;
@@ -282,17 +282,27 @@ export class TurniejeComponent implements OnInit {
 
     const aktualnyTurniej = this.wybranyTurniej ?? this.uczestnikForm.turniej;
 
-    // Bezpieczny payload z uproszczoną strukturą turnieju pod bazę PostgreSQL (Neon)
+    if (!aktualnyTurniej || !aktualnyTurniej.id) {
+      this.error = 'Brak powiązanego turnieju.';
+      return;
+    }
+
+    // Dodajemy właściwości 'nazwa' oraz 'sezonId' do obiektu turnieju.
+    // Dzięki temu walidator .NET Core przejdzie bez błędu 400 Bad Request, 
+    // a backend i tak nadpisze tę relację poprawnym id za pomocą mechanizmu Entry().
     const payload: any = {
+      id: this.editUczestnikMode && this.editUczestnikId ? Number(this.editUczestnikId) : 0,
       nazwa_uczestnika: this.uczestnikForm.nazwa_uczestnika.trim(),
       punkty: Number(this.uczestnikForm.punkty) || 0,
       miejsce: Number(this.uczestnikForm.miejsce) || 0,
-      turniej: aktualnyTurniej ? { id: Number(aktualnyTurniej.id) } : null
+      turniej: {
+        id: Number(aktualnyTurniej.id),
+        nazwa: aktualnyTurniej.nazwa || '', // Zapobiega błędowi 400 dla pól non-nullable string
+        sezonId: aktualnyTurniej.sezonId || 0
+      }
     };
 
     if (this.editUczestnikMode && this.editUczestnikId) {
-      payload.id = Number(this.editUczestnikId);
-
       this.api.updateUczestnikTurnieju(this.editUczestnikId, payload).subscribe({
         next: () => {
           this.success = 'Uczestnik został zaktualizowany.';
@@ -307,8 +317,6 @@ export class TurniejeComponent implements OnInit {
         }
       });
     } else {
-      payload.id = 0;
-
       this.api.createUczestnikTurnieju(payload).subscribe({
         next: () => {
           this.success = 'Uczestnik został dodany.';
@@ -319,7 +327,7 @@ export class TurniejeComponent implements OnInit {
           }
         },
         error: () => {
-          this.error = 'Błąd dodawania uczestnika.';
+          this.error = 'Błąd dodawania uczestnika. Serwer odrzucił strukturę modelu (400).';
         }
       });
     }
