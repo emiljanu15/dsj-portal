@@ -148,6 +148,6 @@ export interface WynikTurniejowyStat {
   pierwszeMiejsca: number;
   drugieMiejsca: number;
   trzecieMiejsca: number;
-  sumaPodiów: number;
+  sumaPodiow: number;
   turnieje: number;
 }

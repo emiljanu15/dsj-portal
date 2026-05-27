@@ -47,9 +47,7 @@ export class WynikiTurniejowComponent implements OnInit {
           next: (rankingi) => {
             const mapa = new Map<string, WynikTurniejowyStat>();
 
-            rankingi.forEach((ranking, index) => {
-              const turniej = turnieje[index];
-
+            rankingi.forEach((ranking) => {
               ranking.forEach((u) => {
                 const key = (u.nazwa_uczestnika || '').trim().toLowerCase();
                 const displayName = u.nazwa_uczestnika || '—';
@@ -62,7 +60,7 @@ export class WynikiTurniejowComponent implements OnInit {
                     pierwszeMiejsca: 0,
                     drugieMiejsca: 0,
                     trzecieMiejsca: 0,
-                    sumaPodiów: 0,
+                    sumaPodiow: 0,
                     turnieje: 0
                   });
                 }
@@ -74,7 +72,10 @@ export class WynikiTurniejowComponent implements OnInit {
                 if (u.miejsce === 2) stat.drugieMiejsca += 1;
                 if (u.miejsce === 3) stat.trzecieMiejsca += 1;
 
-                stat.sumaPodiów = stat.pierwszeMiejsca + stat.drugieMiejsca + stat.trzecieMiejsca;
+                stat.sumaPodiow =
+                  stat.pierwszeMiejsca +
+                  stat.drugieMiejsca +
+                  stat.trzecieMiejsca;
               });
             });
 
@@ -82,7 +83,7 @@ export class WynikiTurniejowComponent implements OnInit {
               b.pierwszeMiejsca - a.pierwszeMiejsca ||
               b.drugieMiejsca - a.drugieMiejsca ||
               b.trzecieMiejsca - a.trzecieMiejsca ||
-              b.sumaPodiów - a.sumaPodiów ||
+              b.sumaPodiow - a.sumaPodiow ||
               a.nazwa_uczestnika.localeCompare(b.nazwa_uczestnika)
             );
 
