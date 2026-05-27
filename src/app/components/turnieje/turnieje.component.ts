@@ -205,17 +205,15 @@ export class TurniejeComponent implements OnInit {
       return;
     }
 
-    // Konstruujemy czysty, surowy obiekt bez zbędnych właściwości nawigacyjnych.
-    // .NET oczekuje płaskiej struktury parametrów bindowania dla żądań zapisu.
-    const payload: any = {
+    // Konstruujemy czysty obiekt. Nie przekazujemy pola 'sezon', 
+    // aby backend powiązał relację wyłącznie przy pomocy klucza 'sezonId'.
+    const payload: Turniej = {
+      id: this.editTurniejMode && this.editTurniejId ? Number(this.editTurniejId) : 0,
       nazwa: this.turniejForm.nazwa.trim(),
-      sezonId: targetSezonId,
-      sezon: null // Jawne wyczyszczenie obiektu zapobiega wywrotce walidacji w EF Core
+      sezonId: targetSezonId
     };
 
     if (this.editTurniejMode && this.editTurniejId) {
-      payload.id = Number(this.editTurniejId);
-
       this.api.updateTurniej(this.editTurniejId, payload).subscribe({
         next: () => {
           this.success = 'Turniej został zaktualizowany.';
@@ -227,8 +225,6 @@ export class TurniejeComponent implements OnInit {
         }
       });
     } else {
-      payload.id = 0; // Wymagane przez .NET Web API zamiast wartości puste/undefined przy POST
-
       this.api.createTurniej(payload).subscribe({
         next: () => {
           this.success = 'Turniej został dodany.';
@@ -236,7 +232,7 @@ export class TurniejeComponent implements OnInit {
           this.loadAll();
         },
         error: () => {
-          this.error = 'Błąd dodawania turnieju. Serwer odrzucił strukturę danych.';
+          this.error = 'Błąd dodawania turnieju. Upewnij się, że wgrałeś poprawiony model turniej.cs z nullable na backend.';
         }
       });
     }
@@ -286,7 +282,7 @@ export class TurniejeComponent implements OnInit {
 
     const aktualnyTurniej = this.wybranyTurniej ?? this.uczestnikForm.turniej;
 
-    // Przerabiamy strukturę pod bezpieczną obsługę w UczestnikTurniejuController
+    // Bezpieczny payload z uproszczoną strukturą turnieju pod bazę PostgreSQL (Neon)
     const payload: any = {
       nazwa_uczestnika: this.uczestnikForm.nazwa_uczestnika.trim(),
       punkty: Number(this.uczestnikForm.punkty) || 0,
