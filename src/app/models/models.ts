@@ -120,3 +120,34 @@ export interface NewsResponse {
     czyAdmin: boolean;
   } | null;
 }
+
+export interface Sezon {
+  id?: number;
+  nazwa: string;
+  dataUtworzenia?: string;
+}
+
+export interface Turniej {
+  id?: number;
+  nazwa: string;
+  dataUtworzenia?: string;
+  sezonId: number;
+  sezon?: Sezon;
+}
+
+export interface UczestnikTurnieju {
+  id?: number;
+  turniej?: Turniej;
+  nazwa_uczestnika: string;
+  punkty: number;
+  dataUtworzenia?: string;
+  miejsce?: number;
+}
+export interface WynikTurniejowyStat {
+  nazwa_uczestnika: string;
+  pierwszeMiejsca: number;
+  drugieMiejsca: number;
+  trzecieMiejsca: number;
+  sumaPodiów: number;
+  turnieje: number;
+}

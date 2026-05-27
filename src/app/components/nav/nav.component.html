@@ -9,7 +9,9 @@
 
   <ul class="nav-links">
     <li>
-      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">📊 Dashboard</a>
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+        📊 Dashboard
+      </a>
     </li>
     <li>
       <a routerLink="/newsy" routerLinkActive="active">📰 Newsy</a>
@@ -19,6 +21,12 @@
     </li>
     <li>
       <a routerLink="/gracze" routerLinkActive="active">🎿 Gracze</a>
+    </li>
+    <li>
+      <a routerLink="/wyniki-turniejow" routerLinkActive="active">🥇 Wyniki turniejów</a>
+    </li>
+    <li *ngIf="auth.isAdmin">
+      <a routerLink="/turnieje" routerLinkActive="active">🏅 Turnieje</a>
     </li>
     <li *ngIf="auth.isAdmin">
       <a routerLink="/wyniki" routerLinkActive="active">🏆 Wyniki</a>
@@ -46,6 +54,7 @@
       </span>
       <button class="btn btn-ghost btn-sm" (click)="logout()">Wyloguj</button>
     </ng-container>
+
     <ng-template #notLogged>
       <a routerLink="/login" class="btn btn-ghost btn-sm">Logowanie</a>
       <a routerLink="/rejestracja" class="btn btn-primary btn-sm">Rejestracja</a>

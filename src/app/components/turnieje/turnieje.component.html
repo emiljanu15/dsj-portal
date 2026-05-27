@@ -1,0 +1,185 @@
+<div class="page-enter">
+  <div class="card">
+    <div class="card-header">
+      <h2><span class="icon">🏆</span> Turnieje</h2>
+      <div class="header-actions" *ngIf="auth.isAdmin">
+        <button class="btn btn-primary" (click)="openAddSezon()">+ Dodaj sezon</button>
+        <button class="btn btn-primary" (click)="openAddTurniej()" [disabled]="!wybranySezon">+ Dodaj turniej</button>
+        <button class="btn btn-primary" (click)="openAddUczestnik()" [disabled]="!wybranyTurniej">+ Dodaj uczestnika</button>
+      </div>
+    </div>
+
+    <div *ngIf="error" class="alert alert-error">{{ error }}</div>
+    <div *ngIf="success" class="alert alert-success">{{ success }}</div>
+    <div *ngIf="loading" class="loading-wrap"><div class="spinner"></div><p>Ładowanie...</p></div>
+
+    <div *ngIf="!loading" class="turnieje-layout">
+      <div class="section-card">
+        <div class="section-head">
+          <h3>📅 Sezony</h3>
+        </div>
+
+        <div *ngIf="sezony.length === 0" class="empty-state">
+          <div class="empty-icon">📅</div>
+          <p>Brak sezonów.</p>
+        </div>
+
+        <div class="item-list" *ngIf="sezony.length > 0">
+          <div class="item-row"
+               *ngFor="let s of sezony"
+               [class.active]="wybranySezon?.id === s.id"
+               (click)="selectSezon(s)">
+            <div class="item-main">
+              <strong>{{ s.nazwa }}</strong>
+              <small class="text-dim">{{ s.dataUtworzenia | date:'dd.MM.yyyy HH:mm' }}</small>
+            </div>
+            <div class="actions" *ngIf="auth.isAdmin">
+              <button class="btn btn-ghost btn-sm" (click)="openEditSezon(s); $event.stopPropagation()">✏️</button>
+              <button class="btn btn-danger btn-sm" (click)="deleteSezon(s.id!); $event.stopPropagation()">🗑️</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-head">
+          <h3>🏅 Turnieje</h3>
+          <span class="text-dim" *ngIf="wybranySezon">Sezon: {{ wybranySezon.nazwa }}</span>
+        </div>
+
+        <div *ngIf="turniejeFiltrowane.length === 0" class="empty-state">
+          <div class="empty-icon">🏅</div>
+          <p>Brak turniejów dla wybranego sezonu.</p>
+        </div>
+
+        <div class="item-list" *ngIf="turniejeFiltrowane.length > 0">
+          <div class="item-row"
+               *ngFor="let t of turniejeFiltrowane"
+               [class.active]="wybranyTurniej?.id === t.id"
+               (click)="selectTurniej(t)">
+            <div class="item-main">
+              <strong>{{ t.nazwa }}</strong>
+              <small class="text-dim">{{ t.dataUtworzenia | date:'dd.MM.yyyy HH:mm' }}</small>
+            </div>
+            <div class="actions" *ngIf="auth.isAdmin">
+              <button class="btn btn-ghost btn-sm" (click)="openEditTurniej(t); $event.stopPropagation()">✏️</button>
+              <button class="btn btn-danger btn-sm" (click)="deleteTurniej(t.id!); $event.stopPropagation()">🗑️</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card section-wide">
+        <div class="section-head">
+          <h3>👥 Uczestnicy</h3>
+          <span class="text-dim" *ngIf="wybranyTurniej">Turniej: {{ wybranyTurniej.nazwa }}</span>
+        </div>
+
+        <div *ngIf="!wybranyTurniej" class="empty-state">
+          <div class="empty-icon">👥</div>
+          <p>Wybierz turniej, aby zobaczyć uczestników.</p>
+        </div>
+
+        <ng-container *ngIf="wybranyTurniej">
+          <div *ngIf="rankingLoading" class="loading-wrap"><div class="spinner"></div><p>Ładowanie rankingu...</p></div>
+
+          <div class="table-wrap" *ngIf="!rankingLoading && ranking.length > 0">
+            <table class="dsj-table">
+              <thead>
+                <tr>
+                  <th>Miejsce</th>
+                  <th>Uczestnik</th>
+                  <th>Punkty</th>
+                  <th>Data dodania</th>
+                  <th *ngIf="auth.isAdmin">Akcje</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let u of ranking" [class.leader-row]="u.miejsce === 1">
+                  <td data-label="Miejsce">
+                    <span class="place-badge" [class.place-1]="u.miejsce === 1" [class.place-2]="u.miejsce === 2" [class.place-3]="u.miejsce === 3">
+                      #{{ u.miejsce }}
+                    </span>
+                  </td>
+                  <td data-label="Uczestnik"><strong>🎿 {{ u.nazwa_uczestnika }}</strong></td>
+                  <td data-label="Punkty"><span class="punkty">{{ u.punkty }}</span></td>
+                  <td data-label="Data" class="date-cell">{{ u.dataUtworzenia | date:'dd.MM.yyyy HH:mm' }}</td>
+                  <td class="actions" *ngIf="auth.isAdmin" data-label="Akcje">
+                    <button class="btn btn-ghost btn-sm" (click)="openEditUczestnik(u)">✏️</button>
+                    <button class="btn btn-danger btn-sm" (click)="deleteUczestnik(u.id!)">🗑️</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div *ngIf="!rankingLoading && ranking.length === 0" class="empty-state">
+            <div class="empty-icon">👥</div>
+            <p>Brak uczestników w tym turnieju.</p>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" *ngIf="showSezonModal && auth.isAdmin" (click)="showSezonModal=false">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>{{ editSezonMode ? '✏️ Edytuj sezon' : '📅 Nowy sezon' }}</h3>
+      <button class="btn btn-ghost btn-sm" (click)="showSezonModal=false">✕</button>
+    </div>
+    <div class="form-group">
+      <label>Nazwa sezonu</label>
+      <input type="text" [(ngModel)]="sezonForm.nazwa" placeholder="np. 2025/2026" />
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" (click)="showSezonModal=false">Anuluj</button>
+      <button class="btn btn-primary" (click)="saveSezon()">{{ editSezonMode ? 'Zapisz' : 'Dodaj sezon' }}</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" *ngIf="showTurniejModal && auth.isAdmin" (click)="showTurniejModal=false">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>{{ editTurniejMode ? '✏️ Edytuj turniej' : '🏅 Nowy turniej' }}</h3>
+      <button class="btn btn-ghost btn-sm" (click)="showTurniejModal=false">✕</button>
+    </div>
+    <div class="form-group">
+      <label>Nazwa turnieju</label>
+      <input type="text" [(ngModel)]="turniejForm.nazwa" placeholder="np. Turniej Letni" />
+    </div>
+    <div class="form-group">
+      <label>Sezon</label>
+      <select [(ngModel)]="turniejForm.sezonId">
+        <option *ngFor="let s of sezony" [value]="s.id">{{ s.nazwa }}</option>
+      </select>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" (click)="showTurniejModal=false">Anuluj</button>
+      <button class="btn btn-primary" (click)="saveTurniej()">{{ editTurniejMode ? 'Zapisz' : 'Dodaj turniej' }}</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" *ngIf="showUczestnikModal && auth.isAdmin" (click)="showUczestnikModal=false">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>{{ editUczestnikMode ? '✏️ Edytuj uczestnika' : '👥 Nowy uczestnik' }}</h3>
+      <button class="btn btn-ghost btn-sm" (click)="showUczestnikModal=false">✕</button>
+    </div>
+    <div class="form-group">
+      <label>Nazwa uczestnika</label>
+      <input type="text" [(ngModel)]="uczestnikForm.nazwa_uczestnika" placeholder="np. Adam Małysz" />
+    </div>
+    <div class="form-group">
+      <label>Punkty</label>
+      <input type="number" [(ngModel)]="uczestnikForm.punkty" />
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" (click)="showUczestnikModal=false">Anuluj</button>
+      <button class="btn btn-primary" (click)="saveUczestnik()">{{ editUczestnikMode ? 'Zapisz' : 'Dodaj uczestnika' }}</button>
+    </div>
+  </div>
+</div>

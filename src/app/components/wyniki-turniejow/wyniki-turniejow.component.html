@@ -1,0 +1,77 @@
+<div class="page-enter">
+  <div class="card">
+    <div class="card-header">
+      <h2><span class="icon">🏆</span> Wyniki turniejów</h2>
+    </div>
+
+    <div *ngIf="error" class="alert alert-error">{{ error }}</div>
+    <div *ngIf="success" class="alert alert-success">{{ success }}</div>
+
+    <div *ngIf="loading" class="loading-wrap">
+      <div class="spinner"></div>
+      <p>Ładowanie klasyfikacji turniejowej...</p>
+    </div>
+
+    <div *ngIf="!loading && stats.length === 0 && !error" class="empty-state">
+      <div class="empty-icon">🏆</div>
+      <p>Brak danych do klasyfikacji turniejowej.</p>
+    </div>
+
+    <div class="stats-top" *ngIf="!loading && stats.length > 0">
+      <div class="stat-box">
+        <span class="stat-label">Turnieje</span>
+        <strong>{{ turnieje.length }}</strong>
+      </div>
+      <div class="stat-box">
+        <span class="stat-label">Sklasyfikowani</span>
+        <strong>{{ stats.length }}</strong>
+      </div>
+    </div>
+
+    <div class="table-wrap" *ngIf="!loading && stats.length > 0">
+      <table class="dsj-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Uczestnik</th>
+            <th>🥇 1. miejsca</th>
+            <th>🥈 2. miejsca</th>
+            <th>🥉 3. miejsca</th>
+            <th>Podia</th>
+            <th>Starty</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let s of stats; let i = index" [class.leader-row]="i === 0">
+            <td data-label="#">
+              <span class="place-badge"
+                    [class.place-1]="i === 0"
+                    [class.place-2]="i === 1"
+                    [class.place-3]="i === 2">
+                #{{ miejsceKlasyfikacji(i) }}
+              </span>
+            </td>
+            <td data-label="Uczestnik">
+              <strong>🎿 {{ s.nazwa_uczestnika }}</strong>
+            </td>
+            <td data-label="1. miejsca">
+              <span class="medal gold">{{ s.pierwszeMiejsca }}</span>
+            </td>
+            <td data-label="2. miejsca">
+              <span class="medal silver">{{ s.drugieMiejsca }}</span>
+            </td>
+            <td data-label="3. miejsca">
+              <span class="medal bronze">{{ s.trzecieMiejsca }}</span>
+            </td>
+            <td data-label="Podia">
+              <span class="podia">{{ s.sumaPodiów }}</span>
+            </td>
+            <td data-label="Starty">
+              <span class="starty">{{ s.turnieje }}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
