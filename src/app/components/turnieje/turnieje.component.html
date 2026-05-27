@@ -153,7 +153,8 @@
     <div class="form-group">
       <label>Sezon</label>
       <select [(ngModel)]="turniejForm.sezonId">
-        <option *ngFor="let s of sezony" [value]="s.id">{{ s.nazwa }}</option>
+        <option [ngValue]="0" disabled>-- Wybierz sezon --</option>
+        <option *ngFor="let s of sezony" [ngValue]="s.id">{{ s.nazwa }}</option>
       </select>
     </div>
     <div class="modal-footer">

@@ -191,18 +191,31 @@ export class TurniejeComponent implements OnInit {
   }
 
   saveTurniej(): void {
+    this.error = '';
+    this.success = '';
+
     if (!this.turniejForm.nazwa?.trim()) {
       this.error = 'Podaj nazwę turnieju.';
       return;
     }
 
-    if (!this.turniejForm.sezonId) {
-      this.error = 'Wybierz sezon.';
+    // Gwarancja rzutowania wartości na poprawny typ number
+    const targetSezonId = Number(this.turniejForm.sezonId);
+
+    if (!targetSezonId || targetSezonId <= 0) {
+      this.error = 'Wybierz poprawny sezon.';
       return;
     }
 
+    // Przygotowanie payloadu dokładnie pod parametry zwalidowane przez backend
+    const payload: Turniej = {
+      id: this.editTurniejMode && this.editTurniejId ? this.editTurniejId : undefined,
+      nazwa: this.turniejForm.nazwa.trim(),
+      sezonId: targetSezonId
+    };
+
     if (this.editTurniejMode && this.editTurniejId) {
-      this.api.updateTurniej(this.editTurniejId, this.turniejForm).subscribe({
+      this.api.updateTurniej(this.editTurniejId, payload).subscribe({
         next: () => {
           this.success = 'Turniej został zaktualizowany.';
           this.showTurniejModal = false;
@@ -213,14 +226,14 @@ export class TurniejeComponent implements OnInit {
         }
       });
     } else {
-      this.api.createTurniej(this.turniejForm).subscribe({
+      this.api.createTurniej(payload).subscribe({
         next: () => {
           this.success = 'Turniej został dodany.';
           this.showTurniejModal = false;
           this.loadAll();
         },
         error: () => {
-          this.error = 'Błąd dodawania turnieju.';
+          this.error = 'Błąd dodawania turnieju (Błąd 400 - sprawdź parametry walidacji).';
         }
       });
     }
