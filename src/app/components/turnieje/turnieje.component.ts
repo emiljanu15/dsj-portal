@@ -199,22 +199,23 @@ export class TurniejeComponent implements OnInit {
       return;
     }
 
-    // Gwarancja rzutowania wartości na poprawny typ number
     const targetSezonId = Number(this.turniejForm.sezonId);
-
     if (!targetSezonId || targetSezonId <= 0) {
       this.error = 'Wybierz poprawny sezon.';
       return;
     }
 
-    // Przygotowanie payloadu dokładnie pod parametry zwalidowane przez backend
-    const payload: Turniej = {
-      id: this.editTurniejMode && this.editTurniejId ? this.editTurniejId : undefined,
+    // Konstruujemy czysty, surowy obiekt bez zbędnych właściwości nawigacyjnych.
+    // .NET oczekuje płaskiej struktury parametrów bindowania dla żądań zapisu.
+    const payload: any = {
       nazwa: this.turniejForm.nazwa.trim(),
-      sezonId: targetSezonId
+      sezonId: targetSezonId,
+      sezon: null // Jawne wyczyszczenie obiektu zapobiega wywrotce walidacji w EF Core
     };
 
     if (this.editTurniejMode && this.editTurniejId) {
+      payload.id = Number(this.editTurniejId);
+
       this.api.updateTurniej(this.editTurniejId, payload).subscribe({
         next: () => {
           this.success = 'Turniej został zaktualizowany.';
@@ -226,6 +227,8 @@ export class TurniejeComponent implements OnInit {
         }
       });
     } else {
+      payload.id = 0; // Wymagane przez .NET Web API zamiast wartości puste/undefined przy POST
+
       this.api.createTurniej(payload).subscribe({
         next: () => {
           this.success = 'Turniej został dodany.';
@@ -233,7 +236,7 @@ export class TurniejeComponent implements OnInit {
           this.loadAll();
         },
         error: () => {
-          this.error = 'Błąd dodawania turnieju (Błąd 400 - sprawdź parametry walidacji).';
+          this.error = 'Błąd dodawania turnieju. Serwer odrzucił strukturę danych.';
         }
       });
     }
@@ -281,12 +284,19 @@ export class TurniejeComponent implements OnInit {
       return;
     }
 
-    const payload: UczestnikTurnieju = {
-      ...this.uczestnikForm,
-      turniej: this.wybranyTurniej ?? this.uczestnikForm.turniej
+    const aktualnyTurniej = this.wybranyTurniej ?? this.uczestnikForm.turniej;
+
+    // Przerabiamy strukturę pod bezpieczną obsługę w UczestnikTurniejuController
+    const payload: any = {
+      nazwa_uczestnika: this.uczestnikForm.nazwa_uczestnika.trim(),
+      punkty: Number(this.uczestnikForm.punkty) || 0,
+      miejsce: Number(this.uczestnikForm.miejsce) || 0,
+      turniej: aktualnyTurniej ? { id: Number(aktualnyTurniej.id) } : null
     };
 
     if (this.editUczestnikMode && this.editUczestnikId) {
+      payload.id = Number(this.editUczestnikId);
+
       this.api.updateUczestnikTurnieju(this.editUczestnikId, payload).subscribe({
         next: () => {
           this.success = 'Uczestnik został zaktualizowany.';
@@ -301,6 +311,8 @@ export class TurniejeComponent implements OnInit {
         }
       });
     } else {
+      payload.id = 0;
+
       this.api.createUczestnikTurnieju(payload).subscribe({
         next: () => {
           this.success = 'Uczestnik został dodany.';
